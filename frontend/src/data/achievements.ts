@@ -1,0 +1,80 @@
+import type { Achievement } from '../types';
+
+export const achievementsList: Achievement[] = [
+  {
+    id: 'ach-1',
+    title: 'Oldest Silambam Association in Malaysia',
+    category: 'National Record',
+    year: 2022,
+    date_awarded: '2022-08-28',
+    awarding_organization: 'The Malaysia Book of Records',
+    description:
+      'Persatuan Aadhiran Silambam Pulau Pinang, having been officially registered on 25th February 1975 and holding unbroken lineage practice since 1936, was formally verified and inducted into the Malaysia Book of Records as the oldest recognized Silambam association in the nation.',
+    cover_image_url: '/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png',
+    evidence_url: 'https://www.malaysiarecords.com.my',
+    is_featured: true,
+    status: 'published',
+    sort_order: 1,
+  },
+  {
+    id: 'ach-2',
+    title: 'UNESCO ICHCAP Global Martial Arts Publication',
+    category: 'International Recognition',
+    year: 2020,
+    date_awarded: '2020-11-15',
+    awarding_organization:
+      'ICHCAP (International Information and Networking Centre for Intangible Cultural Heritage in the Asia-Pacific Region under the auspices of UNESCO, South Korea)',
+    description:
+      'Aadhiran Silambam was the sole martial art from Malaysia selected and published in the prestigious ICHCAP global publication dedicated to safeguarding traditional martial arts disciplines across the Asia-Pacific region.',
+    cover_image_url: '/uploads/july-2015_orig.png',
+    evidence_url: 'https://www.unesco-ichcap.org',
+    is_featured: true,
+    status: 'published',
+    sort_order: 2,
+  },
+  {
+    id: 'ach-3',
+    title: 'UNESCO Living Heritage Community Inventory Engagement',
+    category: 'Cultural Heritage',
+    year: 2019,
+    date_awarded: '2019-07-07',
+    awarding_organization: 'UNESCO & George Town World Heritage Incorporated',
+    description:
+      'Selected as the primary traditional martial art representation in George Town\'s urban community inventorying project supported by UNESCO. Featured on the global UNESCO Intangible Cultural Heritage platform for preserving living cultural expressions.',
+    cover_image_url: '/uploads/48397540-957165591150493-3850920351072518144-o.jpg',
+    evidence_url: 'https://ich.unesco.org',
+    is_featured: true,
+    status: 'published',
+    sort_order: 3,
+  },
+  {
+    id: 'ach-4',
+    title: 'CNN Travel International Feature Recognition',
+    category: 'Global Media',
+    year: 2017,
+    date_awarded: '2017-02-14',
+    awarding_organization: 'CNN Travel (Warner Bros. Discovery)',
+    description:
+      'Highlighted by CNN Travel in their global documentary article titled "9 reasons to visit Penang that have nothing to do with street food". Aadhiran Silambam was spotlighted as the premiere traditional martial discipline showcasing Penang\'s living cultural heritage.',
+    cover_image_url: '/uploads/img10.jpg',
+    evidence_url: 'https://edition.cnn.com/travel/article/penang-not-about-street-food/index.html',
+    is_featured: true,
+    status: 'published',
+    sort_order: 4,
+  },
+  {
+    id: 'ach-5',
+    title: 'Penang Living Heritage Treasure Custodian Citation',
+    category: 'State Heritage',
+    year: 2018,
+    date_awarded: '2018-09-12',
+    awarding_organization: 'Penang Heritage Trust & State Government of Penang',
+    description:
+      'Special recognition honoring the unbroken transmission of authentic Kurunji mountain stick twirling and animal movements in George Town without commercialization.',
+    cover_image_url: '/uploads/portfolio-2-1.jpg',
+    evidence_url: 'https://pht.org.my',
+    is_featured: false,
+    status: 'published',
+    sort_order: 5,
+  },
+];
