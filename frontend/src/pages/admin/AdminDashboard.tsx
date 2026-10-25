@@ -37,32 +37,57 @@ interface DashboardData {
 export const AdminDashboard: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
-  const fetchDashboard = async () => {
+  const fetchDashboard = async (showLoading = true) => {
+    if (showLoading) {
+      setLoading(true);
+      setLoadError(null);
+    }
     try {
       const res = await adminApi.getDashboard();
       if (res && res.stats) {
         setData(res);
+      } else {
+        throw new Error('Unexpected dashboard response.');
       }
-    } catch (err) {
-      console.error('Failed to load dashboard:', err);
+    } catch {
+      setData(null);
+      setLoadError('Unable to load dashboard data from the server. Check the connection and retry.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDashboard();
+    fetchDashboard(false);
   }, []);
 
   const handleStatusChange = async (enquiryId: string, newStatus: string) => {
+    setActionError(null);
     try {
       await adminApi.updateEnquiry(enquiryId, { status: newStatus });
-      fetchDashboard();
-    } catch (e) {
-      console.error('Failed to update status', e);
+      await fetchDashboard();
+    } catch {
+      setActionError('Unable to update this enquiry status. Please retry.');
     }
   };
+
+  if (loadError) {
+    return (
+      <div role="alert" className="rounded-2xl border border-crimson-700/60 bg-crimson-950/60 p-6 text-center">
+        <p className="text-sm font-semibold text-crimson-200">{loadError}</p>
+        <button
+          type="button"
+          onClick={() => fetchDashboard()}
+          className="mt-4 rounded-xl border border-charcoal-700 bg-charcoal-800 px-4 py-2 text-xs font-semibold text-white hover:bg-charcoal-700"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -84,6 +109,12 @@ export const AdminDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      {actionError && (
+        <div role="alert" className="rounded-xl border border-crimson-700/60 bg-crimson-950/60 p-3 text-xs text-crimson-200">
+          {actionError}
+        </div>
+      )}
+
       {/* Title & Welcome */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

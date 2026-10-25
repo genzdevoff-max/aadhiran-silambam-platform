@@ -14,7 +14,18 @@ const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const publicRoutes_1 = __importDefault(require("./routes/publicRoutes"));
 const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
 const errorHandler_1 = require("./middleware/errorHandler");
-dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../.env') });
+dotenv_1.default.config({
+    path: [
+        path_1.default.resolve(__dirname, '../.env.local'),
+        path_1.default.resolve(__dirname, '../.env'),
+    ],
+});
+if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET must be configured before starting the backend.');
+}
+if (process.env.NODE_ENV === 'production' && process.env.JWT_SECRET.length < 32) {
+    throw new Error('JWT_SECRET must contain at least 32 characters in production.');
+}
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
 // Security Middleware
@@ -22,19 +33,28 @@ app.use((0, helmet_1.default)({
     crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 // CORS Configuration
-const allowedOrigins = [
-    process.env.CORS_ORIGIN || 'http://localhost:5173',
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://localhost:3000'
-];
+const rawCorsOrigin = process.env.CORS_ORIGIN || '';
+const configuredOrigins = rawCorsOrigin
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? configuredOrigins
+    : [
+        ...configuredOrigins,
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://localhost:5174',
+        'http://127.0.0.1:5174',
+        'http://localhost:3000',
+    ];
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
             callback(null, true);
         }
         else {
-            callback(null, true); // Allow during development
+            callback(new Error('Origin is not allowed by CORS.'));
         }
     },
     credentials: true,
@@ -47,6 +67,16 @@ app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
 // Static media serving
 const uploadDir = path_1.default.resolve(__dirname, '../uploads');
 app.use('/uploads', express_1.default.static(uploadDir));
+// Rate limiter for authentication endpoints
+const authLimiter = (0, express_rate_limit_1.default)({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 10, // 10 attempts per IP
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { success: false, message: 'Too many authentication attempts from this IP. Please try again after 15 minutes.' }
+});
+app.use('/api/auth/login', authLimiter);
+app.use('/api/v1/auth/login', authLimiter);
 // Rate limiter for public form submissions
 const enquiryLimiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -79,7 +109,10 @@ app.use(errorHandler_1.errorHandler);
 const startServer = async () => {
     const isDbConnected = await (0, db_1.checkDatabaseConnection)();
     if (!isDbConnected) {
-        console.error('CRITICAL: Database connection failed. Verify PostgreSQL configuration.');
+        console.error('CRITICAL: Database connection failed. Verify TiDB configuration.');
+        await db_1.pool.end();
+        process.exitCode = 1;
+        return;
     }
     app.listen(PORT, () => {
         console.log(`=======================================================`);

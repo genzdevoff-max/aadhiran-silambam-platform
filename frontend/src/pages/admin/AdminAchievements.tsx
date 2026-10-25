@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { adminApi } from '../../services/api';
+import { AdminRequestError, getAdminRequestError } from '../../components/admin/AdminRequestState';
 import type { Achievement } from '../../types';
 
 export const AdminAchievements: React.FC = () => {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<Partial<Achievement> | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const fetchAchievements = async () => {
+    setLoading(true);
+    setLoadError(null);
     try {
       const data = await adminApi.getAchievements();
-      if (Array.isArray(data)) {
-        setAchievements(data);
-      }
-    } catch (e) {
-      console.error('Failed to load achievements', e);
+      if (!Array.isArray(data)) throw new Error('Unexpected achievements response.');
+      setAchievements(data);
+    } catch (error) {
+      setLoadError(getAdminRequestError(error, 'Unable to load achievement records.'));
     } finally {
       setLoading(false);
     }
@@ -51,7 +54,7 @@ export const AdminAchievements: React.FC = () => {
       await adminApi.deleteAchievement(id);
       setFeedback({ type: 'success', message: 'Achievement deleted successfully.' });
       fetchAchievements();
-    } catch (err: any) {
+    } catch {
       setFeedback({ type: 'error', message: 'Failed to delete achievement.' });
     }
   };
@@ -105,6 +108,12 @@ export const AdminAchievements: React.FC = () => {
       {/* Grid */}
       {loading ? (
         <div className="py-12 text-center text-xs text-gray-500 font-mono">Loading records...</div>
+      ) : loadError ? (
+        <AdminRequestError message={loadError} onRetry={() => fetchAchievements()} />
+      ) : achievements.length === 0 ? (
+        <div className="rounded-2xl border border-charcoal-800 bg-charcoal-900 p-10 text-center text-sm text-gray-300">
+          No achievement records have been added yet.
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {achievements.map((item) => (
@@ -164,7 +173,7 @@ export const AdminAchievements: React.FC = () => {
       {/* Edit Modal */}
       {editingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-          <div className="relative w-full max-w-xl bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div data-admin-dialog role="dialog" aria-modal="true" aria-label="Achievement editor" tabIndex={-1} className="relative w-full max-w-xl bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="p-5 bg-charcoal-950 flex justify-between items-center border-b border-charcoal-800">
               <h3 className="text-base font-display font-bold text-white">
                 {editingItem.id ? 'Edit Achievement Record' : 'Record New Achievement'}

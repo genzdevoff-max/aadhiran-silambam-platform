@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { requireAuth } from '../middleware/auth';
-import { upload } from '../middleware/upload';
+import { upload, validateUploadedFiles } from '../middleware/upload';
+import { validateBody, sectionUpdateSchema } from '../middleware/validate';
 import {
   getDashboardStats,
   updateSectionSetting,
@@ -55,7 +56,7 @@ router.use(requireAuth);
 router.get('/dashboard', getDashboardStats);
 
 // Sections & Settings
-router.put('/sections/:key', updateSectionSetting);
+router.put('/sections/:key', validateBody(sectionUpdateSchema), updateSectionSetting);
 
 // Syllabus Stages
 router.get('/syllabus', listSyllabusStages);
@@ -106,7 +107,7 @@ router.put('/albums/:id', updateAlbum);
 router.delete('/albums/:id', deleteAlbum);
 
 // Media Assets & Uploads
-router.post('/media/upload', upload.array('files', 15), uploadMedia);
+router.post('/media/upload', upload.array('files', 15), validateUploadedFiles, uploadMedia);
 router.get('/media', listMediaAssets);
 router.put('/media/:id', updateMediaAsset);
 router.get('/media/:id/references', getMediaReferences);

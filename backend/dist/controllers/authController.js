@@ -7,8 +7,7 @@ exports.deleteUser = exports.updateUser = exports.createUser = exports.listUsers
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("../config/db");
-const JWT_SECRET = process.env.JWT_SECRET || 'aadhiran_silambam_penang_secret_key_2026_super_secure';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const security_1 = require("../config/security");
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -23,7 +22,7 @@ const login = async (req, res) => {
         }
         const user = userRes.rows[0];
         if (!user.is_active) {
-            res.status(403).json({ success: false, message: 'This account has been deactivated. Contact the administrator.' });
+            res.status(401).json({ success: false, message: 'Invalid email or password.' });
             return;
         }
         const isMatch = await bcryptjs_1.default.compare(password, user.password_hash);
@@ -33,7 +32,7 @@ const login = async (req, res) => {
         }
         // Update last login
         await (0, db_1.query)('UPDATE users SET last_login = NOW() WHERE id = $1', [user.id]);
-        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, role: user.role, fullName: user.full_name }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email, role: user.role, fullName: user.full_name }, (0, security_1.getJwtSecret)(), { expiresIn: (process.env.JWT_EXPIRES_IN || '7d') });
         res.json({
             success: true,
             message: 'Login successful',
@@ -46,8 +45,8 @@ const login = async (req, res) => {
             }
         });
     }
-    catch (error) {
-        console.error('Login error:', error);
+    catch {
+        console.error('Login request failed.');
         res.status(500).json({ success: false, message: 'Server error during login.' });
     }
 };
@@ -76,8 +75,8 @@ const getMe = async (req, res) => {
             }
         });
     }
-    catch (error) {
-        console.error('getMe error:', error);
+    catch {
+        console.error('Profile request failed.');
         res.status(500).json({ success: false, message: 'Failed to retrieve user profile.' });
     }
 };
@@ -111,8 +110,8 @@ const changePassword = async (req, res) => {
         await (0, db_1.query)('UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2', [newHash, req.user.id]);
         res.json({ success: true, message: 'Password updated successfully.' });
     }
-    catch (error) {
-        console.error('changePassword error:', error);
+    catch {
+        console.error('Password change request failed.');
         res.status(500).json({ success: false, message: 'Failed to update password.' });
     }
 };

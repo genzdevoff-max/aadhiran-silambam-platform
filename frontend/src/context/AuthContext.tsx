@@ -20,7 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const saved = localStorage.getItem('aadhiran_admin_user');
     return saved ? JSON.parse(saved) : null;
   });
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(() => Boolean(localStorage.getItem('aadhiran_admin_token')));
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -33,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const currentUser = await adminApi.getMe();
         setUser(currentUser);
         localStorage.setItem('aadhiran_admin_user', JSON.stringify(currentUser));
-      } catch (err) {
+      } catch {
         console.warn('Session verification failed, clearing auth');
         localStorage.removeItem('aadhiran_admin_token');
         localStorage.removeItem('aadhiran_admin_user');
@@ -52,6 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('aadhiran_admin_user', JSON.stringify(newUser));
     setToken(newToken);
     setUser(newUser);
+    setIsLoading(false);
   };
 
   const logout = () => {
@@ -67,8 +68,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const u = await adminApi.getMe();
       setUser(u);
       localStorage.setItem('aadhiran_admin_user', JSON.stringify(u));
-    } catch (e) {
-      console.error('Failed to refresh user', e);
+    } catch {
+      console.error('Failed to refresh user profile.');
     }
   };
 

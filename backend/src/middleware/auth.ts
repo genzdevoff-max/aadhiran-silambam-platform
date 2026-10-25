@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { query } from '../config/db';
+import { getJwtSecret } from '../config/security';
 
 export interface AuthUser {
   id: string;
@@ -12,8 +13,6 @@ export interface AuthUser {
 export interface AuthenticatedRequest extends Request {
   user?: AuthUser;
 }
-
-const JWT_SECRET = process.env.JWT_SECRET || 'aadhiran_silambam_penang_secret_key_2026_super_secure';
 
 export const requireAuth = async (
   req: AuthenticatedRequest,
@@ -28,7 +27,7 @@ export const requireAuth = async (
     }
 
     const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string; role: string };
+    const decoded = jwt.verify(token, getJwtSecret()) as { id: string; email: string; role: string };
 
     const userRes = await query(
       'SELECT id, email, role, full_name, is_active FROM users WHERE id = $1',

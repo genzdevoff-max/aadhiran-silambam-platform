@@ -11,24 +11,27 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { adminApi } from '../../services/api';
+import { AdminRequestError, getAdminRequestError } from '../../components/admin/AdminRequestState';
 import type { Enquiry } from '../../types';
 
 export const AdminEnquiries: React.FC = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const fetchEnquiries = async () => {
+    setLoading(true);
+    setLoadError(null);
     try {
       const data = await adminApi.getEnquiries();
-      if (Array.isArray(data)) {
-        setEnquiries(data);
-      }
-    } catch (err) {
-      console.error('Failed to load enquiries:', err);
+      if (!Array.isArray(data)) throw new Error('Unexpected enquiries response.');
+      setEnquiries(data);
+    } catch (error) {
+      setLoadError(getAdminRequestError(error, 'Unable to load enquiries.'));
     } finally {
       setLoading(false);
     }
@@ -145,9 +148,11 @@ export const AdminEnquiries: React.FC = () => {
         <div className="p-8 text-center text-gray-500 font-mono text-sm">
           Loading candidate submissions...
         </div>
+      ) : loadError ? (
+        <AdminRequestError message={loadError} onRetry={() => fetchEnquiries()} />
       ) : filtered.length === 0 ? (
         <div className="p-12 text-center rounded-2xl bg-charcoal-900 border border-charcoal-800 text-gray-400 text-xs">
-          No enquiries found matching criteria.
+          {enquiries.length === 0 ? 'No enquiries have been received yet.' : 'No enquiries match the selected filters.'}
         </div>
       ) : (
         <div className="rounded-2xl bg-charcoal-900 border border-charcoal-800 overflow-hidden shadow-xl">
@@ -248,7 +253,7 @@ export const AdminEnquiries: React.FC = () => {
       {/* Details Modal */}
       {selectedEnquiry && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl p-6 space-y-4">
+          <div data-admin-dialog role="dialog" aria-modal="true" aria-label="Enquiry details" tabIndex={-1} className="relative w-full max-w-lg bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl p-6 space-y-4 max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <div className="flex justify-between items-start border-b border-charcoal-800 pb-3">
               <div>
                 <span className="text-[10px] font-mono font-bold text-crimson-400 uppercase">

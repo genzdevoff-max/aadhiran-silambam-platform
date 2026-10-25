@@ -4,7 +4,7 @@ import { query } from '../config/db';
 export const getHomeContent = async (req: Request, res: Response): Promise<void> => {
   try {
     // 1. Site settings (hero, quick facts, general)
-    const settingsRes = await query('SELECT key, value FROM site_settings WHERE key IN ($1, $2, $3)', [
+    const settingsRes = await query('SELECT `key`, `value` FROM site_settings WHERE `key` IN ($1, $2, $3)', [
       'hero', 'quick_facts', 'general'
     ]);
     const settingsMap: Record<string, any> = {};
@@ -76,7 +76,7 @@ export const getHomeContent = async (req: Request, res: Response): Promise<void>
 
 export const getAboutContent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const generalRes = await query("SELECT value FROM site_settings WHERE key = 'general'");
+    const generalRes = await query("SELECT `value` FROM site_settings WHERE `key` = 'general'");
     const instructorsRes = await query(`
       SELECT id, name, tamil_name, title, role_type, biography, years_experience, lineage_rank, photo_url
       FROM instructors
@@ -483,7 +483,7 @@ export const getPartnersPress = async (req: Request, res: Response): Promise<voi
 
 export const getSettings = async (req: Request, res: Response): Promise<void> => {
   try {
-    const settingsRes = await query('SELECT key, value FROM site_settings');
+    const settingsRes = await query('SELECT `key`, `value` FROM site_settings');
     const settingsMap: Record<string, any> = {};
     settingsRes.rows.forEach(r => { settingsMap[r.key] = r.value; });
 

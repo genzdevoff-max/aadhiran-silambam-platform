@@ -50,10 +50,10 @@ const updateSectionSetting = async (req, res) => {
             return;
         }
         await (0, db_1.query)(`
-      INSERT INTO site_settings (key, value, updated_at)
+      INSERT INTO site_settings (\`key\`, \`value\`, updated_at)
       VALUES ($1, $2, NOW())
-      ON CONFLICT (key) DO UPDATE
-      SET value = EXCLUDED.value, updated_at = NOW()
+      ON DUPLICATE KEY UPDATE
+      \`value\` = VALUES(\`value\`), updated_at = NOW()
     `, [key, JSON.stringify(value)]);
         res.json({ success: true, message: `Setting "${key}" updated successfully.` });
     }

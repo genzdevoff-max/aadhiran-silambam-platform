@@ -3,49 +3,75 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.upload = void 0;
+exports.validateUploadedFiles = exports.upload = exports.createUploadMiddleware = exports.MAX_UPLOAD_FILE_COUNT = exports.MAX_UPLOAD_FILE_SIZE = void 0;
 const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+const crypto_1 = require("crypto");
+const uploadValidation_1 = require("./uploadValidation");
 const uploadDir = path_1.default.resolve(__dirname, '../../uploads');
+exports.MAX_UPLOAD_FILE_SIZE = 100 * 1024 * 1024;
+exports.MAX_UPLOAD_FILE_COUNT = 15;
 if (!fs_1.default.existsSync(uploadDir)) {
     fs_1.default.mkdirSync(uploadDir, { recursive: true });
 }
 const storage = multer_1.default.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (_req, _file, cb) => {
         cb(null, uploadDir);
     },
-    filename: (req, file, cb) => {
-        const ext = path_1.default.extname(file.originalname).toLowerCase();
-        const cleanBase = path_1.default.basename(file.originalname, ext)
-            .toLowerCase()
-            .replace(/[^a-z0-9]/g, '-');
-        const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        cb(null, `${cleanBase}-${uniqueSuffix}${ext}`);
-    }
+    filename: (_req, file, cb) => {
+        const extension = (0, uploadValidation_1.getSafeUploadExtension)(file.originalname);
+        if (!extension) {
+            cb(new uploadValidation_1.UploadValidationError(), '');
+            return;
+        }
+        cb(null, `${(0, crypto_1.randomUUID)()}${extension}`);
+    },
 });
-const fileFilter = (req, file, cb) => {
-    const allowedMimes = [
-        'image/jpeg',
-        'image/png',
-        'image/webp',
-        'image/gif',
-        'image/svg+xml',
-        'video/mp4',
-        'video/webm',
-        'application/pdf'
-    ];
-    if (allowedMimes.includes(file.mimetype)) {
-        cb(null, true);
+const fileFilter = (_req, file, cb) => {
+    if (!(0, uploadValidation_1.getSafeUploadExtension)(file.originalname)) {
+        cb(new uploadValidation_1.UploadValidationError());
+        return;
     }
-    else {
-        cb(new Error(`File type ${file.mimetype} is not supported. Allowed formats: JPG, PNG, WEBP, GIF, SVG, MP4, PDF`));
-    }
+    cb(null, true);
 };
-exports.upload = (0, multer_1.default)({
+const createUploadMiddleware = (limits = {}) => (0, multer_1.default)({
     storage,
     fileFilter,
     limits: {
-        fileSize: 100 * 1024 * 1024 // 100 MB max for videos/media
-    }
+        fileSize: limits.fileSize ?? exports.MAX_UPLOAD_FILE_SIZE,
+        files: limits.files ?? exports.MAX_UPLOAD_FILE_COUNT,
+    },
 });
+exports.createUploadMiddleware = createUploadMiddleware;
+exports.upload = (0, exports.createUploadMiddleware)();
+const validateUploadedFiles = async (req, _res, next) => {
+    const files = (req.files || []);
+    try {
+        for (const file of files) {
+            const handle = await fs_1.default.promises.open(file.path, 'r');
+            const header = Buffer.alloc(32);
+            let bytesRead;
+            try {
+                ({ bytesRead } = await handle.read(header, 0, header.length, 0));
+            }
+            finally {
+                await handle.close();
+            }
+            if (!(0, uploadValidation_1.validateMediaFile)(file.originalname, file.mimetype, header.subarray(0, bytesRead))) {
+                throw new uploadValidation_1.UploadValidationError();
+            }
+        }
+        next();
+    }
+    catch (error) {
+        const cleanup = await Promise.allSettled(files.map((file) => fs_1.default.promises.unlink(file.path)));
+        if (cleanup.some((result) => result.status === 'rejected')) {
+            console.error('Failed to remove rejected upload files.');
+            next(new Error('Upload cleanup failed.'));
+            return;
+        }
+        next(error);
+    }
+};
+exports.validateUploadedFiles = validateUploadedFiles;

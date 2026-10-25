@@ -19,8 +19,13 @@ import {
   getPartnersPress,
   getSettings,
   submitContactEnquiry,
-  submitJoinEnquiry
+  submitJoinEnquiry,
 } from '../controllers/publicController';
+import {
+  validateBody,
+  contactEnquirySchema,
+  joinEnquirySchema,
+} from '../middleware/validate';
 
 const router = Router();
 
@@ -43,8 +48,8 @@ router.get('/heritage/:slug', getHeritageBySlug);
 router.get('/partners-press', getPartnersPress);
 router.get('/settings', getSettings);
 
-// Public form submissions
-router.post('/enquiries', submitContactEnquiry);
-router.post('/join-enquiry', submitJoinEnquiry);
+// Public form submissions with validation
+router.post('/enquiries', validateBody(contactEnquirySchema), submitContactEnquiry);
+router.post('/join-enquiry', validateBody(joinEnquirySchema), submitJoinEnquiry);
 
 export default router;

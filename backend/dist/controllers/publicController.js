@@ -5,7 +5,7 @@ const db_1 = require("../config/db");
 const getHomeContent = async (req, res) => {
     try {
         // 1. Site settings (hero, quick facts, general)
-        const settingsRes = await (0, db_1.query)('SELECT key, value FROM site_settings WHERE key IN ($1, $2, $3)', [
+        const settingsRes = await (0, db_1.query)('SELECT `key`, `value` FROM site_settings WHERE `key` IN ($1, $2, $3)', [
             'hero', 'quick_facts', 'general'
         ]);
         const settingsMap = {};
@@ -72,7 +72,7 @@ const getHomeContent = async (req, res) => {
 exports.getHomeContent = getHomeContent;
 const getAboutContent = async (req, res) => {
     try {
-        const generalRes = await (0, db_1.query)("SELECT value FROM site_settings WHERE key = 'general'");
+        const generalRes = await (0, db_1.query)("SELECT `value` FROM site_settings WHERE `key` = 'general'");
         const instructorsRes = await (0, db_1.query)(`
       SELECT id, name, tamil_name, title, role_type, biography, years_experience, lineage_rank, photo_url
       FROM instructors
@@ -464,7 +464,7 @@ const getPartnersPress = async (req, res) => {
 exports.getPartnersPress = getPartnersPress;
 const getSettings = async (req, res) => {
     try {
-        const settingsRes = await (0, db_1.query)('SELECT key, value FROM site_settings');
+        const settingsRes = await (0, db_1.query)('SELECT `key`, `value` FROM site_settings');
         const settingsMap = {};
         settingsRes.rows.forEach(r => { settingsMap[r.key] = r.value; });
         res.json({ success: true, data: settingsMap });

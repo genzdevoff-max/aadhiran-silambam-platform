@@ -10,16 +10,33 @@ const runSeed = async () => {
     const client = await db_1.pool.connect();
     try {
         console.log('--- Seeding Aadhiran Silambam Database with Authentic Content ---');
+        const dbResult = await client.query('SELECT DATABASE() AS db');
+        const activeDatabase = dbResult.rows[0]?.db ?? null;
+        if (activeDatabase !== 'aadhiran') {
+            throw new Error(`Refusing to seed: active database is "${activeDatabase ?? 'none'}", expected "aadhiran".`);
+        }
+        const existingResult = await client.query(`SELECT
+         (SELECT COUNT(*) FROM instructors) +
+         (SELECT COUNT(*) FROM achievements) +
+         (SELECT COUNT(*) FROM albums) +
+         (SELECT COUNT(*) FROM media_assets) +
+         (SELECT COUNT(*) FROM events) +
+         (SELECT COUNT(*) FROM news_articles) +
+         (SELECT COUNT(*) FROM heritage_projects) +
+         (SELECT COUNT(*) FROM partners_press) AS count`);
+        if (Number(existingResult.rows[0]?.count ?? 0) > 0 && process.env.SEED_ALLOW_DESTRUCTIVE !== 'true') {
+            throw new Error('Refusing to seed because existing content was found. Set SEED_ALLOW_DESTRUCTIVE=true only when you intend to replace it.');
+        }
         await client.query('BEGIN');
         // 1. Admin User
         const adminPasswordHash = await bcryptjs_1.default.hash('Admin@Aadhiran2026', 10);
-        const userRes = await client.query(`
+        await client.query(`
       INSERT INTO users (email, password_hash, full_name, role, is_active)
       VALUES ($1, $2, $3, $4, $5)
-      ON CONFLICT (email) DO UPDATE
-      SET password_hash = EXCLUDED.password_hash, full_name = EXCLUDED.full_name
-      RETURNING id;
+      ON DUPLICATE KEY UPDATE
+      password_hash = VALUES(password_hash), full_name = VALUES(full_name);
     `, ['admin@aadhiran.com', adminPasswordHash, 'Aadhiran Administrator', 'super_admin', true]);
+        const userRes = await client.query('SELECT id FROM users WHERE email = $1', ['admin@aadhiran.com']);
         const adminId = userRes.rows[0].id;
         // 2. Site Settings
         const settings = [
@@ -128,10 +145,10 @@ const runSeed = async () => {
         ];
         for (const setting of settings) {
             await client.query(`
-        INSERT INTO site_settings (key, value, updated_at)
+        INSERT INTO site_settings (\`key\`, \`value\`, updated_at)
         VALUES ($1, $2, NOW())
-        ON CONFLICT (key) DO UPDATE
-        SET value = EXCLUDED.value, updated_at = NOW();
+        ON DUPLICATE KEY UPDATE
+        value = VALUES(value), updated_at = NOW();
       `, [setting.key, JSON.stringify(setting.value)]);
         }
         // 3. Syllabus Stages (10 Traditional Stages)
@@ -243,10 +260,10 @@ const runSeed = async () => {
           stage_number, tamil_name, english_name, overview, key_techniques, weapon_focus, animal_movements, sort_order, is_published
         )
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, true)
-        ON CONFLICT (stage_number) DO UPDATE
-        SET tamil_name = EXCLUDED.tamil_name, english_name = EXCLUDED.english_name,
-            overview = EXCLUDED.overview, key_techniques = EXCLUDED.key_techniques,
-            weapon_focus = EXCLUDED.weapon_focus, animal_movements = EXCLUDED.animal_movements;
+        ON DUPLICATE KEY UPDATE
+        tamil_name = VALUES(tamil_name), english_name = VALUES(english_name),
+        overview = VALUES(overview), key_techniques = VALUES(key_techniques),
+        weapon_focus = VALUES(weapon_focus), animal_movements = VALUES(animal_movements);
       `, [
                 stage.stage_number, stage.tamil_name, stage.english_name, stage.overview,
                 stage.key_techniques, stage.weapon_focus, stage.animal_movements, stage.sort_order
@@ -413,12 +430,12 @@ const runSeed = async () => {
         ];
         const albumMap = {};
         for (const a of albums) {
-            const res = await client.query(`
+            await client.query(`
         INSERT INTO albums (title, slug, description, category, sort_order, is_published)
         VALUES ($1, $2, $3, $4, $5, true)
-        RETURNING id;
       `, [a.title, a.slug, `Photographic collection of ${a.title}`, a.category, a.sort_order]);
-            albumMap[a.slug] = res.rows[0].id;
+            const albumRes = await client.query('SELECT id FROM albums WHERE slug = $1', [a.slug]);
+            albumMap[a.slug] = albumRes.rows[0].id;
         }
         // Seed Media Assets from authentic files
         const mediaList = [
@@ -698,7 +715,7 @@ Our master demonstrators and youth apprentices were featured on the global UNESC
       VALUES 
       ('join_training', 'Kavitha Ramasamy', 'kavitha.r@example.com', '+60 12-345 6789', 'teen', 'beginner', 'George Town Heritage Center', 'I would like to enroll my 14-year-old son in the weekend Kaaladi Varisai beginner batches. Does he need to bring a bamboo staff on day one?', 'new', ''),
       ('general', 'Dr. Marcus Tan', 'mtan.heritage@example.my', '+60 17-889 1234', 'adult', 'none', 'Penang Island', 'We are organizing an intangible cultural heritage documentary for Penang Heritage Week and would love to film a 15-minute demonstration with Master Siva.', 'contacted', 'Spoke to Dr. Tan on WhatsApp; agreed on preliminary date in November.')
-      ON CONFLICT DO NOTHING;
+      ;
     `);
         await client.query('COMMIT');
         console.log('✓ Authentic database seeding completed successfully!');

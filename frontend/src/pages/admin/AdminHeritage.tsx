@@ -9,23 +9,26 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { adminApi } from '../../services/api';
+import { AdminRequestError, getAdminRequestError } from '../../components/admin/AdminRequestState';
 import type { HeritageProject } from '../../types';
 
 export const AdminHeritage: React.FC = () => {
   const [projects, setProjects] = useState<HeritageProject[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [editingItem, setEditingItem] = useState<Partial<HeritageProject> | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const fetchHeritage = async () => {
+    setLoading(true);
+    setLoadError(null);
     try {
       const data = await adminApi.getHeritage();
-      if (Array.isArray(data)) {
-        setProjects(data);
-      }
-    } catch (err) {
-      console.error('Failed to load heritage projects:', err);
+      if (!Array.isArray(data)) throw new Error('Unexpected heritage response.');
+      setProjects(data);
+    } catch (error) {
+      setLoadError(getAdminRequestError(error, 'Unable to load heritage projects.'));
     } finally {
       setLoading(false);
     }
@@ -136,9 +139,11 @@ export const AdminHeritage: React.FC = () => {
 
       {loading ? (
         <div className="p-8 text-center text-gray-500 font-mono text-sm">Loading heritage records...</div>
+      ) : loadError ? (
+        <AdminRequestError message={loadError} onRetry={() => fetchHeritage()} />
       ) : filtered.length === 0 ? (
         <div className="p-12 text-center rounded-2xl bg-charcoal-900 border border-charcoal-800 text-gray-400 text-xs">
-          No heritage records found.
+          {projects.length === 0 ? 'No heritage records have been added yet.' : 'No records match your search.'}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -190,7 +195,7 @@ export const AdminHeritage: React.FC = () => {
       {/* Modal */}
       {editingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-          <div className="relative w-full max-w-2xl bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div data-admin-dialog role="dialog" aria-modal="true" aria-label="Heritage project editor" tabIndex={-1} className="relative w-full max-w-2xl bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="p-5 bg-charcoal-950 flex justify-between items-center border-b border-charcoal-800">
               <h3 className="text-base font-display font-bold text-white">
                 {editingItem.id ? 'Edit Heritage Project' : 'New Heritage Project'}

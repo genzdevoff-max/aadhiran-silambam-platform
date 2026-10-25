@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import {
   UserCog,
   Plus,
+  Pencil,
   Trash2,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  X
 } from 'lucide-react';
 import { adminApi } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
@@ -14,7 +16,14 @@ export const AdminUsers: React.FC = () => {
   const { user: currentUser } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [newUserOpen, setNewUserOpen] = useState<boolean>(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editData, setEditData] = useState<{ role: User['role']; isActive: boolean }>({
+    role: 'editor',
+    isActive: true,
+  });
+  const [savingUser, setSavingUser] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     fullName: '',
@@ -23,25 +32,28 @@ export const AdminUsers: React.FC = () => {
   });
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (showLoading = true) => {
+    if (showLoading) {
+      setLoading(true);
+      setLoadError(null);
+    }
     try {
       const data = await adminApi.listUsers();
-      if (Array.isArray(data)) {
-        setUsers(data);
-      }
-    } catch (err) {
-      console.error('Failed to load users:', err);
+      setUsers(data);
+    } catch {
+      setLoadError('Unable to load administrator accounts. Check the connection and try again.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchUsers(false);
   }, []);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSavingUser(true);
     try {
       await adminApi.createUser(formData);
       setFeedback({ type: 'success', message: 'Staff administrator user created successfully.' });
@@ -50,6 +62,29 @@ export const AdminUsers: React.FC = () => {
       fetchUsers();
     } catch (err: any) {
       setFeedback({ type: 'error', message: err.response?.data?.message || 'Failed to create user.' });
+    } finally {
+      setSavingUser(false);
+    }
+  };
+
+  const openEdit = (adminUser: User) => {
+    setEditingUser(adminUser);
+    setEditData({ role: adminUser.role, isActive: adminUser.isActive !== false });
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+    setSavingUser(true);
+    try {
+      await adminApi.updateUser(editingUser.id, editData);
+      setFeedback({ type: 'success', message: `Access for ${editingUser.fullName} updated successfully.` });
+      setEditingUser(null);
+      await fetchUsers();
+    } catch (err: any) {
+      setFeedback({ type: 'error', message: err.response?.data?.message || 'Failed to update user access.' });
+    } finally {
+      setSavingUser(false);
     }
   };
 
@@ -105,13 +140,24 @@ export const AdminUsers: React.FC = () => {
             <AlertCircle className="w-4 h-4 text-crimson-400 flex-shrink-0" />
           )}
           <span>{feedback.message}</span>
-          <button onClick={() => setFeedback(null)} className="ml-auto text-gray-400 hover:text-white text-xs">
+          <button type="button" onClick={() => setFeedback(null)} aria-label="Dismiss notification" className="ml-auto text-gray-400 hover:text-white text-xs">
             ✕
           </button>
         </div>
       )}
 
-      {loading ? (
+      {loadError ? (
+        <div role="alert" className="rounded-2xl border border-crimson-700/60 bg-crimson-950/60 p-6 text-center">
+          <p className="text-sm font-semibold text-crimson-200">{loadError}</p>
+          <button
+            type="button"
+            onClick={() => fetchUsers()}
+            className="mt-4 rounded-xl border border-charcoal-700 bg-charcoal-800 px-4 py-2 text-xs font-semibold text-white hover:bg-charcoal-700"
+          >
+            Retry
+          </button>
+        </div>
+      ) : loading ? (
         <div className="p-8 text-center text-gray-500 font-mono text-sm">Loading user accounts...</div>
       ) : users.length === 0 ? (
         <div className="p-12 text-center rounded-2xl bg-charcoal-900 border border-charcoal-800 text-gray-400 text-xs">
@@ -154,19 +200,36 @@ export const AdminUsers: React.FC = () => {
                       </span>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-950/80 text-emerald-400 border border-emerald-800">
-                        Active
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
+                        u.isActive
+                          ? 'bg-emerald-950/80 text-emerald-400 border-emerald-800'
+                          : 'bg-charcoal-800 text-gray-400 border-charcoal-700'
+                      }`}>
+                        {u.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right">
                       {u.id !== currentUser?.id && (
-                        <button
-                          onClick={() => handleDelete(u.id)}
-                          className="p-1.5 rounded-lg bg-charcoal-800 hover:bg-crimson-950 text-gray-400 hover:text-crimson-400 transition-colors"
-                          title="Revoke user account"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="inline-flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => openEdit(u)}
+                            className="p-2 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 text-gray-300 hover:text-gold-300 transition-colors"
+                            aria-label={`Edit access for ${u.fullName}`}
+                            title="Edit access"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(u.id)}
+                            className="p-2 rounded-lg bg-charcoal-800 hover:bg-crimson-950 text-gray-400 hover:text-crimson-300 transition-colors"
+                            aria-label={`Delete account for ${u.fullName}`}
+                            title="Revoke user account"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -180,11 +243,13 @@ export const AdminUsers: React.FC = () => {
       {/* Create Modal */}
       {newUserOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-          <div className="relative w-full max-w-md bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl p-6 space-y-4">
+          <div data-admin-dialog role="dialog" aria-modal="true" aria-labelledby="new-user-title" tabIndex={-1} className="relative w-full max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto bg-charcoal-900 rounded-2xl border border-charcoal-700 shadow-2xl p-6 space-y-4">
             <div className="flex justify-between items-center border-b border-charcoal-800 pb-3">
-              <h3 className="text-base font-display font-bold text-white">Create Staff Administrator</h3>
+              <h3 id="new-user-title" className="text-base font-display font-bold text-white">Create Staff Administrator</h3>
               <button
+                type="button"
                 onClick={() => setNewUserOpen(false)}
+                aria-label="Close create user dialog"
                 className="text-gray-400 hover:text-white px-2 py-1 rounded bg-charcoal-800 text-xs"
               >
                 ✕ Cancel
@@ -193,9 +258,10 @@ export const AdminUsers: React.FC = () => {
 
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">Full Name</label>
+                <label htmlFor="new-user-name" className="block text-xs font-semibold text-gray-300 uppercase mb-1">Full Name</label>
                 <input
                   type="text"
+                  id="new-user-name"
                   required
                   value={formData.fullName}
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -205,9 +271,10 @@ export const AdminUsers: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">Email Address</label>
+                <label htmlFor="new-user-email" className="block text-xs font-semibold text-gray-300 uppercase mb-1">Email Address</label>
                 <input
                   type="email"
+                  id="new-user-email"
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -217,9 +284,10 @@ export const AdminUsers: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">Initial Password</label>
+                <label htmlFor="new-user-password" className="block text-xs font-semibold text-gray-300 uppercase mb-1">Initial Password</label>
                 <input
                   type="password"
+                  id="new-user-password"
                   required
                   minLength={8}
                   value={formData.password}
@@ -230,8 +298,9 @@ export const AdminUsers: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">Access Role</label>
+                <label htmlFor="new-user-role" className="block text-xs font-semibold text-gray-300 uppercase mb-1">Access Role</label>
                 <select
+                  id="new-user-role"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value as 'super_admin' | 'editor' })}
                   className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
@@ -251,9 +320,62 @@ export const AdminUsers: React.FC = () => {
                 </button>
                 <button
                   type="submit"
+                  disabled={savingUser}
                   className="px-5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow"
                 >
-                  Create Account
+                  {savingUser ? 'Creating...' : 'Create Account'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {editingUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-user-title"
+            data-admin-dialog
+            tabIndex={-1}
+            className="relative w-full max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto bg-charcoal-900 rounded-2xl border border-charcoal-700 shadow-2xl p-6 space-y-5"
+          >
+            <div className="flex items-center justify-between border-b border-charcoal-800 pb-3">
+              <div>
+                <h3 id="edit-user-title" className="text-base font-display font-bold text-white">Edit Account Access</h3>
+                <p className="mt-1 text-xs text-gray-400 break-all">{editingUser.email}</p>
+              </div>
+              <button type="button" onClick={() => setEditingUser(null)} aria-label="Close edit access dialog" className="p-2 rounded-lg text-gray-400 hover:text-white">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleUpdate} className="space-y-4">
+              <div>
+                <label htmlFor="user-role" className="block text-xs font-semibold text-gray-300 uppercase mb-1">Access Role</label>
+                <select
+                  id="user-role"
+                  value={editData.role}
+                  onChange={(e) => setEditData({ ...editData, role: e.target.value as User['role'] })}
+                  className="w-full px-3 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                >
+                  <option value="editor">Editor</option>
+                  <option value="super_admin">Super Admin</option>
+                </select>
+              </div>
+              <label className="flex items-center gap-3 rounded-xl border border-charcoal-800 bg-charcoal-950 p-3 text-xs text-gray-300">
+                <input
+                  type="checkbox"
+                  checked={editData.isActive}
+                  onChange={(e) => setEditData({ ...editData, isActive: e.target.checked })}
+                  className="h-4 w-4 accent-emerald-500"
+                />
+                <span>Account is active and may sign in</span>
+              </label>
+              <div className="flex justify-end gap-2 border-t border-charcoal-800 pt-4">
+                <button type="button" onClick={() => setEditingUser(null)} className="px-4 py-2 rounded-xl bg-charcoal-800 text-gray-300 text-xs font-semibold">Cancel</button>
+                <button type="submit" disabled={savingUser} className="px-5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider">
+                  {savingUser ? 'Saving...' : 'Save Access'}
                 </button>
               </div>
             </form>

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const publicController_1 = require("../controllers/publicController");
+const validate_1 = require("../middleware/validate");
 const router = (0, express_1.Router)();
 router.get('/home', publicController_1.getHomeContent);
 router.get('/about', publicController_1.getAboutContent);
@@ -21,7 +22,7 @@ router.get('/heritage', publicController_1.getHeritageProjects);
 router.get('/heritage/:slug', publicController_1.getHeritageBySlug);
 router.get('/partners-press', publicController_1.getPartnersPress);
 router.get('/settings', publicController_1.getSettings);
-// Public form submissions
-router.post('/enquiries', publicController_1.submitContactEnquiry);
-router.post('/join-enquiry', publicController_1.submitJoinEnquiry);
+// Public form submissions with validation
+router.post('/enquiries', (0, validate_1.validateBody)(validate_1.contactEnquirySchema), publicController_1.submitContactEnquiry);
+router.post('/join-enquiry', (0, validate_1.validateBody)(validate_1.joinEnquirySchema), publicController_1.submitJoinEnquiry);
 exports.default = router;

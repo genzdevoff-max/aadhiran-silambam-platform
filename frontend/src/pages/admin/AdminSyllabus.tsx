@@ -5,22 +5,25 @@ import {
   Trash2
 } from 'lucide-react';
 import { adminApi } from '../../services/api';
+import { AdminRequestError, getAdminRequestError } from '../../components/admin/AdminRequestState';
 import type { SyllabusStage } from '../../types';
 
 export const AdminSyllabus: React.FC = () => {
   const [stages, setStages] = useState<SyllabusStage[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [editingStage, setEditingStage] = useState<Partial<SyllabusStage> | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const fetchStages = async () => {
+    setLoading(true);
+    setLoadError(null);
     try {
       const data = await adminApi.getSyllabus();
-      if (Array.isArray(data)) {
-        setStages(data);
-      }
-    } catch (e) {
-      console.error('Failed to load syllabus stages', e);
+      if (!Array.isArray(data)) throw new Error('Unexpected syllabus response.');
+      setStages(data);
+    } catch (error) {
+      setLoadError(getAdminRequestError(error, 'Unable to load syllabus stages.'));
     } finally {
       setLoading(false);
     }
@@ -108,6 +111,12 @@ export const AdminSyllabus: React.FC = () => {
       {/* Stages List */}
       {loading ? (
         <div className="py-12 text-center text-xs text-gray-500 font-mono">Loading syllabus stages...</div>
+      ) : loadError ? (
+        <AdminRequestError message={loadError} onRetry={() => fetchStages()} />
+      ) : stages.length === 0 ? (
+        <div className="rounded-2xl border border-charcoal-800 bg-charcoal-900 p-10 text-center text-sm text-gray-300">
+          No syllabus stages have been added yet.
+        </div>
       ) : (
         <div className="space-y-4">
           {stages.map((stage) => (
@@ -160,7 +169,7 @@ export const AdminSyllabus: React.FC = () => {
       {/* Edit / Create Modal */}
       {editingStage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-          <div className="relative w-full max-w-2xl bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div data-admin-dialog role="dialog" aria-modal="true" aria-label="Syllabus stage editor" tabIndex={-1} className="relative w-full max-w-2xl bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="p-5 bg-charcoal-950 flex justify-between items-center border-b border-charcoal-800">
               <h3 className="text-base font-display font-bold text-white">
                 {editingStage.id ? `Edit Stage ${editingStage.stage_number}` : 'Create New Syllabus Stage'}

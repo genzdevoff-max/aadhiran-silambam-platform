@@ -159,3 +159,62 @@ export interface DashboardStats {
   mediaAssets: number;
   instructors: number;
 }
+
+export interface SiteSettingsData {
+  siteTitle: string;
+  siteName: string;
+  tamilName?: string;
+  tagline?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  foundedYear: number;
+  registrationNumber: string;
+  registrationBody: string;
+  email: string;
+  phone: string;
+  secondaryPhone?: string;
+  address: string;
+  city: string;
+  state: string;
+  postcode: string;
+  country: string;
+  socials: {
+    facebook: string;
+    instagram: string;
+    youtube: string;
+    twitter: string;
+    whatsapp?: string;
+  };
+  footerNotice?: string;
+}
+
+export interface HeroConfig {
+  badge: string;
+  title: string;
+  tamilTitle: string;
+  subtitle: string;
+  bgImage: string;
+  videoUrl: string;
+  ctaText?: string;
+  ctaLink?: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
+  stats: Array<{ label: string; value: string }>;
+}
+
+export interface SectionVisibilityItem {
+  id: string;
+  name: string;
+  enabled: boolean;
+  order: number;
+}
+
+export interface QuickFact {
+  id: string;
+  badge: string;
+  title: string;
+  description: string;
+  year: string;
+  link: string;
+}
+

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_1 = require("../middleware/auth");
 const upload_1 = require("../middleware/upload");
+const validate_1 = require("../middleware/validate");
 const adminController_1 = require("../controllers/adminController");
 const router = (0, express_1.Router)();
 // Protect all admin routes
@@ -10,7 +11,7 @@ router.use(auth_1.requireAuth);
 // Dashboard
 router.get('/dashboard', adminController_1.getDashboardStats);
 // Sections & Settings
-router.put('/sections/:key', adminController_1.updateSectionSetting);
+router.put('/sections/:key', (0, validate_1.validateBody)(validate_1.sectionUpdateSchema), adminController_1.updateSectionSetting);
 // Syllabus Stages
 router.get('/syllabus', adminController_1.listSyllabusStages);
 router.post('/syllabus', adminController_1.createSyllabusStage);
@@ -52,7 +53,7 @@ router.post('/albums', adminController_1.createAlbum);
 router.put('/albums/:id', adminController_1.updateAlbum);
 router.delete('/albums/:id', adminController_1.deleteAlbum);
 // Media Assets & Uploads
-router.post('/media/upload', upload_1.upload.array('files', 15), adminController_1.uploadMedia);
+router.post('/media/upload', upload_1.upload.array('files', 15), upload_1.validateUploadedFiles, adminController_1.uploadMedia);
 router.get('/media', adminController_1.listMediaAssets);
 router.put('/media/:id', adminController_1.updateMediaAsset);
 router.get('/media/:id/references', adminController_1.getMediaReferences);

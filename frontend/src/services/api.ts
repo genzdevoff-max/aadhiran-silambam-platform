@@ -1,4 +1,20 @@
 import axios from 'axios';
+import type { User } from '../types';
+
+let activeMutationCount = 0;
+let nextMutationId = 0;
+const mutationRequestIds = new WeakMap<object, string>();
+
+const notifyMutationActivity = (detail: {
+  id: string;
+  phase: 'start' | 'end';
+  activeMutationCount: number;
+  succeeded?: boolean;
+}) => {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('admin-api-activity', { detail }));
+  }
+};
 
 export const api = axios.create({
   baseURL: '/api',
@@ -13,13 +29,31 @@ api.interceptors.request.use((config) => {
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  if (!['get', 'head', 'options'].includes((config.method || 'get').toLowerCase())) {
+    const id = `mutation-${++nextMutationId}`;
+    mutationRequestIds.set(config, id);
+    activeMutationCount += 1;
+    notifyMutationActivity({ id, phase: 'start', activeMutationCount });
+  }
   return config;
 });
 
 // Intercept responses to handle 401 unauthenticated
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const id = mutationRequestIds.get(response.config);
+    if (id) {
+      activeMutationCount = Math.max(0, activeMutationCount - 1);
+      notifyMutationActivity({ id, phase: 'end', activeMutationCount, succeeded: true });
+    }
+    return response;
+  },
   (error) => {
+    const id = error.config && mutationRequestIds.get(error.config);
+    if (id) {
+      activeMutationCount = Math.max(0, activeMutationCount - 1);
+      notifyMutationActivity({ id, phase: 'end', activeMutationCount, succeeded: false });
+    }
     if (error.response?.status === 401) {
       // If unauthorized on admin route, clear token
       if (window.location.pathname.startsWith('/admin') && window.location.pathname !== '/admin/login') {
@@ -63,7 +97,31 @@ export const adminApi = {
   login: (credentials: { email: string; password: string }) => api.post('/auth/login', credentials).then((r) => r.data),
   getMe: () => api.get('/auth/me').then((r) => r.data.user),
   changePassword: (data: any) => api.post('/auth/change-password', data).then((r) => r.data),
-  listUsers: () => api.get('/auth/users').then((r) => r.data.users),
+  listUsers: async (): Promise<User[]> => {
+    const users = await api
+      .get<{
+        users: Array<{
+          id: string;
+          email: string;
+          full_name: string;
+          role: User['role'];
+          is_active: boolean;
+          created_at?: string;
+          last_login?: string;
+        }>;
+      }>('/auth/users')
+      .then((r) => r.data.users);
+
+    return users.map((adminUser) => ({
+      id: adminUser.id,
+      email: adminUser.email,
+      fullName: adminUser.full_name,
+      role: adminUser.role,
+      isActive: adminUser.is_active,
+      createdAt: adminUser.created_at,
+      lastLogin: adminUser.last_login,
+    }));
+  },
   createUser: (data: any) => api.post('/auth/users', data).then((r) => r.data),
   updateUser: (id: string, data: any) => api.put(`/auth/users/${id}`, data).then((r) => r.data),
   deleteUser: (id: string) => api.delete(`/auth/users/${id}`).then((r) => r.data),

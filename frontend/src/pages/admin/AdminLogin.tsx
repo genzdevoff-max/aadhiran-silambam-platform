@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import { Shield, Lock, Mail, AlertCircle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { adminApi } from '../../services/api';
@@ -11,8 +12,16 @@ export const AdminLogin: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login } = useAuth();
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/admin/dashboard';
+
+  // If already authenticated and not verifying token, redirect directly
+  if (!authLoading && isAuthenticated) {
+    return <Navigate to={from} replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,13 +32,14 @@ export const AdminLogin: React.FC = () => {
       const data = await adminApi.login({ email, password });
       if (data && data.token && data.user) {
         login(data.token, data.user);
-        navigate('/admin/dashboard');
+        navigate(from, { replace: true });
       } else {
         setError('Invalid response from authentication server.');
       }
-    } catch (err: any) {
-      console.error('Login error:', err);
-      const errMsg = err.response?.data?.message || 'Invalid credentials or inactive account.';
+    } catch (err: unknown) {
+      const errMsg = axios.isAxiosError<{ message?: string }>(err)
+        ? err.response?.data?.message || 'Unable to sign in. Check your credentials and try again.'
+        : 'Unable to sign in. Please try again.';
       setError(errMsg);
     } finally {
       setIsLoading(false);
@@ -37,7 +47,7 @@ export const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-charcoal-950 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="admin-login min-h-screen bg-charcoal-950 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Background Graphic */}
       <div className="absolute inset-0 bg-[radial-gradient(#020ee3_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
 
@@ -61,7 +71,7 @@ export const AdminLogin: React.FC = () => {
         {/* Card */}
         <div className="bg-charcoal-900 border border-charcoal-800 rounded-3xl p-8 sm:p-10 shadow-2xl space-y-6">
           {error && (
-            <div className="p-4 rounded-xl bg-crimson-950/80 border border-crimson-700/60 text-crimson-300 text-xs flex items-start space-x-3">
+            <div role="alert" className="p-4 rounded-xl bg-crimson-950/80 border border-crimson-700/60 text-crimson-300 text-xs flex items-start space-x-3">
               <AlertCircle className="w-4 h-4 flex-shrink-0 text-crimson-400 mt-0.5" />
               <span>{error}</span>
             </div>
@@ -69,39 +79,47 @@ export const AdminLogin: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
+              <label htmlFor="admin-email" className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
                 Admin Email Address
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="email"
+                  id="admin-email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@aadhiran.com"
+                  autoComplete="username"
+                  aria-invalid={!!error}
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-gold-500 transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
+              <label htmlFor="admin-password" className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
                 Security Password
               </label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  id="admin-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
+                  autoComplete="current-password"
+                  aria-invalid={!!error}
                   className="w-full pl-10 pr-10 py-3 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-gold-500 transition-colors"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -112,6 +130,7 @@ export const AdminLogin: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
+              aria-busy={isLoading}
               className="w-full py-4 rounded-xl bg-crimson-600 hover:bg-crimson-500 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-lg shadow-crimson-900/50 flex items-center justify-center space-x-2"
             >
               {isLoading ? (
