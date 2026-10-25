@@ -5,16 +5,33 @@ import { randomUUID } from 'crypto';
 import type { NextFunction, Request, Response } from 'express';
 import { getSafeUploadExtension, UploadValidationError, validateMediaFile } from './uploadValidation';
 
-const uploadDir = path.resolve(__dirname, '../../uploads');
+import os from 'os';
+const defaultUploadDir = (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+  ? path.join(os.tmpdir(), 'uploads')
+  : path.resolve(__dirname, '../../uploads');
+const uploadDir = process.env.UPLOAD_DIR
+  ? path.resolve(process.env.UPLOAD_DIR)
+  : defaultUploadDir;
 export const MAX_UPLOAD_FILE_SIZE = 100 * 1024 * 1024;
 export const MAX_UPLOAD_FILE_COUNT = 15;
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (err) {
+  console.warn('[upload] Warning: Could not create upload directory:', err);
 }
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    cb(null, uploadDir);
+    try {
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      cb(null, uploadDir);
+    } catch (err) {
+      cb(err as Error, '');
+    }
   },
   filename: (_req, file, cb) => {
     const extension = getSafeUploadExtension(file.originalname);

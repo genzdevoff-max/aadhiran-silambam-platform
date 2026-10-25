@@ -9,15 +9,34 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const crypto_1 = require("crypto");
 const uploadValidation_1 = require("./uploadValidation");
-const uploadDir = path_1.default.resolve(__dirname, '../../uploads');
+const os_1 = __importDefault(require("os"));
+const defaultUploadDir = (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+    ? path_1.default.join(os_1.default.tmpdir(), 'uploads')
+    : path_1.default.resolve(__dirname, '../../uploads');
+const uploadDir = process.env.UPLOAD_DIR
+    ? path_1.default.resolve(process.env.UPLOAD_DIR)
+    : defaultUploadDir;
 exports.MAX_UPLOAD_FILE_SIZE = 100 * 1024 * 1024;
 exports.MAX_UPLOAD_FILE_COUNT = 15;
-if (!fs_1.default.existsSync(uploadDir)) {
-    fs_1.default.mkdirSync(uploadDir, { recursive: true });
+try {
+    if (!fs_1.default.existsSync(uploadDir)) {
+        fs_1.default.mkdirSync(uploadDir, { recursive: true });
+    }
+}
+catch (err) {
+    console.warn('[upload] Warning: Could not create upload directory:', err);
 }
 const storage = multer_1.default.diskStorage({
     destination: (_req, _file, cb) => {
-        cb(null, uploadDir);
+        try {
+            if (!fs_1.default.existsSync(uploadDir)) {
+                fs_1.default.mkdirSync(uploadDir, { recursive: true });
+            }
+            cb(null, uploadDir);
+        }
+        catch (err) {
+            cb(err, '');
+        }
     },
     filename: (_req, file, cb) => {
         const extension = (0, uploadValidation_1.getSafeUploadExtension)(file.originalname);

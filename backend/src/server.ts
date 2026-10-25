@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
 import dotenv from 'dotenv';
+import os from 'os';
 import { checkDatabaseConnection, pool } from './config/db';
 import authRoutes from './routes/authRoutes';
 import publicRoutes from './routes/publicRoutes';
@@ -68,7 +69,12 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Static media serving
-const uploadDir = path.resolve(__dirname, '../uploads');
+const defaultUploadDir = (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+  ? path.join(os.tmpdir(), 'uploads')
+  : path.resolve(__dirname, '../uploads');
+const uploadDir = process.env.UPLOAD_DIR
+  ? path.resolve(process.env.UPLOAD_DIR)
+  : defaultUploadDir;
 app.use('/uploads', express.static(uploadDir));
 
 // Rate limiter for authentication endpoints

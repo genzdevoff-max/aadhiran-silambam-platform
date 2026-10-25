@@ -9,6 +9,7 @@ const helmet_1 = __importDefault(require("helmet"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const os_1 = __importDefault(require("os"));
 const db_1 = require("./config/db");
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const publicRoutes_1 = __importDefault(require("./routes/publicRoutes"));
@@ -65,7 +66,12 @@ app.use((0, cors_1.default)({
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
 // Static media serving
-const uploadDir = path_1.default.resolve(__dirname, '../uploads');
+const defaultUploadDir = (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME)
+    ? path_1.default.join(os_1.default.tmpdir(), 'uploads')
+    : path_1.default.resolve(__dirname, '../uploads');
+const uploadDir = process.env.UPLOAD_DIR
+    ? path_1.default.resolve(process.env.UPLOAD_DIR)
+    : defaultUploadDir;
 app.use('/uploads', express_1.default.static(uploadDir));
 // Rate limiter for authentication endpoints
 const authLimiter = (0, express_rate_limit_1.default)({
