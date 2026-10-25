@@ -123,5 +123,8 @@ const startServer = async () => {
         console.log(`=======================================================`);
     });
 };
-startServer();
+// Start server only when run directly (not in Vercel environment)
+if (require.main === module) {
+    startServer();
+}
 exports.default = app;
