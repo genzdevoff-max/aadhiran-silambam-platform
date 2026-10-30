@@ -59,10 +59,11 @@ export const runSeed = async () => {
           phone: '+60 16-414 7856',
           secondaryPhone: '+60 4-261 8890',
           address: 'Lebuh King, George Town, 10200 Penang, Malaysia',
-          instagram: 'https://instagram.com/aadhiransilambam',
-          facebook: 'https://facebook.com/aadhiransilambam',
+          instagram: 'https://www.instagram.com/aadhiransilambam',
+          facebook: 'https://www.facebook.com/share/1kJFSc672L/',
           youtube: 'https://youtube.com/@aadhiransilambam',
-          twitter: 'https://twitter.com/aadhiransilambam'
+          twitter: 'https://twitter.com/aadhiransilambam',
+          whatsapp: 'https://wa.me/97433690769'
         }
       },
       {

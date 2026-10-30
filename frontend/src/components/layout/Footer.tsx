@@ -8,6 +8,13 @@ import {
   ChevronRight,
   Globe
 } from 'lucide-react';
+import {
+  FaInstagram,
+  FaYoutube,
+  FaFacebookF,
+  FaWhatsapp
+} from 'react-icons/fa6';
+import { generalInfo } from '../../data/siteContent';
 
 export const Footer: React.FC = () => {
   return (
@@ -77,6 +84,55 @@ export const Footer: React.FC = () => {
               <span className="inline-flex items-center px-2.5 py-1 rounded bg-[#142C66] border border-[#1E3A8A] text-amber-300 font-medium">
                 CNN Travel Featured (2017)
               </span>
+            </div>
+
+            {/* Official Social Media Channels */}
+            <div className="pt-3">
+              <span className="block text-xs font-semibold uppercase tracking-wider text-amber-400 mb-2.5">
+                Official Channels & Social
+              </span>
+              <div className="flex items-center space-x-3" aria-label="Official Social Media Links">
+                <a
+                  href={generalInfo.socials.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram: Visit Aadhiran Silambam Profile"
+                  title="Follow Aadhiran Silambam on Instagram"
+                  className="w-10 h-10 rounded-full bg-[#142C66] border border-[#1E3A8A] flex items-center justify-center text-slate-300 hover:text-amber-400 hover:border-amber-400/80 hover:bg-[#1B3678] hover:scale-110 transition-all duration-200 shadow-sm"
+                >
+                  <FaInstagram className="w-4 h-4" aria-hidden="true" />
+                </a>
+                <a
+                  href={generalInfo.socials.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube: Visit Aadhiran Silambam Channel"
+                  title="Subscribe to Aadhiran Silambam on YouTube"
+                  className="w-10 h-10 rounded-full bg-[#142C66] border border-[#1E3A8A] flex items-center justify-center text-slate-300 hover:text-amber-400 hover:border-amber-400/80 hover:bg-[#1B3678] hover:scale-110 transition-all duration-200 shadow-sm"
+                >
+                  <FaYoutube className="w-4 h-4" aria-hidden="true" />
+                </a>
+                <a
+                  href={generalInfo.socials.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook: Visit Aadhiran Silambam Page"
+                  title="Follow Aadhiran Silambam on Facebook"
+                  className="w-10 h-10 rounded-full bg-[#142C66] border border-[#1E3A8A] flex items-center justify-center text-slate-300 hover:text-amber-400 hover:border-amber-400/80 hover:bg-[#1B3678] hover:scale-110 transition-all duration-200 shadow-sm"
+                >
+                  <FaFacebookF className="w-4 h-4" aria-hidden="true" />
+                </a>
+                <a
+                  href={generalInfo.socials.whatsapp || 'https://wa.me/97433690769'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp: Chat with Aadhiran Silambam"
+                  title="Chat with Aadhiran Silambam on WhatsApp"
+                  className="w-10 h-10 rounded-full bg-[#142C66] border border-[#1E3A8A] flex items-center justify-center text-slate-300 hover:text-[#25D366] hover:border-[#25D366]/80 hover:bg-[#1B3678] hover:scale-110 transition-all duration-200 shadow-sm"
+                >
+                  <FaWhatsapp className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -174,6 +230,17 @@ export const Footer: React.FC = () => {
                 <Phone className="w-4 h-4 mr-2.5 text-amber-400 flex-shrink-0" />
                 <a href="tel:+60164147856" className="text-slate-300 hover:text-amber-300 transition-colors">
                   +60 16-414 7856
+                </a>
+              </li>
+              <li className="flex items-center">
+                <FaWhatsapp className="w-4 h-4 mr-2.5 text-[#25D366] flex-shrink-0" />
+                <a
+                  href={generalInfo.socials.whatsapp || 'https://wa.me/97433690769'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-300 hover:text-emerald-400 transition-colors"
+                >
+                  +974 3369 0769 (WhatsApp)
                 </a>
               </li>
               <li className="flex items-center">

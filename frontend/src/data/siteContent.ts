@@ -18,6 +18,7 @@ export interface SiteGeneralInfo {
     instagram: string;
     youtube: string;
     twitter: string;
+    whatsapp?: string;
   };
 }
 
@@ -53,10 +54,11 @@ export const generalInfo: SiteGeneralInfo = {
   postcode: '10200',
   country: 'Malaysia',
   socials: {
-    facebook: 'https://facebook.com/aadhiransilambam',
-    instagram: 'https://instagram.com/aadhiransilambam',
+    facebook: 'https://www.facebook.com/share/1kJFSc672L/',
+    instagram: 'https://www.instagram.com/aadhiransilambam',
     youtube: 'https://youtube.com/@aadhiransilambam',
     twitter: 'https://twitter.com/aadhiransilambam',
+    whatsapp: 'https://wa.me/97433690769',
   },
 };
 
