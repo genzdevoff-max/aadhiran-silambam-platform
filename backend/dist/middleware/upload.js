@@ -65,7 +65,16 @@ const createUploadMiddleware = (limits = {}) => (0, multer_1.default)({
 exports.createUploadMiddleware = createUploadMiddleware;
 exports.upload = (0, exports.createUploadMiddleware)();
 const validateUploadedFiles = async (req, _res, next) => {
-    const files = (req.files || []);
+    const files = [];
+    if (Array.isArray(req.files)) {
+        files.push(...req.files);
+    }
+    else if (req.files && typeof req.files === 'object') {
+        Object.values(req.files).forEach((group) => files.push(...group));
+    }
+    if (req.file) {
+        files.push(req.file);
+    }
     try {
         for (const file of files) {
             const handle = await fs_1.default.promises.open(file.path, 'r');

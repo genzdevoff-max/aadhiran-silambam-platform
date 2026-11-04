@@ -1,164 +1,1055 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Award,
-  Shield,
   ChevronRight,
-  Flame,
   ArrowRight,
   CheckCircle2,
   Play,
-  MapPin,
-  ExternalLink,
-  BookOpen,
-  Camera,
   Layers,
   Sparkles,
   Globe,
+  Compass,
+  Trophy,
+  Calendar,
+  MapPin,
+  Clock,
+  Shield,
+  X,
+  Camera,
+  Film,
+  BookOpen
 } from 'lucide-react';
+import { HeroSlider } from '../../components/home/HeroSlider';
 import {
   syllabusStages,
   achievementsList,
   quickFacts,
   heroContent,
+  instructorsList,
+  eventsList,
+  newsArticlesList
 } from '../../data';
+import { publicApi } from '../../services/api';
+import type { HeroConfig, QuickFact, Achievement, Instructor, EventItem, NewsArticle } from '../../types';
 
 export const Home: React.FC = () => {
   const [videoModalOpen, setVideoModalOpen] = useState<boolean>(false);
+  const [hero, setHero] = useState<HeroConfig>(heroContent);
+  const [facts, setFacts] = useState<QuickFact[]>(quickFacts);
+  const [featuredAchievements, setFeaturedAchievements] = useState<Achievement[]>(
+    achievementsList.filter((a) => a.is_featured).slice(0, 3)
+  );
+  const [instructors, setInstructors] = useState<Instructor[]>(instructorsList.slice(0, 3));
+  const [events, setEvents] = useState<EventItem[]>(eventsList.slice(0, 3));
+  const [news, setNews] = useState<NewsArticle[]>(newsArticlesList.slice(0, 3));
+  const [activeStageTab, setActiveStageTab] = useState<number>(1);
 
-  const featuredAchievements = achievementsList
-    .filter((a) => a.is_featured)
-    .slice(0, 3);
+  useEffect(() => {
+    publicApi
+      .getHome()
+      .then((data) => {
+        if (data) {
+          if (data.hero) setHero((prev) => ({ ...prev, ...data.hero }));
+          if (Array.isArray(data.quickFacts) && data.quickFacts.length > 0) setFacts(data.quickFacts);
+          if (Array.isArray(data.featuredAchievements) && data.featuredAchievements.length > 0) {
+            setFeaturedAchievements(data.featuredAchievements.slice(0, 3));
+          }
+          if (Array.isArray(data.instructorsPreview) && data.instructorsPreview.length > 0) {
+            setInstructors(data.instructorsPreview.slice(0, 3));
+          }
+          if (Array.isArray(data.upcomingEvents) && data.upcomingEvents.length > 0) {
+            setEvents(data.upcomingEvents.slice(0, 3));
+          }
+          if (Array.isArray(data.latestNews) && data.latestNews.length > 0) {
+            setNews(data.latestNews.slice(0, 3));
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const activeStage = syllabusStages.find((s) => s.stage_number === activeStageTab) || syllabusStages[0];
 
   return (
-    <div className="bg-[#FDFBF7] text-slate-800">
-      {/* 1. Refined Heritage Hero Section - Deep Navy with Balanced Warm Glow */}
-      <section className="public-dark-surface relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-navy-800 bg-[#0B1B3D]">
-        {/* Background Atmosphere Layers */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroContent.bgImage}
-            alt="Aadhiran Silambam Lineage Custody"
-            className="w-full h-full object-cover object-center opacity-80 filter brightness-90 contrast-110"
-          />
-          {/* Radial amber glow & subtle gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B1B3D]/45 via-[#0B1B3D]/40 to-[#0B1B3D]/65" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(245,158,11,0.15),transparent_70%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_110%,rgba(14,165,233,0.12),transparent_70%)]" />
+    <div className="bg-[#FDFBF7] text-[#182332]">
+      {/* 1. LATEST ANNOUNCEMENTS TICKER RIBBON (Inspired by Indian Silambam Federation live ticker) */}
+      <div className="bg-[#102137] border-b border-[#C6A04A]/30 text-white py-2.5 px-4 sm:px-6 lg:px-8 text-xs font-sans">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5">
+          <div className="flex items-center space-x-3 w-full md:w-auto overflow-hidden min-w-0">
+            <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-[#C6A04A] text-[#102137] font-bold text-[10px] uppercase tracking-wider shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#102137] animate-pulse" />
+              <span>Official Notice</span>
+            </span>
+            <div className="text-slate-200 truncate text-[11px] sm:text-xs">
+              <strong className="text-[#D9B96E] font-semibold">Malaysia Book of Records (2022)</strong>: Certified Oldest Silambam Association in Malaysia • 2026 Traditional Intake Open
+            </div>
+          </div>
+          <div className="flex items-center space-x-4 shrink-0 text-[11px] sm:text-xs font-medium">
+            <Link to="/join-training" className="text-[#D9B96E] hover:text-white font-semibold transition-colors flex items-center space-x-1">
+              <span>Begin Training</span>
+              <ArrowRight className="w-3 h-3 ml-0.5" />
+            </Link>
+            <span className="text-slate-500">|</span>
+            <Link to="/events" className="text-slate-300 hover:text-white transition-colors">
+              Championship Calendar
+            </Link>
+          </div>
         </div>
+      </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
-          {/* Official ASA Logo Emblem */}
-          <div className="flex justify-center mb-6">
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full p-1 bg-gradient-to-br from-amber-400 via-amber-300 to-crimson-600 shadow-2xl shadow-navy-950/80 hover:scale-105 transition-transform duration-300">
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden p-1 shadow-inner">
-                <img
-                  src="/logo.png"
-                  alt="Aadhiran Silambam Association Official Emblem"
-                  className="w-full h-full object-contain"
-                />
+      {/* 2. SPLIT-LAYOUT HERO SECTION (Main Priority: Text on Left, High-Impact Action Slider on Right) */}
+      <section className="relative bg-[#102137] text-white overflow-hidden border-b border-[#183B5B]">
+        {/* Subtle Ambient Background Gradients */}
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_70%_50%_at_20%_20%,rgba(24,59,91,0.6),transparent_80%)]" />
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_60%_at_85%_65%,rgba(198,160,74,0.1),transparent_75%)]" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-18">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Heading, Subtitle, Credibility & Action CTAs */}
+            <div className="lg:col-span-6 flex flex-col items-start text-left space-y-5">
+              {/* Refined Credibility Element (Malaysia Book of Records as sleek credibility strip, not oversized) */}
+              <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/90 border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-semibold tracking-wide shadow-sm backdrop-blur-md">
+                <Award className="w-4 h-4 text-[#C6A04A] shrink-0" />
+                <span className="text-[11px] sm:text-xs tracking-wider uppercase">
+                  Malaysia Book of Records (2022) • Oldest Silambam Association
+                </span>
+              </div>
+
+              {/* Small Introductory Label with ISF-inspired Architectural Accent */}
+              <div className="flex items-center space-x-2.5 text-xs font-bold tracking-[0.2em] text-[#C6A04A] uppercase">
+                <span className="w-6 h-px bg-[#C6A04A]" />
+                <span className="w-1.5 h-1.5 rotate-45 bg-[#C6A04A]" />
+                <span>Living Tamil Martial Heritage · Est. 1975</span>
+              </div>
+
+              {/* Main Heading with High-Contrast Dual Tone Visual Hierarchy */}
+              <div className="space-y-1">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
+                  AADHIRAN <span className="text-[#C6A04A]">SILAMBAM</span>
+                </h1>
+                <p className="text-base sm:text-lg font-medium text-[#D9B96E] tracking-wide pt-1">
+                  ஆதிரன் சிலம்ப சங்கம் <span className="text-slate-400 mx-1.5">•</span> George Town, Penang & Global
+                </p>
+              </div>
+
+              {/* Supporting Description with Balanced Line Length */}
+              <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-xl font-normal">
+                Preserving the traditional art of Silambam through structured training, cultural heritage and martial arts excellence. Unbroken 10-stage <strong className="text-white font-semibold">Por Silambam</strong> battlefield combat and modern <strong className="text-white font-semibold">Sport Silambam</strong> athletic mastery in George Town since 1936.
+              </p>
+
+              {/* Action Buttons: Primary Gold, Secondary Navy, and Demo Reel */}
+              <div className="flex flex-wrap items-center gap-3 pt-2 w-full sm:w-auto">
+                <Link
+                  to="/join-training"
+                  className="px-6 py-3.5 rounded-xl bg-[#C6A04A] hover:bg-[#D9B96E] text-[#102137] font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 shadow-md flex items-center justify-center group shrink-0"
+                >
+                  <span>Begin Your Training</span>
+                  <ArrowRight className="w-4 h-4 ml-2 text-[#102137] group-hover:translate-x-1 transition-transform shrink-0" />
+                </Link>
+
+                <Link
+                  to="/history-lineage"
+                  className="px-5 py-3.5 rounded-xl bg-[#183B5B]/90 hover:bg-[#183B5B] text-white font-semibold text-xs sm:text-sm transition-all duration-200 border border-[#C6A04A]/40 hover:border-[#C6A04A] flex items-center justify-center backdrop-blur-sm shrink-0"
+                >
+                  <Compass className="w-4 h-4 mr-2 text-[#C6A04A] shrink-0" />
+                  <span>Explore Our Heritage</span>
+                </Link>
+
+                <button
+                  onClick={() => setVideoModalOpen(true)}
+                  aria-label="Watch Silambam demonstration video"
+                  className="px-4 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white font-medium text-xs sm:text-sm transition-all duration-200 border border-white/20 flex items-center justify-center backdrop-blur-sm shrink-0 cursor-pointer"
+                >
+                  <Play className="w-3.5 h-3.5 mr-1.5 text-[#C6A04A] fill-current shrink-0" />
+                  <span>Watch Reel</span>
+                </button>
+              </div>
+
+              {/* 4 Heritage Metric Pillars */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-4 border-t border-white/15 w-full">
+                {(hero.stats || heroContent.stats).map((stat, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-xl bg-[#183B5B]/60 border border-[#C6A04A]/25 backdrop-blur-sm"
+                  >
+                    <div className="text-lg sm:text-xl font-bold text-[#D9B96E]">
+                      {stat.value}
+                    </div>
+                    <div className="text-[11px] font-semibold text-white leading-tight mt-0.5">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Column: Hero Image Slider (Authentic Silambam Photography) */}
+            <div className="lg:col-span-6 w-full">
+              <HeroSlider
+                bgImageOverride={hero.bgImage}
+                onWatchVideo={() => setVideoModalOpen(true)}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. RECOGNITION & CREDIBILITY STRIP */}
+      <section className="py-8 bg-white border-b border-[#E8E3D9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="flex items-center space-x-2 shrink-0">
+              <Sparkles className="w-4 h-4 text-[#C6A04A]" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#102137]">
+                National & Global Recognitions
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+              {facts.map((fact) => (
+                <div
+                  key={fact.id}
+                  className="p-3.5 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9] hover:border-[#C6A04A] transition-all"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#102137] text-[#D9B96E]">
+                      {fact.badge}
+                    </span>
+                    <span className="text-[11px] font-mono text-[#64748B]">{fact.year}</span>
+                  </div>
+                  <h4 className="text-xs font-bold text-[#182332] truncate">{fact.title}</h4>
+                  <p className="text-[11px] text-[#64748B] line-clamp-1 mt-0.5">
+                    {fact.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. ASSOCIATION INTRODUCTION (Alternating: Image on Left, Content on Right) */}
+      <section className="py-20 bg-[#FDFBF7] border-b border-[#E8E3D9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left: Authentic Photo + Quote Overlay (Inspired by ISF President Quote) */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative rounded-3xl overflow-hidden bg-white border border-[#E8E3D9] shadow-xl">
+                <div className="aspect-[4/5] sm:aspect-[4/5] relative overflow-hidden bg-slate-900">
+                  <img
+                    src="/api/public/media/stream/silambam/64ce5275-b368-4d52-b9d7-540d4d7c9613.png"
+                    alt="Master Siva Chief Master with Traditional Silambam Staff"
+                    className="w-full h-full object-cover object-top filter contrast-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-transparent to-transparent opacity-80" />
+                </div>
+
+                {/* Quote Card Overlay */}
+                <div className="absolute bottom-4 inset-x-4 p-4 sm:p-5 rounded-2xl bg-[#102137]/90 backdrop-blur-md border border-[#C6A04A]/40 text-white shadow-xl">
+                  <p className="text-xs sm:text-sm italic font-serif leading-relaxed text-slate-100">
+                    &ldquo;Silambam is not merely a martial art—it is a living symbol of our ancient heritage, discipline, courage, and identity.&rdquo;
+                  </p>
+                  <div className="mt-3 pt-2.5 border-t border-white/15 flex items-center justify-between text-xs">
+                    <div>
+                      <strong className="text-[#D9B96E] block font-sans text-xs">Master Siva</strong>
+                      <span className="text-slate-400 text-[10px]">Headmaster & Chief Instructor</span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full bg-[#183B5B] text-[#D9B96E] text-[10px] font-mono font-bold">
+                      EST. 1975
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Narrative Story & Structured Value Pillars */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#F8F5EE] border border-[#E8E3D9] text-[#102137] text-xs font-semibold uppercase tracking-wider">
+                <Globe className="w-3.5 h-3.5 text-[#C6A04A]" />
+                <span>The Mother of Martial Arts</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#102137] tracking-tight leading-tight">
+                Preserving Tradition • Promoting Excellence • Building Champions
+              </h2>
+
+              <p className="text-sm sm:text-base text-[#64748B] leading-relaxed">
+                Persatuan Aadhiran Silambam Pulau Pinang was established on 25th February 1975 under the registration of Societies Malaysia (PPM-014-07-25021975). On 28th August 2022, the association was officially certified by the <strong className="text-[#102137]">Malaysia Book of Records</strong> as the <strong className="text-[#102137]">Oldest Silambam Association in Malaysia</strong>.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-colors">
+                  <div className="flex items-center space-x-2 text-[#102137] font-bold text-sm mb-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#C6A04A] shrink-0" />
+                    <span>Ethical Gurukulam Code</span>
+                  </div>
+                  <p className="text-xs text-[#64748B] leading-relaxed">
+                    Zero commercial belt grading or financial exploitation. Advancement is granted strictly on physical mastery, technical precision, and moral integrity.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-colors">
+                  <div className="flex items-center space-x-2 text-[#102137] font-bold text-sm mb-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-[#C6A04A] shrink-0" />
+                    <span>UNESCO Intangible Treasure</span>
+                  </div>
+                  <p className="text-xs text-[#64748B] leading-relaxed">
+                    Documented with George Town World Heritage Incorporated (GTWHI) and UNESCO ICHCAP South Korea as a living cultural treasure.
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2 flex flex-wrap gap-3">
+                <Link
+                  to="/about"
+                  className="inline-flex items-center px-5 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm"
+                >
+                  <span>Read Full Association History</span>
+                  <ArrowRight className="w-4 h-4 ml-2 text-[#C6A04A]" />
+                </Link>
+                <Link
+                  to="/history-lineage"
+                  className="inline-flex items-center px-5 py-2.5 rounded-xl bg-white hover:bg-[#F8F5EE] border border-[#E8E3D9] hover:border-[#C6A04A] text-[#182332] text-xs font-semibold uppercase tracking-wider transition-all shadow-xs"
+                >
+                  <span>View Grandmaster Lineage</span>
+                </Link>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Institutional Heritage Badge */}
-          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-navy-900/90 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-medium tracking-wide mb-6 shadow-sm backdrop-blur-md">
-            <Award className="w-4 h-4 text-amber-400 flex-shrink-0" />
-            <span className="text-[11px] sm:text-xs uppercase tracking-widest font-semibold text-amber-200">
-              Certified Oldest Silambam Association in Malaysia • Malaysia Book of Records (2022)
-            </span>
-          </div>
-
-          {/* Lineage Subtitle */}
-          <div className="flex items-center justify-center space-x-3 text-xs sm:text-sm font-semibold tracking-[0.25em] text-amber-400 uppercase mb-3">
-            <span className="w-8 h-px bg-amber-400/50" />
-            <span>Living Tamil Martial Lineage • Est. 1975</span>
-            <span className="w-8 h-px bg-amber-400/50" />
-          </div>
-
-          {/* Main Hero Typography */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-display font-black tracking-tight text-white mb-3 drop-shadow-md">
-            AADHIRAN SILAMBAM
-          </h1>
-          <p className="text-lg sm:text-2xl font-display font-medium text-amber-300 tracking-wider mb-6">
-            ஆதிரன் சிலம்ப சங்கம் <span className="text-slate-400 font-sans mx-2">•</span> George Town, Penang & Global
-          </p>
-
-          <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed mb-8 font-normal">
-            Mother of all martial arts, originating from primordial stone age Kumari Kandam. Preserving traditional <strong className="text-white font-semibold">Por Silambam</strong> battlefield warfare and <strong className="text-white font-semibold">Sport Silambam</strong> tournament mastery across Penang, India, and the Middle East.
-          </p>
-
-          {/* Focused Call to Action Cluster */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-            <Link
-              to="/join-training"
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white font-semibold text-base tracking-wide transition-all duration-200 border border-amber-400/40 shadow-xl shadow-amber-950/40 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center group"
-            >
-              <span>Begin Your Training</span>
-              <ArrowRight className="w-5 h-5 ml-2.5 text-amber-100 group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <button
-              onClick={() => setVideoModalOpen(true)}
-              className="w-full sm:w-auto px-6 py-4 rounded-xl bg-navy-900/80 hover:bg-navy-850 text-slate-200 hover:text-white font-medium text-base transition-all duration-200 border border-navy-700 hover:border-amber-400/50 flex items-center justify-center group backdrop-blur-sm"
-            >
-              <div className="w-7 h-7 rounded-full bg-amber-500/20 group-hover:bg-amber-500/30 flex items-center justify-center mr-2.5 transition-colors">
-                <Play className="w-3.5 h-3.5 text-amber-400 fill-current ml-0.5" />
+      {/* 5. HERITAGE & LINEAGE SPOTLIGHT (Alternating: Content on Left, Authentic Lineage Photo on Right) */}
+      <section className="py-20 bg-white border-b border-[#E8E3D9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left: Historical Lineage Narrative & Milestones */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#F8F5EE] border border-[#E8E3D9] text-[#102137] text-xs font-semibold uppercase tracking-wider">
+                <Shield className="w-3.5 h-3.5 text-[#C6A04A]" />
+                <span>5,000-Year Kurunji Mountain Martial Lineage</span>
               </div>
-              <span>Watch Archival Documentary</span>
-            </button>
-          </div>
 
-          <div className="mb-14">
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#102137] tracking-tight leading-tight">
+                An Unbroken Lineage of Martial Masters & Living Heritage
+              </h2>
+
+              <p className="text-sm sm:text-base text-[#64748B] leading-relaxed">
+                Silambam is an ancient battlefield martial art originating in the Kurunji mountain ranges of Tamil Nadu. Brought to George Town, Penang in 1936 by pioneering Tamil masters, the lineage has been continuously preserved under unbroken Guru-Shishya (Gurukulam) oral and physical transmission for over 90 years.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                <div className="p-4 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9]">
+                  <div className="text-2xl font-bold text-[#C6A04A] font-mono">1936</div>
+                  <div className="text-xs font-bold text-[#102137] mt-1">Penang Arrival</div>
+                  <p className="text-[11px] text-[#64748B] mt-0.5">Founding masters establish traditional gurukulam training in George Town.</p>
+                </div>
+                <div className="p-4 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9]">
+                  <div className="text-2xl font-bold text-[#C6A04A] font-mono">1975</div>
+                  <div className="text-xs font-bold text-[#102137] mt-1">PPM Registered</div>
+                  <p className="text-[11px] text-[#64748B] mt-0.5">Officially registered under PPM-014-07-25021975 on 25 February 1975.</p>
+                </div>
+                <div className="p-4 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9]">
+                  <div className="text-2xl font-bold text-[#C6A04A] font-mono">2022</div>
+                  <div className="text-xs font-bold text-[#102137] mt-1">MBOR Certified</div>
+                  <p className="text-[11px] text-[#64748B] mt-0.5">Officially recognized by Malaysia Book of Records as Oldest Association.</p>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  to="/history-lineage"
+                  className="inline-flex items-center px-5 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm"
+                >
+                  <BookOpen className="w-4 h-4 mr-2 text-[#C6A04A]" />
+                  <span>Explore Complete Lineage Chronology</span>
+                  <ArrowRight className="w-4 h-4 ml-2 text-[#C6A04A]" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Right: Authentic Photograph of Grandmaster Mariapakkiam */}
+            <div className="lg:col-span-5 relative">
+              <div className="p-4 rounded-3xl bg-[#FDFBF7] border border-[#E8E3D9] shadow-xl">
+                <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-slate-900 relative group">
+                  <img
+                    src="/api/public/media/stream/silambam/e1a90c59-7602-4fe0-8b73-0b9fba961691.png"
+                    alt="Grandmaster Mariapakkiam 14th Descendant of Aadhiran Silambam Lineage"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-transparent to-transparent opacity-70" />
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-xs font-bold border border-[#C6A04A]/40">
+                    14th Lineage Descendant
+                  </div>
+                  <div className="absolute bottom-4 inset-x-4 p-3 rounded-xl bg-[#102137]/90 backdrop-blur-xs text-white border border-white/10">
+                    <h4 className="text-sm font-bold text-white">Grandmaster Mariapakkiam</h4>
+                    <p className="text-[11px] text-[#D9B96E]">Founding Pioneer & Custodian of 10-Stage Kurunji Syllabus</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. 10-STAGE TRADITIONAL SYLLABUS (Interactive Curriculum Showcase) */}
+      <section className="py-20 bg-[#FDFBF7] border-b border-[#E8E3D9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+              <div className="flex items-center space-x-2 mb-2">
+                <Layers className="w-4 h-4 text-[#C6A04A]" />
+                <span className="text-xs uppercase font-bold text-[#102137] tracking-wider">
+                  Academic Martial Structure
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-[#182332]">
+                The 10-Stage Traditional Syllabus
+              </h3>
+              <p className="text-xs sm:text-sm text-[#64748B] mt-1 max-w-xl">
+                A systematic martial curriculum originating from the Kurunji mountains. Progress from essential triangular footwork to armed battlefield combat.
+              </p>
+            </div>
             <Link
               to="/training-syllabus"
-              className="inline-flex items-center text-xs sm:text-sm text-amber-300 hover:text-amber-200 font-medium tracking-wide underline underline-offset-4 decoration-amber-400/50 hover:decoration-amber-300 transition-colors"
+              className="inline-flex items-center text-xs font-semibold text-[#102137] hover:text-[#183B5B] shrink-0"
             >
-              <BookOpen className="w-4 h-4 mr-2 text-amber-400" />
-              <span>Explore the Authentic 10-Stage Traditional Syllabus &rarr;</span>
+              <span>Explore Complete 10-Stage Syllabus</span>
+              <ArrowRight className="w-4 h-4 ml-1.5 text-[#C6A04A]" />
             </Link>
           </div>
 
-          {/* 4 Pillar Heritage Stat Badges */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-navy-800">
-            {heroContent.stats.map((stat, idx) => (
+          {/* Interactive Curriculum Selector (Stages 1-5 Quick Switcher) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Stage Selector List */}
+            <div className="lg:col-span-5 flex flex-col space-y-2.5">
+              {syllabusStages.slice(0, 5).map((stage) => {
+                const isActive = stage.stage_number === activeStageTab;
+                return (
+                  <button
+                    key={stage.stage_number}
+                    onClick={() => setActiveStageTab(stage.stage_number)}
+                    className={`p-4 rounded-xl text-left transition-all duration-200 border cursor-pointer flex items-center justify-between ${
+                      isActive
+                        ? 'bg-[#102137] border-[#C6A04A] text-white shadow-md'
+                        : 'bg-white hover:bg-[#F8F5EE] border-[#E8E3D9] text-[#182332]'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3.5">
+                      <span
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold font-mono ${
+                          isActive
+                            ? 'bg-[#C6A04A] text-[#102137]'
+                            : 'bg-[#FDFBF7] border border-[#E8E3D9] text-[#102137]'
+                        }`}
+                      >
+                        0{stage.stage_number}
+                      </span>
+                      <div>
+                        <div className={`text-sm font-bold ${isActive ? 'text-white' : 'text-[#182332]'}`}>
+                          {stage.english_name}
+                        </div>
+                        <div className={`text-xs ${isActive ? 'text-[#D9B96E]' : 'text-[#64748B]'}`}>
+                          {stage.tamil_name}
+                        </div>
+                      </div>
+                    </div>
+                    <ChevronRight
+                      className={`w-4 h-4 transition-transform ${
+                        isActive ? 'text-[#C6A04A] translate-x-1' : 'text-[#64748B]'
+                      }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Active Stage Detail Panel */}
+            <div className="lg:col-span-7 p-6 sm:p-8 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#E8E3D9]">
+                  <span className="px-3 py-1 rounded-full bg-[#102137] text-[#D9B96E] text-xs font-bold uppercase tracking-wider">
+                    Stage 0{activeStage.stage_number} Curriculum Focus
+                  </span>
+                  <span className="text-xs font-semibold text-[#183B5B]">
+                    Traditional Por Silambam
+                  </span>
+                </div>
+
+                <h4 className="text-2xl font-bold text-[#182332] mb-1">
+                  {activeStage.english_name}
+                </h4>
+                <div className="text-sm font-semibold text-[#C6A04A] mb-4">
+                  {activeStage.tamil_name}
+                </div>
+
+                <p className="text-sm text-[#64748B] leading-relaxed mb-6">
+                  {activeStage.overview}
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="p-3.5 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9]">
+                    <span className="text-[10px] uppercase font-bold text-[#C6A04A] tracking-wider block mb-1">
+                      Weapon Focus
+                    </span>
+                    <strong className="text-xs sm:text-sm text-[#182332]">
+                      {activeStage.weapon_focus || 'Traditional Bamboo Staff (Prambu)'}
+                    </strong>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9]">
+                    <span className="text-[10px] uppercase font-bold text-[#C6A04A] tracking-wider block mb-1">
+                      Key Movement Pattern
+                    </span>
+                    <strong className="text-xs sm:text-sm text-[#182332]">
+                      {activeStage.key_techniques || '18-Step Kaaladi Positioning'}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6 mt-6 border-t border-[#E8E3D9] flex items-center justify-between">
+                <span className="text-xs text-[#64748B]">
+                  Unbroken oral & physical transmission in George Town since 1936
+                </span>
+                <Link
+                  to="/training-syllabus"
+                  className="text-xs font-bold text-[#102137] hover:text-[#183B5B] flex items-center space-x-1"
+                >
+                  <span>Full Syllabus Details</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#C6A04A]" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. INSTRUCTORS & LINEAGE MASTERS COUNCIL (Image-Led Cards) */}
+      <section className="py-20 bg-white border-b border-[#E8E3D9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+              <div className="flex items-center space-x-2 mb-2">
+                <Shield className="w-4 h-4 text-[#C6A04A]" />
+                <span className="text-xs uppercase font-bold text-[#102137] tracking-wider">
+                  Accredited Gurukulam Master Council
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-[#182332]">
+                Masters & Lineage Custodians
+              </h3>
+              <p className="text-xs sm:text-sm text-[#64748B] mt-1">
+                Direct lineage masters authorized to teach traditional Por Silambam and certify students.
+              </p>
+            </div>
+            <Link
+              to="/instructors"
+              className="inline-flex items-center text-xs font-semibold text-[#102137] hover:text-[#183B5B] shrink-0"
+            >
+              <span>View Full Instructor Council</span>
+              <ArrowRight className="w-4 h-4 ml-1.5 text-[#C6A04A]" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {instructors.map((inst) => (
               <div
-                key={idx}
-                className="p-4 rounded-xl bg-navy-900/70 border border-navy-700/80 backdrop-blur-sm text-left hover:border-amber-400/40 transition-colors"
+                key={inst.id}
+                className="rounded-2xl overflow-hidden bg-[#FDFBF7] border border-[#E8E3D9] hover:border-[#C6A04A] transition-all duration-300 shadow-xs flex flex-col group"
               >
-                <span className="block text-2xl sm:text-3xl font-display font-extrabold text-amber-300 mb-0.5">
-                  {stat.value}
-                </span>
-                <span className="text-[11px] sm:text-xs uppercase tracking-wider text-slate-300 font-medium">
-                  {stat.label}
-                </span>
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-900">
+                  <img
+                    src={inst.photo_url || '/api/public/media/stream/silambam/e1a90c59-7602-4fe0-8b73-0b9fba961691.png'}
+                    alt={inst.name}
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-[10px] font-bold uppercase tracking-wider border border-[#C6A04A]/40">
+                    {inst.lineage_rank || 'Master Instructor'}
+                  </div>
+                </div>
+
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h4 className="text-base font-bold text-[#182332] group-hover:text-[#102137] transition-colors">
+                      {inst.name}
+                    </h4>
+                    {inst.tamil_name && (
+                      <div className="text-xs font-medium text-[#C6A04A] mt-0.5">
+                        {inst.tamil_name}
+                      </div>
+                    )}
+                    <div className="text-xs font-semibold text-[#183B5B] mt-1">
+                      {inst.title}
+                    </div>
+                    <p className="text-xs text-[#64748B] line-clamp-3 leading-relaxed mt-2.5">
+                      {inst.biography}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 mt-4 border-t border-[#E8E3D9] flex items-center justify-between text-xs text-[#64748B]">
+                    <span>Experience: <strong className="text-[#102137]">{inst.years_experience}+ Yrs</strong></span>
+                    <Link
+                      to="/instructors"
+                      className="text-xs font-bold text-[#102137] hover:text-[#183B5B] flex items-center"
+                    >
+                      <span>Bio</span>
+                      <ChevronRight className="w-3.5 h-3.5 ml-0.5 text-[#C6A04A]" />
+                    </Link>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 2. Video Modal */}
-      {videoModalOpen && (
-        <div className="public-dark-surface fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/90 backdrop-blur-md">
-          <div className="relative w-full max-w-4xl bg-navy-900 rounded-2xl overflow-hidden border border-navy-700 shadow-2xl">
-            <div className="p-4 bg-navy-950 flex justify-between items-center border-b border-navy-800">
-              <div>
-                <h3 className="font-display font-bold text-amber-400 text-lg">
-                  Aadhiran Silambam of Penang — The Untold Story
-                </h3>
-                <p className="text-xs text-slate-300">Authentic archival documentary • George Town, Penang</p>
+      {/* 8. VISUAL STORIES & DEMONSTRATION SHOWCASE (Gallery & Videos inspired by ISF Visual Stories) */}
+      <section className="py-20 bg-[#102137] text-white relative overflow-hidden border-b border-[#183B5B]">
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_20%_80%,rgba(198,160,74,0.1),transparent_70%)]" />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div>
+              <div className="flex items-center space-x-2.5 mb-2 text-xs font-bold tracking-[0.2em] text-[#C6A04A] uppercase">
+                <Camera className="w-4 h-4 text-[#C6A04A]" />
+                <span>Visual Stories · Action Gallery</span>
               </div>
-              <button
-                onClick={() => setVideoModalOpen(false)}
-                className="text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 transition-colors text-sm"
+              <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Authentic Silambam in Motion
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                From traditional Gurukulam training grounds in George Town to international demonstrations — witness authentic Silambam speed, weapons precision, and cultural mastery.
+              </p>
+            </div>
+            <div className="flex items-center space-x-3 shrink-0">
+              <Link
+                to="/gallery"
+                className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-semibold tracking-wide transition-all shadow-sm"
               >
-                ✕ Close
+                Browse Full Gallery
+              </Link>
+              <Link
+                to="/videos"
+                className="px-4 py-2.5 rounded-xl bg-[#C6A04A] hover:bg-[#D9B96E] text-[#102137] text-xs font-bold tracking-wide transition-all shadow-sm flex items-center space-x-1"
+              >
+                <Film className="w-3.5 h-3.5" />
+                <span>Watch Videos</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Action Photo Mosaic & Video Reel Player Card */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch">
+            {/* Primary Action Photo (Large 5-col Feature) */}
+            <div className="md:col-span-5 relative rounded-2xl overflow-hidden border border-[#C6A04A]/30 bg-[#183B5B] group min-h-[300px]">
+              <img
+                src="/api/public/media/stream/silambam/b417be8b-6b26-4914-848f-fdc546a2abd2.jpg"
+                alt="Silambam Warrior Dynamic Spin"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-[#102137]/30 to-transparent" />
+              <div className="absolute bottom-4 inset-x-4 p-4 rounded-xl bg-[#102137]/85 backdrop-blur-md border border-white/15">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#D9B96E] font-bold block mb-1">
+                  Speed & Precision
+                </span>
+                <h4 className="text-sm font-bold text-white">Warrior Dynamic Rotational Spin</h4>
+                <p className="text-xs text-slate-300 mt-1">High-velocity bamboo staff deflection and continuous centripetal twirling.</p>
+              </div>
+            </div>
+
+            {/* Middle 2-Stack Photos */}
+            <div className="md:col-span-3 flex flex-col gap-5">
+              <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-[#183B5B] group flex-1 min-h-[160px]">
+                <img
+                  src="/api/public/media/stream/silambam/64b51e47-87c8-47e8-808a-0f0d61d71e4d.jpg"
+                  alt="Animal Stance Combat Drill"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-95"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-transparent to-transparent opacity-80" />
+                <div className="absolute bottom-3 left-3 right-3 text-xs">
+                  <span className="text-[10px] text-[#D9B96E] font-bold uppercase tracking-wider block">Animal Stances</span>
+                  <span className="text-xs font-semibold text-white">Tiger & Eagle Stance Kinematics</span>
+                </div>
+              </div>
+              <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-[#183B5B] group flex-1 min-h-[160px]">
+                <img
+                  src="/api/public/media/stream/silambam/751f540c-4cfb-4a09-8812-3121746f591c.jpg"
+                  alt="Duo Combat Exchange"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-95"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-transparent to-transparent opacity-80" />
+                <div className="absolute bottom-3 left-3 right-3 text-xs">
+                  <span className="text-[10px] text-[#D9B96E] font-bold uppercase tracking-wider block">Por Silambam</span>
+                  <span className="text-xs font-semibold text-white">Two-Warrior Sparring & Defense</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Video Demonstration Reel Showcase Card */}
+            <div className="md:col-span-4 relative rounded-2xl overflow-hidden border border-[#C6A04A]/40 bg-[#183B5B] flex flex-col justify-between p-6 shadow-xl">
+              <div>
+                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-[10px] font-bold uppercase tracking-wider border border-[#C6A04A]/40 mb-4">
+                  <Film className="w-3 h-3 text-[#C6A04A]" />
+                  <span>Featured Video Demonstration</span>
+                </div>
+                <h4 className="text-xl font-bold text-white leading-snug">
+                  Living Battlefield Arts of George Town
+                </h4>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                  Watch official demonstrations of traditional weapons including Bamboo Staff (Prambu), Maduvu (Deer Horns), and Surul Vaal (Flexible Sword).
+                </p>
+              </div>
+
+              {/* Video Thumbnail with Play Button */}
+              <div className="relative aspect-video rounded-xl overflow-hidden bg-black/60 border border-white/15 my-4 group cursor-pointer" onClick={() => setVideoModalOpen(true)}>
+                <img
+                  src="/api/public/media/stream/silambam/30f575ff-d7dd-45ca-b024-2d3ec970d369.jpg"
+                  alt="Watch Demonstration Video Reel"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-75"
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-[#C6A04A] text-[#102137] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <Play className="w-5 h-5 fill-current ml-0.5" />
+                  </div>
+                </div>
+                <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/80 text-[10px] font-mono text-white">
+                  Official Reel
+                </div>
+              </div>
+
+              <button
+                onClick={() => setVideoModalOpen(true)}
+                className="w-full py-3 rounded-xl bg-[#C6A04A] hover:bg-[#D9B96E] text-[#102137] font-bold text-xs uppercase tracking-wider transition-colors flex items-center justify-center space-x-2 cursor-pointer shadow-md"
+              >
+                <Play className="w-4 h-4 fill-current" />
+                <span>Launch Video Player</span>
               </button>
             </div>
-            <div className="aspect-video bg-black flex items-center justify-center">
+          </div>
+        </div>
+      </section>
+
+      {/* 9. UPCOMING EVENTS & CHAMPIONSHIPS CALENDAR (Inspired by Indian Silambam Federation Event List) */}
+      <section className="py-20 bg-[#FDFBF7] border-b border-[#E8E3D9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+              <div className="flex items-center space-x-2 mb-2">
+                <Calendar className="w-4 h-4 text-[#C6A04A]" />
+                <span className="text-xs uppercase font-bold text-[#102137] tracking-wider">
+                  Competition & Showcase Calendar
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-[#182332]">
+                Upcoming Events & Programmes
+              </h3>
+            </div>
+            <Link
+              to="/events"
+              className="inline-flex items-center px-4 py-2 rounded-xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] text-xs font-semibold text-[#102137] transition-all shadow-xs"
+            >
+              <span>Download Association Calendar</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5 text-[#C6A04A]" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Featured Event Card */}
+            {events[0] && (
+              <div className="lg:col-span-5 rounded-2xl overflow-hidden bg-white border border-[#E8E3D9] shadow-md flex flex-col justify-between group">
+                <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
+                  <img
+                    src={events[0].cover_image_url || '/api/public/media/stream/silambam/9661e79a-b91d-4307-b538-70ed6647bafb.jpg'}
+                    alt={events[0].title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-[10px] font-bold uppercase tracking-wider border border-[#C6A04A]/40">
+                    Main Featured Event
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center space-x-2 text-xs text-[#C6A04A] font-bold uppercase mb-2">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{new Date(events[0].start_date).toLocaleDateString('en-MY', { month: 'long', year: 'numeric' })}</span>
+                  </div>
+                  <h4 className="text-lg font-bold text-[#182332] mb-2 leading-tight">
+                    {events[0].title}
+                  </h4>
+                  <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed mb-4">
+                    {events[0].description}
+                  </p>
+                  <div className="flex items-center space-x-1.5 text-xs text-[#64748B] mb-4">
+                    <MapPin className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
+                    <span className="truncate">{events[0].location}</span>
+                  </div>
+                  <Link
+                    to="/events"
+                    className="inline-flex items-center text-xs font-bold text-[#102137] hover:text-[#183B5B] group/link"
+                  >
+                    <span>Event Details & Registration</span>
+                    <ArrowRight className="w-3.5 h-3.5 ml-1 text-[#C6A04A] group-hover/link:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* Event List (Federation Style List Rows) */}
+            <div className="lg:col-span-7 space-y-3.5">
+              {events.slice(0, 3).map((item) => {
+                const eventDate = new Date(item.start_date);
+                const month = eventDate.toLocaleString('default', { month: 'short' });
+                const day = eventDate.getDate();
+                return (
+                  <div
+                    key={item.id}
+                    className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                  >
+                    <div className="flex items-center space-x-4 min-w-0 flex-1">
+                      {/* Date Badge */}
+                      <div className="w-13 h-13 rounded-xl bg-[#102137] text-white flex flex-col items-center justify-center shrink-0">
+                        <span className="text-[10px] font-bold text-[#D9B96E] uppercase leading-none">
+                          {month}
+                        </span>
+                        <span className="text-base font-bold leading-none mt-1">
+                          {day}
+                        </span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <span className="px-2 py-0.5 rounded-full bg-[#F8F5EE] border border-[#E8E3D9] text-[9px] font-bold uppercase tracking-wider text-[#102137]">
+                            {item.event_type}
+                          </span>
+                          <span className="text-[11px] text-emerald-700 font-semibold">
+                            ● {(item.status || 'UPCOMING').toUpperCase()}
+                          </span>
+                        </div>
+                        <h4 className="text-sm font-bold text-[#182332] group-hover:text-[#102137] transition-colors truncate">
+                          {item.title}
+                        </h4>
+                        <div className="text-xs text-[#64748B] flex items-center space-x-1 mt-0.5">
+                          <MapPin className="w-3 h-3 text-[#C6A04A] shrink-0" />
+                          <span className="truncate">{item.location}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <Link
+                      to="/events"
+                      className="px-3.5 py-2 rounded-xl bg-[#F8F5EE] hover:bg-[#102137] hover:text-white text-xs font-semibold text-[#182332] transition-colors self-start sm:self-center shrink-0"
+                    >
+                      View Details
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. ACHIEVEMENTS & RECORDS (Split Showcase with MBOR Certificate) */}
+      <section className="py-20 bg-white border-b border-[#E8E3D9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            {/* Left Column: Official Certificate Visual */}
+            <div className="lg:col-span-5 relative">
+              <div className="p-4 rounded-3xl bg-[#FDFBF7] border border-[#E8E3D9] shadow-xl">
+                <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 border border-[#E8E3D9] relative group">
+                  <img
+                    src="/api/public/media/stream/silambam/aadhiran-mbor-certificate.png"
+                    alt="Malaysia Book of Records Official Certificate"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-xs font-bold border border-[#C6A04A]/40">
+                    Official Record Certificate
+                  </div>
+                </div>
+                <div className="mt-3 text-center">
+                  <span className="text-xs font-bold text-[#102137] block">
+                    Certified by The Malaysia Book of Records (2022)
+                  </span>
+                  <span className="text-[11px] text-[#64748B]">
+                    Oldest Silambam Association in Malaysia • Founded 1975
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Key Accolades Grid */}
+            <div className="lg:col-span-7 space-y-5">
+              <div className="flex items-center space-x-2">
+                <Trophy className="w-4 h-4 text-[#C6A04A]" />
+                <span className="text-xs uppercase font-bold text-[#102137] tracking-wider">
+                  Documented Accolades & Records
+                </span>
+              </div>
+
+              <h3 className="text-3xl font-bold text-[#182332] leading-tight">
+                Recognized National & International Excellence
+              </h3>
+
+              <div className="space-y-3">
+                {featuredAchievements.map((item) => (
+                  <div
+                    key={item.id}
+                    className="p-4 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9] hover:border-[#C6A04A] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  >
+                    <div>
+                      <div className="flex items-center space-x-2 mb-1">
+                        <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white text-[#102137] border border-[#E8E3D9]">
+                          {item.category}
+                        </span>
+                        <span className="text-xs font-mono text-[#64748B]">{item.year}</span>
+                      </div>
+                      <h4 className="text-sm font-bold text-[#182332] group-hover:text-[#102137] transition-colors">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-[#64748B] line-clamp-1 mt-0.5">
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className="text-xs text-right font-medium text-[#102137] shrink-0 max-w-[200px] sm:max-w-[240px]">
+                      <span className="text-[10px] text-[#64748B] block">Conferred by</span>
+                      <strong className="text-xs text-[#183B5B] block truncate" title={item.awarding_organization}>
+                        {item.awarding_organization}
+                      </strong>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  to="/achievements"
+                  className="inline-flex items-center px-5 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-xs"
+                >
+                  <span>View All Awards & Historic Milestones</span>
+                  <ArrowRight className="w-3.5 h-3.5 ml-2 text-[#C6A04A]" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 11. LATEST NEWS & EDITORIAL ARTICLES */}
+      <section className="py-20 bg-[#FDFBF7] border-b border-[#E8E3D9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+              <div className="flex items-center space-x-2 mb-2">
+                <Sparkles className="w-4 h-4 text-[#C6A04A]" />
+                <span className="text-xs uppercase font-bold text-[#102137] tracking-wider">
+                  Press Releases & Insights
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-[#182332]">
+                Latest News & Editorial Dispatches
+              </h3>
+            </div>
+            <Link
+              to="/news"
+              className="inline-flex items-center text-xs font-semibold text-[#102137] hover:text-[#183B5B] shrink-0"
+            >
+              <span>Browse All Articles</span>
+              <ArrowRight className="w-4 h-4 ml-1.5 text-[#C6A04A]" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {news.map((art) => (
+              <div
+                key={art.id}
+                className="rounded-2xl overflow-hidden bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all duration-300 shadow-xs flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
+                    <img
+                      src={art.cover_image_url || '/api/public/media/stream/silambam/b417be8b-6b26-4914-848f-fdc546a2abd2.jpg'}
+                      alt={art.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-[#102137]/90 text-[#D9B96E] text-[10px] font-bold uppercase tracking-wider border border-[#C6A04A]/40">
+                      {art.category}
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <div className="text-[11px] font-mono text-[#64748B] mb-2">
+                      {new Date(art.published_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </div>
+                    <h4 className="text-base font-bold text-[#182332] group-hover:text-[#102137] transition-colors leading-snug mb-2">
+                      {art.title}
+                    </h4>
+                    <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
+                      {art.summary}
+                    </p>
+                  </div>
+                </div>
+                <div className="p-5 pt-0">
+                  <Link
+                    to={`/news/${art.slug}`}
+                    className="inline-flex items-center text-xs font-bold text-[#102137] hover:text-[#183B5B] group/link"
+                  >
+                    <span>Read Full Dispatch</span>
+                    <ChevronRight className="w-3.5 h-3.5 ml-1 text-[#C6A04A] group-hover/link:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 12. HIGH-IMPACT ENROLMENT CTA BANNER (Heritage Navy & Gold Split Banner) */}
+      <section className="py-16 bg-[#102137] text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(198,160,74,0.15),transparent_75%)]" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8 space-y-3">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#C6A04A] block">
+                Begin Your Silambam Journey Today
+              </span>
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+                Traditional Martial Training for All Ages & Skill Levels
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                Admissions are open for children, youths, and adults. Experience the ancient martial wisdom of Por Silambam under verified master instructors at our George Town headquarters.
+              </p>
+            </div>
+
+            <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-end">
+              <Link
+                to="/join-training"
+                className="w-full px-6 py-3.5 rounded-xl bg-[#C6A04A] hover:bg-[#D9B96E] text-[#102137] font-bold text-xs sm:text-sm tracking-wide text-center transition-all duration-200 shadow-lg flex items-center justify-center group"
+              >
+                <span>Submit Enrolment Application</span>
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/contact"
+                className="w-full px-5 py-3 rounded-xl bg-[#183B5B] hover:bg-[#183B5B]/80 text-white font-semibold text-xs sm:text-sm text-center transition-colors border border-[#C6A04A]/40 flex items-center justify-center"
+              >
+                <span>Contact Headquarters Desk</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 13. DEMO REEL VIDEO MODAL */}
+      {videoModalOpen && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+          <div className="relative w-full max-w-4xl bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/20">
+            <button
+              onClick={() => setVideoModalOpen(false)}
+              aria-label="Close demonstration video"
+              className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="aspect-video w-full bg-black flex items-center justify-center">
               <video
-                src={heroContent.videoUrl}
+                src="/api/public/media/stream/silambam/VID-20231026-WA0019.mp4"
                 controls
                 autoPlay
                 className="w-full h-full object-contain"
@@ -166,464 +1057,9 @@ export const Home: React.FC = () => {
                 Your browser does not support HTML5 video.
               </video>
             </div>
-            <div className="p-4 text-xs sm:text-sm text-slate-300 bg-navy-950 border-t border-navy-800 flex items-center justify-between">
-              <span>Rare archival footage capturing Master Mariapakkiam and the living lineage preserved in Penang.</span>
-              <span className="text-amber-400 font-mono text-xs hidden sm:inline-block">Kurunji Tradition</span>
-            </div>
           </div>
         </div>
       )}
-
-      {/* 3. Authentic Living Lineage Spotlight - Warm Ivory with Clean Heritage Cards */}
-      <section className="py-20 border-b border-stone-200 bg-[#FDFBF7]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Visuals: Authentic Masters */}
-            <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div className="relative rounded-2xl overflow-hidden border border-stone-200 shadow-md group bg-white">
-                  <img
-                    src="/uploads/mariapaqiam4.png"
-                    alt="Grandmaster Mariapakkiam"
-                    className="w-full h-64 object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/20 to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3 text-left">
-                    <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider">
-                      14th Lineage Descendant
-                    </span>
-                    <h4 className="text-sm font-display font-bold text-white">
-                      Grandmaster Mariapakkiam
-                    </h4>
-                    <p className="text-[11px] text-slate-300">Migrated to Penang in 1936</p>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl bg-white border border-stone-200 shadow-sm">
-                  <div className="flex items-center space-x-2 text-crimson-600 mb-1">
-                    <Shield className="w-4 h-4 text-crimson-600" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-900">
-                      No Commercial Belting
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Aadhiran does not sell commercial belts or sport rings. Training strictly adheres to the traditional 10 stages of the Kurunji custom.
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4 pt-6">
-                <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 shadow-sm">
-                  <div className="flex items-center space-x-2 text-amber-800 mb-1">
-                    <Award className="w-4 h-4 text-amber-600" />
-                    <span className="text-xs font-bold uppercase tracking-wider">
-                      Malaysia Book of Records
-                    </span>
-                  </div>
-                  <p className="text-xs text-amber-900/80 leading-relaxed">
-                    Officially established on 25th February 1975 — Verified Oldest Silambam Association in Malaysia (2022).
-                  </p>
-                </div>
-
-                <div className="relative rounded-2xl overflow-hidden border border-stone-200 shadow-md group bg-white">
-                  <img
-                    src="/uploads/siva_orig.png"
-                    alt="Chief Master Siva"
-                    className="w-full h-64 object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/20 to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3 text-left">
-                    <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider">
-                      Heritage Custodian
-                    </span>
-                    <h4 className="text-sm font-display font-bold text-white">
-                      Chief Master Siva
-                    </h4>
-                    <p className="text-[11px] text-slate-300">Spearheading UNESCO Recognition</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Narrative */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-amber-100 border border-amber-300 text-amber-900 text-xs font-semibold uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                <span>The Living Martial Heritage of Penang</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl font-display font-bold text-[#0B1B3D] tracking-tight">
-                An Extinct Indian Martial Treasure Preserved in George Town
-              </h2>
-
-              <p className="text-base text-slate-700 leading-relaxed">
-                Originating from the Kurunji Mountains of South India over five thousand years ago, the authentic Aadhiran Silambam discipline has virtually vanished in modern India. Yet, it found a living sanctuary in Penang, Malaysia in 1936 when the 14th direct descendant, <span className="text-slate-900 font-semibold">Grandmaster Mariapakkiam</span>, migrated from Madurai to George Town during the British Colonial era.
-              </p>
-
-              <p className="text-base text-slate-600 leading-relaxed">
-                Unlike sport-adapted martial arts, Aadhiran focuses on high-speed bamboo stick twirling (Kambu Veechu), deceptive triangular footworks (Kaaladi Varisai), animated animal combat postures (tiger, lion, serpent), and lethal close-quarter weapons like the Deer Horn (Maan Kombu) and Flexible Whip Sword (Surul Vaal).
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                <div className="flex items-start space-x-3 p-3.5 rounded-xl bg-white border border-stone-200 shadow-sm">
-                  <CheckCircle2 className="w-5 h-5 text-crimson-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h5 className="text-sm font-semibold text-slate-900">Pure Traditional Lineage</h5>
-                    <p className="text-xs text-slate-600 mt-0.5">Strict Guru-Student (Gurukulam) transmission without dilution.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-3 p-3.5 rounded-xl bg-white border border-stone-200 shadow-sm">
-                  <CheckCircle2 className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h5 className="text-sm font-semibold text-slate-900">UNESCO Global Registry</h5>
-                    <p className="text-xs text-slate-600 mt-0.5">Documented in UNESCO ICHCAP South Korea and GTWHI.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-4 flex flex-wrap gap-4">
-                <Link
-                  to="/history-lineage"
-                  className="inline-flex items-center text-amber-700 hover:text-amber-800 font-semibold text-sm transition-colors"
-                >
-                  <span>Read the full 5,000-year history</span>
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </Link>
-                <Link
-                  to="/instructors"
-                  className="inline-flex items-center text-slate-600 hover:text-[#0B1B3D] font-medium text-sm transition-colors"
-                >
-                  <span>Meet all Masters & Instructors</span>
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Quick Facts Grid - Light Stone with Rich Heritage Cards */}
-      <section className="py-20 border-b border-stone-200 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-xs uppercase font-bold text-crimson-600 tracking-widest mb-2">
-              Authentic Credentials
-            </h2>
-            <h3 className="text-3xl sm:text-4xl font-display font-bold text-[#0B1B3D]">
-              Recognized Across the Nation & the World
-            </h3>
-            <p className="text-slate-600 text-sm mt-3">
-              Documented milestones verified by state, national, and international heritage authorities.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {quickFacts.map((fact, idx) => (
-              <div
-                key={fact.id}
-                className="p-6 rounded-2xl bg-white border border-stone-200 hover:border-amber-400 hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 shadow-sm flex flex-col justify-between"
-              >
-                <div>
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 border transition-colors ${
-                      idx % 2 === 0
-                        ? 'bg-crimson-50 text-crimson-600 border-crimson-200 group-hover:bg-crimson-600 group-hover:text-white'
-                        : 'bg-amber-50 text-amber-600 border-amber-200 group-hover:bg-amber-600 group-hover:text-white'
-                    }`}
-                  >
-                    {idx === 0 && <Award className="w-6 h-6" />}
-                    {idx === 1 && <BookOpen className="w-6 h-6" />}
-                    {idx === 2 && <Globe className="w-6 h-6" />}
-                    {idx === 3 && <Shield className="w-6 h-6" />}
-                  </div>
-                  <span className="text-xs font-mono font-bold text-amber-700 tracking-wider uppercase">
-                    {fact.badge}
-                  </span>
-                  <h4 className="text-lg font-display font-bold text-[#0B1B3D] mt-2 mb-3">
-                    {fact.title}
-                  </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                    {fact.description}
-                  </p>
-                </div>
-                <Link
-                  to={fact.link}
-                  className="text-xs font-semibold text-amber-700 group-hover:text-amber-800 flex items-center pt-2"
-                >
-                  <span>Learn more</span>
-                  <ChevronRight className="w-3.5 h-3.5 ml-1" />
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. The 10-Stage Traditional Syllabus Highlights */}
-      <section className="py-20 border-b border-stone-200 bg-[#FDFBF7]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="text-xs uppercase font-bold text-amber-700 tracking-widest">
-                Comprehensive Martial Pedagogy
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-display font-bold text-[#0B1B3D] mt-2">
-                The 10 Ancient Tamil Stages
-              </h2>
-              <p className="text-slate-600 text-sm mt-2 max-w-2xl">
-                Beginning with elemental balance and staff twirling methods, advancing through animal battle manoeuvres, and culminating in master ethics.
-              </p>
-            </div>
-            <Link
-              to="/training-syllabus"
-              className="mt-4 md:mt-0 inline-flex items-center text-sm font-semibold text-amber-700 hover:text-amber-800"
-            >
-              <span>View detailed syllabus for all 10 stages</span>
-              <ChevronRight className="w-4 h-4 ml-1" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {syllabusStages.slice(0, 5).map((stage) => (
-              <div
-                key={stage.id}
-                className="p-5 rounded-xl bg-white border border-stone-200 hover:border-amber-400 hover:shadow-md transition-all duration-300 group"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-crimson-50 border border-crimson-200 text-crimson-700">
-                    STAGE {stage.stage_number}
-                  </span>
-                  <span className="text-slate-400 text-xs font-mono">
-                    0{stage.stage_number}/10
-                  </span>
-                </div>
-                <h4 className="text-sm font-semibold text-amber-700 font-mono mb-1 truncate">
-                  {stage.tamil_name}
-                </h4>
-                <h3 className="text-base font-display font-bold text-[#0B1B3D] mb-2 line-clamp-1">
-                  {stage.english_name}
-                </h3>
-                <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
-                  {stage.overview}
-                </p>
-                <div className="text-[11px] text-slate-500 border-t border-stone-100 pt-2">
-                  <span className="text-slate-700 font-medium">Focus:</span>{' '}
-                  {stage.weapon_focus || 'Bamboo staff'}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-navy-900 to-[#0B1B3D] border border-navy-800 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md text-white">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 flex-shrink-0">
-                <Layers className="w-6 h-6 text-amber-300" />
-              </div>
-              <div>
-                <h4 className="text-white font-display font-bold text-base">
-                  Looking for the complete advanced stages?
-                </h4>
-                <p className="text-xs text-slate-300">
-                  Stages 6 to 10 include Surul Vaal (Flexible Whip Sword), Vel Kambu (Spear Combat), Pulipaaivu (Tiger), and Kurunji Meypadu.
-                </p>
-              </div>
-            </div>
-            <Link
-              to="/training-syllabus"
-              className="px-6 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs tracking-wider uppercase transition-colors whitespace-nowrap shadow-md shadow-amber-950/30"
-            >
-              Explore All 10 Stages →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Featured Achievements Section - Stone Background with Heritage Cards */}
-      <section className="py-20 border-b border-stone-200 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="text-xs uppercase font-bold text-crimson-600 tracking-widest">
-                Honors & Accolades
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-display font-bold text-[#0B1B3D] mt-2">
-                Featured Achievements
-              </h2>
-              <p className="text-slate-600 text-sm mt-2 max-w-2xl">
-                Unprecedented milestones acknowledging our unbroken 5,000-year Tamil martial heritage transmission.
-              </p>
-            </div>
-            <Link
-              to="/achievements"
-              className="mt-4 md:mt-0 inline-flex items-center text-sm font-semibold text-amber-700 hover:text-amber-800"
-            >
-              <span>View all awards & historical timeline</span>
-              <ChevronRight className="w-4 h-4 ml-1" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredAchievements.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-2xl bg-white border border-stone-200 overflow-hidden hover:border-amber-400 hover:shadow-lg transition-all duration-300 flex flex-col group shadow-sm"
-              >
-                {item.cover_image_url && (
-                  <div className="relative h-48 overflow-hidden bg-stone-100">
-                    <img
-                      src={item.cover_image_url}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded bg-navy-950/80 backdrop-blur-sm border border-navy-700 text-amber-300 text-xs font-mono font-bold">
-                      {item.year}
-                    </div>
-                  </div>
-                )}
-                <div className="p-6 flex-grow flex flex-col justify-between">
-                  <div>
-                    <span className="text-[11px] font-mono text-crimson-600 uppercase tracking-wider font-semibold block mb-1">
-                      {item.category}
-                    </span>
-                    <h3 className="text-lg font-display font-bold text-[#0B1B3D] mb-2 group-hover:text-amber-700 transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs font-semibold text-slate-700 mb-3">
-                      Awarded by:{' '}
-                      <span className="text-amber-700">
-                        {item.awarding_organization}
-                      </span>
-                    </p>
-                    <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed mb-4">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  {item.evidence_url && (
-                    <a
-                      href={item.evidence_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center text-xs font-semibold text-amber-700 hover:text-amber-800 transition-colors pt-3 border-t border-stone-100"
-                    >
-                      <span>Official Verification / Source</span>
-                      <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Authentic Visual Gallery Preview */}
-      <section className="py-20 border-b border-stone-200 bg-[#FDFBF7]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="text-xs uppercase font-bold text-amber-700 tracking-widest">
-                Living Traditions in Action
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-display font-bold text-[#0B1B3D] mt-2">
-                Authentic Media Archives
-              </h2>
-              <p className="text-slate-600 text-sm mt-2 max-w-2xl">
-                Rare archival photographs, community heritage demonstrations, and weapon twirling methods captured over five decades in Penang.
-              </p>
-            </div>
-            <div className="mt-4 md:mt-0 flex space-x-4">
-              <Link
-                to="/gallery"
-                className="inline-flex items-center text-sm font-semibold text-amber-700 hover:text-amber-800"
-              >
-                <Camera className="w-4 h-4 mr-1.5" />
-                <span>Full Photo Gallery</span>
-              </Link>
-              <span className="text-stone-300">|</span>
-              <Link
-                to="/videos"
-                className="inline-flex items-center text-sm font-semibold text-crimson-600 hover:text-crimson-700"
-              >
-                <Play className="w-4 h-4 mr-1.5" />
-                <span>Video Vault</span>
-              </Link>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {[
-              { src: '/uploads/portfolio-1.jpg', title: 'Traditional Staff Stance', category: 'Technique' },
-              { src: '/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png', title: 'Malaysia Book of Records Presentation', category: 'Milestone' },
-              { src: '/uploads/portfolio-2.jpg', title: 'Speed & Twirling Routine', category: 'Weapons' },
-              { src: '/uploads/single1.jpg', title: 'Intricate Kaaladi Footwork', category: 'Training' },
-              { src: '/uploads/portfolio-3.jpg', title: 'Maan Kombu Deer Horn Routine', category: 'Weapons' },
-              { src: '/uploads/48397540-957165591150493-3850920351072518144-o.jpg', title: 'George Town Living Heritage Demonstration', category: 'UNESCO' },
-              { src: '/uploads/portfolio-5.jpg', title: 'Youth Academy Session', category: 'Students' },
-              { src: '/uploads/silambam-back.jpg', title: 'Ancient Combat Posture', category: 'Heritage' },
-            ].map((img, idx) => (
-              <Link
-                to="/gallery"
-                key={idx}
-                className="relative h-48 rounded-xl overflow-hidden group border border-stone-200 bg-stone-100 shadow-sm"
-              >
-                <img
-                  src={img.src}
-                  alt={img.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/20 to-transparent opacity-75 group-hover:opacity-90 transition-opacity" />
-                <div className="absolute bottom-3 left-3 right-3">
-                  <span className="text-[10px] font-mono text-amber-300 uppercase tracking-wider block">
-                    {img.category}
-                  </span>
-                  <h4 className="text-xs font-semibold text-white truncate">
-                    {img.title}
-                  </h4>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 8. Call To Action (Enrollment / Join Training) - Deep Navy Banner */}
-      <section className="py-20 relative overflow-hidden bg-gradient-to-b from-[#0B1B3D] to-navy-950 border-t border-navy-800 text-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-400 mx-auto mb-6 shadow-lg">
-            <Flame className="w-8 h-8 text-amber-400" />
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight mb-4">
-            Begin Your Traditional Silambam Journey
-          </h2>
-
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-300 leading-relaxed mb-8">
-            Experience the discipline of ancient Tamil warriors in George Town, Penang. Training classes available for children, youth, and adults under certified masters.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/join-training"
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-base tracking-wide transition-all duration-200 shadow-xl shadow-navy-950/50 border border-amber-400/40"
-            >
-              Submit Training Enquiry →
-            </Link>
-            <Link
-              to="/contact"
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-navy-900/80 hover:bg-navy-800 text-amber-300 font-semibold text-base transition-colors border border-navy-700"
-            >
-              Contact Association
-            </Link>
-          </div>
-
-          <p className="text-xs text-slate-400 mt-6 flex items-center justify-center space-x-2">
-            <MapPin className="w-3.5 h-3.5 text-amber-400" />
-            <span>Training Center: Lebuh King, George Town, Penang</span>
-          </p>
-        </div>
-      </section>
     </div>
   );
 };

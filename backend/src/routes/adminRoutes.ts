@@ -38,13 +38,17 @@ import {
   updateAlbum,
   deleteAlbum,
   uploadMedia,
+  uploadSingleMedia,
   listMediaAssets,
   updateMediaAsset,
   getMediaReferences,
   deleteMediaAsset,
   listEnquiries,
   updateEnquiry,
-  deleteEnquiry
+  deleteEnquiry,
+  getEmailConfig,
+  updateEmailConfig,
+  testEmailConnection
 } from '../controllers/adminController';
 
 const router = Router();
@@ -108,6 +112,7 @@ router.delete('/albums/:id', deleteAlbum);
 
 // Media Assets & Uploads
 router.post('/media/upload', upload.array('files', 15), validateUploadedFiles, uploadMedia);
+router.post('/media/upload-single', upload.single('file'), validateUploadedFiles, uploadSingleMedia);
 router.get('/media', listMediaAssets);
 router.put('/media/:id', updateMediaAsset);
 router.get('/media/:id/references', getMediaReferences);
@@ -117,5 +122,10 @@ router.delete('/media/:id', deleteMediaAsset);
 router.get('/enquiries', listEnquiries);
 router.put('/enquiries/:id', updateEnquiry);
 router.delete('/enquiries/:id', deleteEnquiry);
+
+// Email & Notifications Management
+router.get('/email/settings', getEmailConfig);
+router.put('/email/settings', updateEmailConfig);
+router.post('/email/test', testEmailConnection);
 
 export default router;

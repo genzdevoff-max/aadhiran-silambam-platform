@@ -10,7 +10,8 @@ import {
   X,
   AlertTriangle,
   Folder,
-  Star
+  Star,
+  Cloud
 } from 'lucide-react';
 import { adminApi } from '../../services/api';
 import type { MediaAsset, Album } from '../../types';
@@ -61,7 +62,7 @@ export const AdminMedia: React.FC = () => {
     } catch {
       setMedia([]);
       setAlbums([]);
-      setLoadError('Unable to load media from the server. Check the connection and retry.');
+      setLoadError('Unable to load media from the cloud server. Check the connection and retry.');
     } finally {
       setLoading(false);
     }
@@ -90,7 +91,7 @@ export const AdminMedia: React.FC = () => {
       if (file.size > maxSizeBytes) {
         return {
           valid: false,
-          error: `File "${file.name}" exceeds the maximum upload limit of 10MB (${(file.size / (1024 * 1024)).toFixed(1)}MB).`,
+          error: `File "${file.name}" exceeds the maximum cloud upload limit of 10MB (${(file.size / (1024 * 1024)).toFixed(1)}MB).`,
         };
       }
 
@@ -109,7 +110,6 @@ export const AdminMedia: React.FC = () => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    // Validate files before upload
     const validation = validateFiles(files);
     if (!validation.valid) {
       setFeedback({ type: 'error', message: validation.error || 'Invalid file selection.' });
@@ -129,7 +129,7 @@ export const AdminMedia: React.FC = () => {
     setFeedback(null);
     try {
       await adminApi.uploadMedia(formData);
-      setFeedback({ type: 'success', message: `${files.length} file(s) uploaded successfully.` });
+      setFeedback({ type: 'success', message: `${files.length} file(s) uploaded to Backblaze B2 storage.` });
       await fetchMedia();
     } catch (err: any) {
       const errMsg =
@@ -211,7 +211,7 @@ export const AdminMedia: React.FC = () => {
     }
   };
 
-  // Execute deletion (force if referenced)
+  // Execute deletion
   const confirmDelete = async (force: boolean) => {
     if (!deleteTarget || !referencesVerified || deleteSaving) return;
 
@@ -219,7 +219,7 @@ export const AdminMedia: React.FC = () => {
     try {
       await adminApi.deleteMedia(deleteTarget.id, force);
       setMedia((prev) => prev.filter((m) => m.id !== deleteTarget.id));
-      setFeedback({ type: 'success', message: `Asset "${deleteTarget.original_name}" deleted successfully.` });
+      setFeedback({ type: 'success', message: `Asset "${deleteTarget.original_name}" removed from cloud storage and library.` });
       setDeleteTarget(null);
       setReferenceCount(0);
     } catch (err: any) {
@@ -249,16 +249,22 @@ export const AdminMedia: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-white flex items-center space-x-3">
-            <ImageIcon className="w-7 h-7 text-crimson-500" />
-            <span>Media Asset Library</span>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#102137] flex items-center space-x-3">
+            <span className="p-2 rounded-xl bg-[#102137]/5 text-[#102137] border border-[#E8E3D9] flex items-center justify-center">
+              <ImageIcon className="w-5 h-5 text-[#C6A04A]" />
+            </span>
+            <span>Cloud Media Asset Library</span>
           </h1>
-          <p className="text-xs text-gray-400 mt-1">
-            Centrally manage photography, archival video, certificates, and safe reference links.
+          <p className="text-xs text-[#64748B] mt-1">
+            Centrally manage high-resolution photography, archival video, certificates, and B2 cloud storage assets.
           </p>
         </div>
 
-        <div>
+        <div className="flex items-center space-x-3">
+          <div className="hidden lg:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] text-[11px] text-[#64748B]">
+            <Cloud className="w-3.5 h-3.5 text-[#C6A04A]" />
+            <span>Backblaze B2 Storage</span>
+          </div>
           <input
             type="file"
             multiple
@@ -270,10 +276,10 @@ export const AdminMedia: React.FC = () => {
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="px-4 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-500 disabled:opacity-50 text-white font-semibold text-xs tracking-wider uppercase transition-colors shadow-md shadow-crimson-900/40 flex items-center space-x-2"
+            className="px-4 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] disabled:opacity-50 text-white font-medium text-xs tracking-wider uppercase transition-all shadow-sm border border-[#102137] flex items-center space-x-2"
           >
-            <Upload className="w-4 h-4" />
-            <span>{uploading ? 'Validating & Uploading...' : 'Upload Media Files'}</span>
+            <Upload className="w-4 h-4 text-[#C6A04A]" />
+            <span>{uploading ? 'Uploading to B2...' : 'Upload Cloud Files'}</span>
           </button>
         </div>
       </div>
@@ -283,17 +289,17 @@ export const AdminMedia: React.FC = () => {
         <div
           className={`p-4 rounded-xl text-xs flex items-center space-x-2.5 ${
             feedback.type === 'success'
-              ? 'bg-emerald-950/80 border border-emerald-700/60 text-emerald-300'
-              : 'bg-crimson-950/80 border border-crimson-700/60 text-crimson-300'
+              ? 'bg-emerald-50 border border-emerald-200 text-emerald-800 shadow-sm'
+              : 'bg-rose-50 border border-rose-200 text-rose-800 shadow-sm'
           }`}
         >
           {feedback.type === 'success' ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           ) : (
-            <AlertCircle className="w-4 h-4 text-crimson-400 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
           )}
           <span>{feedback.message}</span>
-          <button onClick={() => setFeedback(null)} className="ml-auto text-gray-400 hover:text-white text-xs">
+          <button onClick={() => setFeedback(null)} className="ml-auto text-[#64748B] hover:text-[#182332] text-xs">
             ✕
           </button>
         </div>
@@ -302,24 +308,24 @@ export const AdminMedia: React.FC = () => {
       {/* Search & Album Filter Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[#64748B] absolute left-3.5 top-1/2 -translate-y-1/2 shrink-0" />
           <input
             type="text"
             aria-label="Search media by file name, alt text, or caption"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by file name, alt text, or caption..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-gold-500"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] placeholder-[#64748B] text-xs focus:outline-none focus:border-[#102137] transition-colors shadow-sm"
           />
         </div>
 
         {albums.length > 0 && (
           <div className="flex items-center space-x-2">
-            <Folder className="w-4 h-4 text-gold-400 flex-shrink-0" />
+            <Folder className="w-4 h-4 text-[#C6A04A] shrink-0" />
             <select
               value={selectedAlbumFilter}
               onChange={(e) => setSelectedAlbumFilter(e.target.value)}
-              className="px-3 py-2.5 rounded-xl bg-charcoal-900 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+              className="px-3 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137] transition-colors shadow-sm"
             >
               <option value="all">All Albums ({media.length})</option>
               {albums.map((alb) => (
@@ -334,20 +340,20 @@ export const AdminMedia: React.FC = () => {
 
       {/* Media Grid */}
       {loadError ? (
-        <div role="alert" className="rounded-2xl border border-crimson-700/60 bg-crimson-950/60 p-6 text-center">
-          <p className="text-sm font-semibold text-crimson-200">{loadError}</p>
+        <div role="alert" className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center">
+          <p className="text-sm font-semibold text-rose-800">{loadError}</p>
           <button
             type="button"
             onClick={() => fetchMedia()}
-            className="mt-4 rounded-xl border border-charcoal-700 bg-charcoal-800 px-4 py-2 text-xs font-semibold text-white hover:bg-charcoal-700"
+            className="mt-4 rounded-xl border border-[#E8E3D9] bg-white px-4 py-2 text-xs font-semibold text-[#182332] hover:bg-[#F8F5EE] transition-colors"
           >
             Retry
           </button>
         </div>
       ) : loading ? (
-        <div className="p-8 text-center text-gray-500 font-mono text-sm">Loading media library...</div>
+        <div className="p-8 text-center text-[#64748B] font-mono text-sm">Connecting to cloud storage and media library...</div>
       ) : filtered.length === 0 ? (
-        <div className="p-12 text-center rounded-2xl bg-charcoal-900 border border-charcoal-800 text-gray-400 text-xs">
+        <div className="p-12 text-center rounded-2xl bg-white border border-[#E8E3D9] text-[#64748B] text-xs">
           No media assets match your query.
         </div>
       ) : (
@@ -355,12 +361,12 @@ export const AdminMedia: React.FC = () => {
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="group relative rounded-xl bg-charcoal-900 border border-charcoal-800 overflow-hidden hover:border-gold-500/50 transition-colors shadow flex flex-col justify-between"
+              className="group relative rounded-xl bg-white border border-[#E8E3D9] overflow-hidden hover:border-[#C6A04A] transition-all shadow-sm hover:shadow-md flex flex-col justify-between"
             >
               {/* Featured Badge */}
               {item.is_featured && (
-                <div className="absolute top-2 left-2 z-10 px-1.5 py-0.5 rounded bg-gold-500/90 text-charcoal-950 font-mono text-[9px] font-bold uppercase flex items-center space-x-1 shadow">
-                  <Star className="w-2.5 h-2.5 fill-current" />
+                <div className="absolute top-2 left-2 z-10 px-1.5 py-0.5 rounded bg-[#C6A04A] text-white font-mono text-[9px] font-bold uppercase flex items-center space-x-1 shadow">
+                  <Star className="w-2.5 h-2.5 fill-current shrink-0" />
                   <span>Featured</span>
                 </div>
               )}
@@ -368,14 +374,14 @@ export const AdminMedia: React.FC = () => {
               {/* Reference Count Badge */}
               {item.reference_count !== undefined && item.reference_count > 0 && (
                 <div
-                  className="absolute top-2 right-2 z-10 px-1.5 py-0.5 rounded bg-cobalt-950/90 border border-cobalt-700 text-cobalt-300 font-mono text-[9px] font-semibold"
+                  className="absolute top-2 right-2 z-10 px-1.5 py-0.5 rounded bg-[#102137]/90 text-white font-mono text-[9px] font-semibold"
                   title={`Referenced in ${item.reference_count} places across website`}
                 >
                   {item.reference_count} refs
                 </div>
               )}
 
-              <div className="aspect-square bg-charcoal-950 flex items-center justify-center overflow-hidden relative">
+              <div className="aspect-square bg-[#F8F5EE] flex items-center justify-center overflow-hidden relative">
                 <img
                   src={item.file_path}
                   alt={item.alt_text || item.original_name}
@@ -386,33 +392,33 @@ export const AdminMedia: React.FC = () => {
                 />
               </div>
 
-              <div className="p-2.5 bg-charcoal-900 flex flex-col justify-between space-y-1">
-                <p className="text-[11px] font-medium text-white truncate" title={item.original_name}>
+              <div className="p-2.5 bg-white flex flex-col justify-between space-y-1">
+                <p className="text-[11px] font-medium text-[#182332] truncate" title={item.original_name}>
                   {item.original_name}
                 </p>
 
                 {item.caption && (
-                  <p className="text-[10px] text-gray-400 truncate" title={item.caption}>
+                  <p className="text-[10px] text-[#64748B] truncate" title={item.caption}>
                     {item.caption}
                   </p>
                 )}
 
-                <div className="flex items-center justify-between pt-1 border-t border-charcoal-800 text-[10px] text-gray-500">
+                <div className="flex items-center justify-between pt-1 border-t border-[#E8E3D9] text-[10px] text-[#64748B]">
                   <span>{(item.file_size / 1024).toFixed(0)} KB</span>
                   <div className="flex items-center space-x-1">
                     <button
                       onClick={() => openEditModal(item)}
-                      className="p-1 rounded text-gray-400 hover:text-gold-400 hover:bg-charcoal-800 transition-colors"
+                      className="p-1 rounded text-[#64748B] hover:text-[#C6A04A] hover:bg-[#F8F5EE] transition-colors"
                       title="Edit metadata & alt text"
                     >
-                      <Edit2 className="w-3 h-3" />
+                      <Edit2 className="w-3 h-3 shrink-0" />
                     </button>
                     <button
                       onClick={() => startDelete(item)}
-                      className="p-1 rounded text-gray-400 hover:text-crimson-400 hover:bg-charcoal-800 transition-colors"
+                      className="p-1 rounded text-[#64748B] hover:text-rose-600 hover:bg-[#F8F5EE] transition-colors"
                       title="Delete asset"
                     >
-                      <Trash2 className="w-3 h-3" />
+                      <Trash2 className="w-3 h-3 shrink-0" />
                     </button>
                   </div>
                 </div>
@@ -424,43 +430,46 @@ export const AdminMedia: React.FC = () => {
 
       {/* Edit Metadata Modal */}
       {editingAsset && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div data-admin-dialog role="dialog" aria-modal="true" aria-labelledby="edit-media-title" tabIndex={-1} className="w-full max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl bg-charcoal-900 border border-charcoal-800 p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-charcoal-800 pb-3">
-              <h2 id="edit-media-title" className="text-sm font-display font-bold text-white flex items-center space-x-2">
-                <Edit2 className="w-4 h-4 text-gold-400" />
+        <div className="fixed inset-0 z-50 bg-[#102137]/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div data-admin-dialog role="dialog" aria-modal="true" aria-labelledby="edit-media-title" tabIndex={-1} className="w-full max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl bg-white border border-[#E8E3D9] p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#E8E3D9] pb-3">
+              <h2 id="edit-media-title" className="text-base font-display font-bold text-[#102137] flex items-center space-x-2">
+                <Edit2 className="w-4 h-4 text-[#C6A04A] shrink-0" />
                 <span>Edit Media Asset Metadata</span>
               </h2>
               <button
                 type="button"
                 onClick={() => setEditingAsset(null)}
                 aria-label="Close edit media dialog"
-                className="text-gray-400 hover:text-white"
+                className="text-[#64748B] hover:text-[#182332]"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4 shrink-0" />
               </button>
             </div>
 
             <form onSubmit={handleSaveEdit} className="space-y-4">
-              <div className="flex items-center space-x-3 p-3 rounded-xl bg-charcoal-950 border border-charcoal-800">
+              <div className="flex items-center space-x-3 p-3 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9]">
                 <img
                   src={editingAsset.file_path}
                   alt={editingAsset.alt_text}
-                  className="w-14 h-14 object-cover rounded-lg"
+                  className="w-14 h-14 object-cover rounded-lg border border-[#E8E3D9]"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = '/logo.png';
                   }}
                 />
                 <div className="truncate text-xs">
-                  <p className="font-semibold text-white truncate">{editingAsset.original_name}</p>
-                  <p className="text-[10px] text-gray-500 font-mono">
+                  <p className="font-semibold text-[#182332] truncate">{editingAsset.original_name}</p>
+                  <p className="text-[10px] text-[#64748B] font-mono">
                     {editingAsset.mime_type} • {(editingAsset.file_size / 1024).toFixed(0)} KB
+                  </p>
+                  <p className="text-[10px] text-[#C6A04A] font-mono truncate mt-0.5">
+                    {editingAsset.file_path}
                   </p>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1">
+                <label className="block text-xs font-semibold text-[#182332] mb-1">
                   Accessible Alt Text (for Screen Readers & SEO) *
                 </label>
                 <input
@@ -469,28 +478,28 @@ export const AdminMedia: React.FC = () => {
                   value={editFormData.alt_text}
                   onChange={(e) => setEditFormData({ ...editFormData, alt_text: e.target.value })}
                   placeholder="Describe image content..."
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3 py-2 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137] transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1">Display Caption</label>
+                <label className="block text-xs font-semibold text-[#182332] mb-1">Display Caption</label>
                 <textarea
                   rows={2}
                   value={editFormData.caption}
                   onChange={(e) => setEditFormData({ ...editFormData, caption: e.target.value })}
                   placeholder="Optional explanatory caption..."
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3 py-2 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137] transition-colors"
                 />
               </div>
 
               {albums.length > 0 && (
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1">Assign to Album</label>
+                  <label className="block text-xs font-semibold text-[#182332] mb-1">Assign to Album</label>
                   <select
                     value={editFormData.album_id}
                     onChange={(e) => setEditFormData({ ...editFormData, album_id: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137] transition-colors"
                   >
                     <option value="">No Album (General Uncategorized)</option>
                     {albums.map((alb) => (
@@ -508,25 +517,25 @@ export const AdminMedia: React.FC = () => {
                   id="featuredToggle"
                   checked={editFormData.is_featured}
                   onChange={(e) => setEditFormData({ ...editFormData, is_featured: e.target.checked })}
-                  className="w-4 h-4 rounded text-crimson-600 focus:ring-crimson-500 bg-charcoal-950 border-charcoal-700"
+                  className="w-4 h-4 rounded text-[#102137] focus:ring-[#102137] border-[#E8E3D9]"
                 />
-                <label htmlFor="featuredToggle" className="text-xs text-gray-300 font-semibold cursor-pointer">
+                <label htmlFor="featuredToggle" className="text-xs text-[#182332] font-semibold cursor-pointer">
                   Feature this media asset on the homepage preview gallery
                 </label>
               </div>
 
-              <div className="flex items-center justify-end space-x-2 pt-3 border-t border-charcoal-800">
+              <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E8E3D9]">
                 <button
                   type="button"
                   onClick={() => setEditingAsset(null)}
-                  className="px-4 py-2 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-gray-300 text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-[#F8F5EE] text-[#64748B] text-xs font-semibold border border-[#E8E3D9] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={editSaving}
-                  className="px-4 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 disabled:opacity-50 text-white text-xs font-semibold uppercase tracking-wider"
+                  className="px-5 py-2 rounded-xl bg-[#102137] hover:bg-[#183B5B] disabled:opacity-50 text-white text-xs font-medium tracking-wider transition-all shadow-sm"
                 >
                   {editSaving ? 'Saving...' : 'Save Metadata'}
                 </button>
@@ -538,50 +547,50 @@ export const AdminMedia: React.FC = () => {
 
       {/* Delete / Reference Warning Modal */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div data-admin-dialog role="alertdialog" aria-modal="true" aria-labelledby="delete-media-title" tabIndex={-1} className="w-full max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl bg-charcoal-900 border border-charcoal-800 p-6 space-y-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-[#102137]/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div data-admin-dialog role="alertdialog" aria-modal="true" aria-labelledby="delete-media-title" tabIndex={-1} className="w-full max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-2xl bg-white border border-[#E8E3D9] p-6 space-y-4 shadow-2xl">
             <div className="flex items-center space-x-3">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
                   referenceCount > 0
-                    ? 'bg-amber-950 border border-amber-700 text-amber-400'
-                    : 'bg-crimson-950 border border-crimson-700 text-crimson-400'
+                    ? 'bg-amber-50 border border-amber-200 text-amber-700'
+                    : 'bg-rose-50 border border-rose-200 text-rose-700'
                 }`}
               >
-                <AlertTriangle className="w-5 h-5" />
+                <AlertTriangle className="w-5 h-5 shrink-0" />
               </div>
               <div>
-                <h2 id="delete-media-title" className="text-sm font-display font-bold text-white">
+                <h2 id="delete-media-title" className="text-base font-display font-bold text-[#102137]">
                   {referenceCount > 0 ? 'Warning: Asset In Use' : 'Confirm Asset Deletion'}
                 </h2>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-[#64748B]">
                   {deleteTarget.original_name}
                 </p>
               </div>
             </div>
 
             {referenceChecking ? (
-              <p className="text-xs text-gray-400 font-mono">Checking asset reference links...</p>
+              <p className="text-xs text-[#64748B] font-mono">Checking cloud asset reference links...</p>
             ) : referenceError ? (
-              <p role="alert" className="rounded-xl border border-crimson-700/60 bg-crimson-950/60 p-3 text-xs text-crimson-200">
+              <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-800">
                 {referenceError}
               </p>
             ) : referenceCount > 0 ? (
-              <div className="p-3.5 rounded-xl bg-amber-950/60 border border-amber-800/80 text-amber-300 text-xs space-y-1.5">
+              <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs space-y-1.5">
                 <p className="font-semibold">
                   This media item is referenced in {referenceCount} place(s) across the website!
                 </p>
-                <p className="text-[11px] text-amber-400/90 leading-relaxed">
+                <p className="text-[11px] text-amber-700 leading-relaxed">
                   Deleting this file will result in missing images on public pages (such as achievements, articles, or instructor profiles).
                 </p>
               </div>
             ) : (
-              <p className="text-xs text-gray-300 leading-relaxed">
-                Are you sure you want to delete this media asset? This action will remove the record and unlink the asset.
+              <p className="text-xs text-[#64748B] leading-relaxed">
+                Are you sure you want to delete this media asset? This action will remove the record from cloud storage and database.
               </p>
             )}
 
-            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-charcoal-800">
+            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E8E3D9]">
               <button
                 type="button"
                 onClick={() => {
@@ -590,7 +599,7 @@ export const AdminMedia: React.FC = () => {
                   setReferenceError(null);
                   setReferencesVerified(false);
                 }}
-                className="px-4 py-2 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-gray-300 text-xs font-semibold"
+                className="px-4 py-2 rounded-xl bg-white hover:bg-[#F8F5EE] text-[#64748B] text-xs font-semibold border border-[#E8E3D9] transition-colors"
               >
                 Cancel (Keep Asset)
               </button>
@@ -600,7 +609,7 @@ export const AdminMedia: React.FC = () => {
                   type="button"
                   onClick={() => confirmDelete(true)}
                   disabled={!referencesVerified || referenceChecking || deleteSaving}
-                  className="px-4 py-2 rounded-xl bg-crimson-700 hover:bg-crimson-600 disabled:opacity-50 text-white text-xs font-semibold uppercase tracking-wider"
+                  className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-medium tracking-wider transition-all shadow-sm"
                 >
                   {deleteSaving ? 'Deleting...' : 'Force Delete Anyway'}
                 </button>
@@ -609,7 +618,7 @@ export const AdminMedia: React.FC = () => {
                   type="button"
                   onClick={() => confirmDelete(false)}
                   disabled={!referencesVerified || referenceChecking || deleteSaving}
-                  className="px-4 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 disabled:opacity-50 text-white text-xs font-semibold uppercase tracking-wider"
+                  className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-medium tracking-wider transition-all shadow-sm"
                 >
                   {deleteSaving ? 'Deleting...' : 'Delete Asset'}
                 </button>

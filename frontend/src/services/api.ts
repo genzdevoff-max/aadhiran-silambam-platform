@@ -186,6 +186,16 @@ export const adminApi = {
     api.post('/admin/media/upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).then((r) => r.data),
+  uploadSingleMedia: (file: File, metadata?: { alt_text?: string; caption?: string; album_id?: string }) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (metadata?.alt_text) formData.append('alt_text', metadata.alt_text);
+    if (metadata?.caption) formData.append('caption', metadata.caption);
+    if (metadata?.album_id) formData.append('album_id', metadata.album_id);
+    return api.post('/admin/media/upload-single', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then((r) => r.data);
+  },
   updateMedia: (id: string, data: any) => api.put(`/admin/media/${id}`, data).then((r) => r.data),
   getMediaReferences: (id: string) => api.get(`/admin/media/${id}/references`).then((r) => r.data.references),
   deleteMedia: (id: string, force = false) =>
@@ -196,4 +206,10 @@ export const adminApi = {
     api.get('/admin/enquiries', { params }).then((r) => r.data.enquiries),
   updateEnquiry: (id: string, data: any) => api.put(`/admin/enquiries/${id}`, data).then((r) => r.data),
   deleteEnquiry: (id: string) => api.delete(`/admin/enquiries/${id}`).then((r) => r.data),
+
+  // Email & SMTP Configuration
+  getEmailSettings: () => api.get('/admin/email/settings').then((r) => r.data.settings),
+  updateEmailSettings: (data: any) => api.put('/admin/email/settings', data).then((r) => r.data),
+  testEmailConnection: (data: { targetEmail?: string; customConfig?: any }) =>
+    api.post('/admin/email/test', data).then((r) => r.data),
 };

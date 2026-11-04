@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Users,
@@ -6,55 +6,67 @@ import {
   Clock
 } from 'lucide-react';
 import { instructorsList } from '../../data';
+import { publicApi } from '../../services/api';
+import type { Instructor } from '../../types';
 
 export const Instructors: React.FC = () => {
-  const lineagePillars = instructorsList.filter(
+  const [instructors, setInstructors] = useState<Instructor[]>(instructorsList);
+
+  useEffect(() => {
+    publicApi.getInstructors().then((data) => {
+      if (Array.isArray(data) && data.length > 0) {
+        setInstructors(data);
+      }
+    }).catch(() => {});
+  }, []);
+
+  const lineagePillars = instructors.filter(
     (i) => i.role_type === 'grandmaster' || i.role_type === 'head_master'
   );
-  const councilInstructors = instructorsList.filter(
+  const councilInstructors = instructors.filter(
     (i) => i.role_type !== 'grandmaster' && i.role_type !== 'head_master'
   );
 
   return (
-    <div className="bg-[#FDFBF7] text-slate-800">
-      {/* 1. Header Banner - Deep Navy */}
-      <section className="relative py-20 sm:py-28 bg-gradient-to-b from-[#0B1B3D] to-navy-950 border-b border-navy-800 text-white overflow-hidden">
+    <div className="bg-[#FDFBF7] text-[#182332]">
+      {/* 1. Header Banner - Deep Heritage Navy */}
+      <section className="relative py-20 sm:py-28 bg-[#102137] border-b border-[#183B5B] text-white overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-navy-900/90 border border-amber-400/40 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-5 backdrop-blur-md">
-            <Users className="w-3.5 h-3.5 text-amber-400" />
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/80 border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-5 backdrop-blur-md">
+            <Users className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>Guru-Student Tradition (குருகுலம்)</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-extrabold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold text-white tracking-tight">
             Masters & Living Custodians
           </h1>
-          <p className="mt-3 text-lg sm:text-xl font-display text-amber-300 font-medium tracking-wide">
-            ஆசிரியர்கள் மற்றும் குருமார்கள் <span className="text-slate-400 font-sans mx-2">•</span> Guardians of the Ancient Discipline
+          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-medium tracking-wide">
+            ஆசிரியர்கள் மற்றும் குருமார்கள் <span className="text-[#64748B] font-sans mx-2">•</span> Guardians of the Ancient Discipline
           </p>
 
-          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
+          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-white/80 leading-relaxed font-normal">
             Certified masters with decades of dedicated Gurukulam practice, tested through authentic traditional pedagogy and recognized by national heritage bodies.
           </p>
 
-          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-6">
-            <Link to="/" className="hover:text-amber-300 transition-colors">Home</Link>
+          <div className="flex items-center justify-center space-x-2 text-xs text-white/70 mt-6">
+            <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-amber-200">Instructors</span>
+            <span className="text-[#D9B96E] font-medium">Instructors</span>
           </div>
         </div>
       </section>
 
-      {/* 2. Lineage Custodians Feature Spotlight */}
-      <section className="py-20 border-b border-stone-200 bg-[#FDFBF7]">
+      {/* 2. Lineage Custodians Feature Spotlight - Ivory Background */}
+      <section className="py-20 border-b border-[#E8E3D9] bg-[#FDFBF7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs uppercase font-bold text-crimson-600 tracking-widest block mb-2">
+            <span className="text-xs uppercase font-bold text-[#C6A04A] tracking-widest block mb-2">
               Primary Lineage Authority
             </span>
-            <h2 className="text-3xl sm:text-4xl font-display font-bold text-[#0B1B3D]">
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-[#102137]">
               The Lineage Custodians
             </h2>
-            <p className="text-slate-600 text-xs sm:text-sm mt-3">
+            <p className="text-[#64748B] text-xs sm:text-sm mt-3">
               The master transmission that brought ancient Aadhiran Silambam from Madurai to Penang and elevated it to national heritage status.
             </p>
           </div>
@@ -63,17 +75,17 @@ export const Instructors: React.FC = () => {
             {lineagePillars.map((master) => (
               <div
                 key={master.id}
-                className="rounded-2xl bg-white border border-stone-200 overflow-hidden hover:border-amber-400 transition-all duration-300 flex flex-col sm:flex-row group shadow-sm hover:shadow-md"
+                className="rounded-2xl bg-white border border-[#E8E3D9] overflow-hidden hover:border-[#C6A04A] transition-all duration-300 flex flex-col sm:flex-row group shadow-sm hover:shadow-md"
               >
                 {/* Photo */}
-                <div className="relative sm:w-2/5 h-80 sm:h-auto overflow-hidden bg-stone-100 flex-shrink-0">
+                <div className="relative sm:w-2/5 h-80 sm:h-auto overflow-hidden bg-[#F8F5EE] flex-shrink-0">
                   <img
-                    src={master.photo_url || '/uploads/mariapaqiam4.png'}
+                    src={master.photo_url || '/api/public/media/stream/silambam/mariapaqiam4.png'}
                     alt={master.name}
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-navy-950/70 via-transparent to-transparent" />
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-navy-950/85 backdrop-blur-sm border border-amber-400/40 text-[10px] font-mono text-amber-300 font-bold uppercase">
+                  <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-[#102137]/80 via-transparent to-transparent" />
+                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#102137]/90 backdrop-blur-sm border border-[#C6A04A]/50 text-[10px] font-mono text-[#D9B96E] font-bold uppercase">
                     {master.lineage_rank}
                   </span>
                 </div>
@@ -81,30 +93,30 @@ export const Instructors: React.FC = () => {
                 {/* Content */}
                 <div className="p-6 sm:p-8 sm:w-3/5 flex flex-col justify-between space-y-4">
                   <div>
-                    <span className="text-[11px] font-mono text-crimson-600 font-semibold uppercase tracking-wider block mb-1">
-                      {master.role_type.replace('_', ' ').toUpperCase()}
+                    <span className="text-[11px] font-mono text-[#C6A04A] font-semibold uppercase tracking-wider block mb-1">
+                      {(master.role_type || '').replace('_', ' ').toUpperCase()}
                     </span>
-                    <h3 className="text-2xl font-display font-bold text-[#0B1B3D]">
+                    <h3 className="text-2xl font-display font-bold text-[#102137]">
                       {master.name}
                     </h3>
-                    <p className="text-xs font-mono text-amber-700 mt-0.5">
+                    <p className="text-xs font-mono text-[#C6A04A] mt-0.5">
                       {master.tamil_name}
                     </p>
-                    <p className="text-xs font-semibold text-slate-700 mt-2">
+                    <p className="text-xs font-semibold text-[#182332] mt-2">
                       {master.title}
                     </p>
 
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-4">
+                    <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed mt-4">
                       {master.biography}
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-stone-100 flex items-center justify-between text-xs text-slate-500 font-mono">
-                    <span className="flex items-center text-amber-700 font-semibold">
-                      <Clock className="w-3.5 h-3.5 mr-1.5" />
+                  <div className="pt-4 border-t border-[#E8E3D9] flex items-center justify-between text-xs text-[#64748B] font-mono">
+                    <span className="flex items-center text-[#102137] font-semibold">
+                      <Clock className="w-3.5 h-3.5 mr-1.5 text-[#C6A04A] shrink-0" />
                       {master.years_experience}+ Years Practice
                     </span>
-                    <span className="text-slate-400">Living Lineage</span>
+                    <span className="text-[#C6A04A] font-semibold">Living Lineage</span>
                   </div>
                 </div>
               </div>
@@ -113,17 +125,17 @@ export const Instructors: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. Instruction Council & Senior Masters */}
-      <section className="py-20 border-b border-stone-200 bg-stone-50">
+      {/* 3. Instruction Council & Senior Masters - Paper Background */}
+      <section className="py-20 border-b border-[#E8E3D9] bg-[#F8F5EE]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs uppercase font-bold text-amber-700 tracking-widest block mb-2">
+            <span className="text-xs uppercase font-bold text-[#C6A04A] tracking-widest block mb-2">
               Teaching Council
             </span>
-            <h2 className="text-3xl sm:text-4xl font-display font-bold text-[#0B1B3D]">
+            <h2 className="text-3xl sm:text-4xl font-display font-bold text-[#102137]">
               Senior Masters & Field Instructors
             </h2>
-            <p className="text-slate-600 text-xs sm:text-sm mt-3">
+            <p className="text-[#64748B] text-xs sm:text-sm mt-3">
               Direct disciples responsible for youth development, weapons mastery, and community demonstrations across Penang.
             </p>
           </div>
@@ -132,29 +144,29 @@ export const Instructors: React.FC = () => {
             {councilInstructors.map((instructor) => (
               <div
                 key={instructor.id}
-                className="rounded-2xl bg-white border border-stone-200 overflow-hidden hover:border-amber-400 transition-all duration-300 flex flex-col group shadow-sm hover:shadow-md"
+                className="rounded-2xl bg-white border border-[#E8E3D9] overflow-hidden hover:border-[#C6A04A] transition-all duration-300 flex flex-col group shadow-sm hover:shadow-md"
               >
                 {/* Photo */}
-                <div className="relative h-64 overflow-hidden bg-stone-100">
+                <div className="relative h-64 overflow-hidden bg-[#F8F5EE]">
                   <img
-                    src={instructor.photo_url || '/uploads/member1.png'}
+                    src={instructor.photo_url || '/api/public/media/stream/silambam/member1.png'}
                     alt={instructor.name}
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/90 via-transparent to-transparent" />
                   
-                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded bg-navy-950/85 backdrop-blur-sm border border-navy-700 text-amber-300 text-[11px] font-mono font-bold">
+                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded bg-[#102137]/90 backdrop-blur-sm border border-[#183B5B] text-[#D9B96E] text-[11px] font-mono font-bold">
                     {instructor.lineage_rank}
                   </div>
 
                   <div className="absolute bottom-3 left-4 right-4">
-                    <span className="text-[10px] font-mono text-amber-300 uppercase tracking-widest font-semibold block">
-                      {instructor.role_type.replace('_', ' ').toUpperCase()}
+                    <span className="text-[10px] font-mono text-[#D9B96E] uppercase tracking-widest font-semibold block">
+                      {(instructor.role_type || '').replace('_', ' ').toUpperCase()}
                     </span>
                     <h3 className="text-lg font-display font-bold text-white">
                       {instructor.name}
                     </h3>
-                    <p className="text-xs font-mono text-amber-200">
+                    <p className="text-xs font-mono text-white/80">
                       {instructor.tamil_name}
                     </p>
                   </div>
@@ -163,23 +175,23 @@ export const Instructors: React.FC = () => {
                 {/* Details */}
                 <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
                   <div>
-                    <div className="flex items-center space-x-2 text-xs text-amber-700 mb-2 font-mono">
-                      <Clock className="w-3.5 h-3.5 text-amber-600" />
+                    <div className="flex items-center space-x-2 text-xs text-[#182332] mb-2 font-mono">
+                      <Clock className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
                       <span>{instructor.years_experience}+ Years of Practice</span>
                     </div>
 
-                    <p className="text-xs font-semibold text-slate-800 mb-2">
+                    <p className="text-xs font-semibold text-[#102137] mb-2">
                       {instructor.title}
                     </p>
 
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                    <p className="text-xs text-[#64748B] leading-relaxed">
                       {instructor.biography}
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-stone-100 text-[11px] text-slate-500 font-mono flex items-center justify-between">
+                  <div className="pt-4 border-t border-[#E8E3D9] text-[11px] text-[#64748B] font-mono flex items-center justify-between">
                     <span>Aadhiran Gurukulam</span>
-                    <span className="text-crimson-600 font-semibold">Verified Discipline</span>
+                    <span className="text-[#C6A04A] font-semibold">Verified Discipline</span>
                   </div>
                 </div>
               </div>
@@ -189,39 +201,39 @@ export const Instructors: React.FC = () => {
       </section>
 
       {/* 4. Gurukulam Code Notice */}
-      <section className="py-16 bg-white border-b border-stone-200">
+      <section className="py-16 bg-[#FDFBF7] border-b border-[#E8E3D9]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 mx-auto mb-4">
-            <Shield className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mx-auto mb-4">
+            <Shield className="w-6 h-6 text-[#C6A04A] shrink-0" />
           </div>
-          <h3 className="text-2xl font-display font-bold text-[#0B1B3D] mb-2">
+          <h3 className="text-2xl font-display font-bold text-[#102137] mb-2">
             The Gurukulam Student-Master Covenant
           </h3>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#64748B] max-w-2xl mx-auto leading-relaxed">
             In Aadhiran, instructors do not merely teach techniques for sport medals. They transmit moral balance, battlefield self-restraint, respect for traditional elders, and cultural preservation. Students are accepted only upon agreeing to ethical martial conduct.
           </p>
         </div>
       </section>
 
-      {/* 5. CTA Section - Navy Banner */}
-      <section className="py-20 bg-[#0B1B3D] text-center text-white">
+      {/* 5. CTA Section */}
+      <section className="py-20 bg-[#102137] border-t border-[#183B5B] text-center text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <h3 className="text-3xl font-display font-bold text-white mb-4">
             Train Under Living Lineage Masters
           </h3>
-          <p className="text-sm text-slate-300 mb-8 max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm text-white/80 mb-8 max-w-xl mx-auto leading-relaxed">
             Direct personal instruction from senior masters at our George Town training headquarters.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/join-training"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm tracking-wide transition-all shadow-md border border-amber-400/40"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#C6A04A] hover:bg-[#D9B96E] text-[#102137] font-bold text-sm tracking-wide transition-all shadow-md"
             >
               Enquire for Admission →
             </Link>
             <Link
               to="/training-syllabus"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-navy-900 border border-navy-700 hover:border-amber-400 text-slate-200 hover:text-white text-sm font-semibold transition-all"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#183B5B] border border-[#C6A04A]/40 hover:border-[#C6A04A] text-white hover:text-white text-sm font-semibold transition-all"
             >
               Inspect 10-Stage Syllabus
             </Link>

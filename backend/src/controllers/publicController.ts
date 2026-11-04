@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
+import path from 'path';
+import fs from 'fs';
+import mime from 'mime-types';
 import { query } from '../config/db';
+import { sendEnquiryNotification } from '../services/emailService';
+import { getObjectFromB2 } from '../services/b2Storage';
 
 export const getHomeContent = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -516,6 +521,15 @@ export const submitContactEnquiry = async (req: Request, res: Response): Promise
       VALUES ('general', $1, $2, $3, $4, 'new', $5)
     `, [fullName.trim(), email.trim().toLowerCase(), phone.trim(), message.trim(), ip]);
 
+    // Dispatch asynchronous email notifications (admin alert + applicant confirmation)
+    sendEnquiryNotification({
+      enquiry_type: 'general',
+      full_name: fullName.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone.trim(),
+      message: message.trim(),
+    }).catch((err) => console.error('Enquiry notification background error:', err));
+
     res.status(201).json({
       success: true,
       message: 'Thank you! Your enquiry has been received. Our association officers will contact you shortly.'
@@ -559,6 +573,18 @@ export const submitJoinEnquiry = async (req: Request, res: Response): Promise<vo
       ip
     ]);
 
+    // Dispatch asynchronous email notifications (admin alert + applicant confirmation)
+    sendEnquiryNotification({
+      enquiry_type: 'join_training',
+      full_name: fullName.trim(),
+      email: email.trim().toLowerCase(),
+      phone: phone.trim(),
+      age_group: ageGroup || 'adult',
+      experience_level: experienceLevel || 'beginner',
+      preferred_location: preferredLocation || 'George Town',
+      message: message ? message.trim() : 'Admission enquiry for Aadhiran traditional syllabus training.',
+    }).catch((err) => console.error('Join enquiry notification background error:', err));
+
     res.status(201).json({
       success: true,
       message: 'Admission enquiry received! Our chief instructor will reach out regarding batch timing and venue location.'
@@ -566,5 +592,98 @@ export const submitJoinEnquiry = async (req: Request, res: Response): Promise<vo
   } catch (error) {
     console.error('submitJoinEnquiry error:', error);
     res.status(500).json({ success: false, message: 'Failed to submit admission enquiry.' });
+  }
+};
+
+/**
+ * Public streaming proxy for Backblaze B2 private bucket assets.
+ * Fetches the object using authenticated credentials, caches locally for ultra-fast subsequent hits,
+ * and sets long-lived HTTP caching headers (Cache-Control: immutable, ETag).
+ */
+export const streamMediaAsset = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const rawPath = (req.params[0] || (req.params as any).key || '').replace(/^\/+/, '');
+    if (!rawPath) {
+      res.status(400).json({ success: false, message: 'Missing media asset key.' });
+      return;
+    }
+
+    // Security validation against directory traversal and null-byte injection
+    if (rawPath.includes('..') || rawPath.includes('\\') || rawPath.includes('\0')) {
+      res.status(400).json({ success: false, message: 'Invalid asset path.' });
+      return;
+    }
+
+    const key = rawPath.startsWith('silambam/') ? rawPath : `silambam/${rawPath}`;
+    const keyBasename = path.basename(key);
+
+    // Cache directory inside uploads/b2_cache
+    const cacheDir = path.resolve(__dirname, '../../uploads/b2_cache');
+    const cacheFilePath = path.join(cacheDir, keyBasename);
+
+    // Check disk cache first for sub-millisecond response
+    if (fs.existsSync(cacheFilePath)) {
+      const stat = fs.statSync(cacheFilePath);
+      const mimeType = (mime.lookup(cacheFilePath) as string) || 'application/octet-stream';
+      const etag = `"${stat.size}-${stat.mtimeMs}"`;
+
+      if (req.headers['if-none-match'] === etag) {
+        res.status(304).end();
+        return;
+      }
+
+      res.setHeader('Content-Type', mimeType);
+      res.setHeader('Content-Length', stat.size);
+      res.setHeader('ETag', etag);
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      fs.createReadStream(cacheFilePath).pipe(res);
+      return;
+    }
+
+    // Otherwise fetch object from private B2 bucket
+    try {
+      const b2Object = await getObjectFromB2(key);
+      const mimeType = b2Object.contentType || (mime.lookup(key) as string) || 'application/octet-stream';
+      const etag = b2Object.eTag || `"${Date.now()}"`;
+
+      if (req.headers['if-none-match'] === etag) {
+        res.status(304).end();
+        return;
+      }
+
+      res.setHeader('Content-Type', mimeType);
+      if (b2Object.contentLength) {
+        res.setHeader('Content-Length', b2Object.contentLength);
+      }
+      res.setHeader('ETag', etag);
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+
+      if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir, { recursive: true });
+      }
+
+      const cacheStream = fs.createWriteStream(cacheFilePath);
+      const b2Stream = b2Object.body as NodeJS.ReadableStream;
+      b2Stream.pipe(cacheStream);
+      b2Stream.pipe(res);
+    } catch (b2Err: any) {
+      // Fallback: check if the legacy file exists in uploads/
+      const legacyPath = path.resolve(__dirname, '../../uploads', keyBasename);
+      if (fs.existsSync(legacyPath)) {
+        const stat = fs.statSync(legacyPath);
+        const mimeType = (mime.lookup(legacyPath) as string) || 'application/octet-stream';
+        res.setHeader('Content-Type', mimeType);
+        res.setHeader('Content-Length', stat.size);
+        res.setHeader('Cache-Control', 'public, max-age=86400');
+        fs.createReadStream(legacyPath).pipe(res);
+        return;
+      }
+
+      console.warn(`[streamMediaAsset] Asset not found in B2 or local uploads for key: ${key} (${b2Err.message})`);
+      res.status(404).json({ success: false, message: 'Media asset not found.' });
+    }
+  } catch (error: any) {
+    console.error('streamMediaAsset error:', error);
+    res.status(500).json({ success: false, message: 'Failed to stream media asset.' });
   }
 };

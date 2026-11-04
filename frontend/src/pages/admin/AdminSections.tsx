@@ -10,11 +10,11 @@ import {
   Layers,
   Sparkles,
   Link as LinkIcon,
-  Video,
-  Image as ImageIcon
+  Video
 } from 'lucide-react';
 import { adminApi, publicApi } from '../../services/api';
 import { heroContent as defaultHero, quickFacts as defaultQuickFacts } from '../../data/siteContent';
+import { CloudImageUpload } from '../../components/common/CloudImageUpload';
 import type { HeroConfig, QuickFact, SectionVisibilityItem } from '../../types';
 
 export const AdminSections: React.FC = () => {
@@ -158,7 +158,7 @@ export const AdminSections: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="p-8 text-center text-gray-500 font-mono text-sm">Loading sections data...</div>;
+    return <div className="p-8 text-center text-[#64748B] font-mono text-sm">Loading sections data...</div>;
   }
 
   return (
@@ -166,27 +166,29 @@ export const AdminSections: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-white flex items-center space-x-3">
-            <Flame className="w-7 h-7 text-crimson-500" />
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#102137] flex items-center space-x-3">
+            <span className="p-2 rounded-xl bg-[#102137]/5 text-[#102137] border border-[#E8E3D9] flex items-center justify-center">
+              <Flame className="w-5 h-5 text-[#C6A04A]" />
+            </span>
             <span>Sections & Hero Editor</span>
           </h1>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-[#64748B] mt-1">
             Customize homepage hero presentation, institutional highlights, and section hierarchy.
           </p>
         </div>
 
         <div className="flex items-center space-x-3">
           {isDirty && (
-            <span className="text-xs font-semibold text-amber-400 bg-amber-950/60 border border-amber-800/80 px-3 py-1.5 rounded-xl">
+            <span className="text-xs font-semibold text-[#C6A04A] bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl">
               ● Unsaved Changes
             </span>
           )}
           <button
             onClick={handleSaveAll}
             disabled={saving}
-            className="px-5 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-500 disabled:opacity-50 text-white font-semibold text-xs tracking-wider uppercase transition-colors shadow-md shadow-crimson-900/40 flex items-center space-x-2"
+            className="px-5 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] disabled:opacity-50 text-white font-medium text-xs tracking-wider uppercase transition-all shadow-sm border border-[#102137] flex items-center space-x-2 shrink-0"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-4 h-4 text-[#C6A04A]" />
             <span>{saving ? 'Saving...' : 'Save All Changes'}</span>
           </button>
         </div>
@@ -194,7 +196,7 @@ export const AdminSections: React.FC = () => {
 
       {/* Feedback banner */}
       {loadWarning && (
-        <div role="status" className="rounded-xl border border-amber-800/80 bg-amber-950/50 p-4 text-xs text-amber-200">
+        <div role="status" className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800">
           {loadWarning}
         </div>
       )}
@@ -202,60 +204,60 @@ export const AdminSections: React.FC = () => {
         <div
           className={`p-4 rounded-xl text-xs flex items-center space-x-2.5 ${
             feedback.type === 'success'
-              ? 'bg-emerald-950/80 border border-emerald-700/60 text-emerald-300'
-              : 'bg-crimson-950/80 border border-crimson-700/60 text-crimson-300'
+              ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+              : 'bg-rose-50 border border-rose-200 text-rose-800'
           }`}
         >
           {feedback.type === 'success' ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
           ) : (
-            <AlertCircle className="w-4 h-4 text-crimson-400 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
           )}
           <span>{feedback.message}</span>
-          <button onClick={() => setFeedback(null)} className="ml-auto text-gray-400 hover:text-white text-xs">
+          <button onClick={() => setFeedback(null)} className="ml-auto text-[#64748B] hover:text-[#182332] text-xs">
             ✕
           </button>
         </div>
       )}
 
       {/* Sub-tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-charcoal-800 pb-3">
+      <div className="flex flex-wrap gap-2 border-b border-[#E8E3D9] pb-3">
         <button
           type="button"
           onClick={() => setActiveTab('hero')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-colors ${
+          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all ${
             activeTab === 'hero'
-              ? 'bg-crimson-600 text-white shadow-md shadow-crimson-900/40'
-              : 'bg-charcoal-900 text-gray-400 hover:text-white hover:bg-charcoal-800 border border-charcoal-800'
+              ? 'bg-[#102137] text-white shadow-sm border border-[#102137]'
+              : 'bg-white text-[#64748B] hover:text-[#182332] hover:bg-[#F8F5EE] border border-[#E8E3D9]'
           }`}
         >
-          <Sparkles className="w-4 h-4" />
+          <Sparkles className="w-4 h-4 text-[#C6A04A] shrink-0" />
           <span>Hero Banner Content</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('quickFacts')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-colors ${
+          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all ${
             activeTab === 'quickFacts'
-              ? 'bg-crimson-600 text-white shadow-md shadow-crimson-900/40'
-              : 'bg-charcoal-900 text-gray-400 hover:text-white hover:bg-charcoal-800 border border-charcoal-800'
+              ? 'bg-[#102137] text-white shadow-sm border border-[#102137]'
+              : 'bg-white text-[#64748B] hover:text-[#182332] hover:bg-[#F8F5EE] border border-[#E8E3D9]'
           }`}
         >
-          <Layers className="w-4 h-4" />
+          <Layers className="w-4 h-4 text-[#C6A04A] shrink-0" />
           <span>Quick Facts & Proof Points</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('sections')}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-colors ${
+          className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all ${
             activeTab === 'sections'
-              ? 'bg-crimson-600 text-white shadow-md shadow-crimson-900/40'
-              : 'bg-charcoal-900 text-gray-400 hover:text-white hover:bg-charcoal-800 border border-charcoal-800'
+              ? 'bg-[#102137] text-white shadow-sm border border-[#102137]'
+              : 'bg-white text-[#64748B] hover:text-[#182332] hover:bg-[#F8F5EE] border border-[#E8E3D9]'
           }`}
         >
-          <Eye className="w-4 h-4" />
+          <Eye className="w-4 h-4 text-[#C6A04A] shrink-0" />
           <span>Homepage Section Order & Visibility</span>
         </button>
       </div>
@@ -264,34 +266,34 @@ export const AdminSections: React.FC = () => {
       {activeTab === 'hero' && (
         <div className="space-y-6">
           {/* Live Preview Box */}
-          <div className="p-6 rounded-3xl bg-charcoal-900 border border-charcoal-800 overflow-hidden relative shadow-xl">
-            <span className="inline-block text-[10px] font-mono font-bold uppercase tracking-wider text-gold-400 mb-2">
+          <div className="p-6 rounded-3xl bg-white border border-[#E8E3D9] overflow-hidden relative shadow-sm">
+            <span className="inline-block text-[10px] font-mono font-bold uppercase tracking-wider text-[#C6A04A] mb-2">
               Live Mockup Preview
             </span>
-            <div className="relative rounded-2xl p-8 text-center overflow-hidden border border-charcoal-700 bg-black/60">
+            <div className="relative rounded-2xl p-8 text-center overflow-hidden border border-[#183B5B] bg-[#102137]">
               <img
                 src={hero.bgImage}
                 alt="Backdrop preview"
-                className="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+                className="absolute inset-0 w-full h-full object-cover opacity-25 pointer-events-none"
               />
               <div className="relative z-10 max-w-2xl mx-auto space-y-3">
-                <span className="inline-block px-3 py-1 rounded-full bg-charcoal-900/80 border border-gold-500/30 text-gold-400 text-[10px] uppercase font-semibold tracking-wider">
+                <span className="inline-block px-3 py-1 rounded-full bg-white/10 border border-[#C6A04A]/40 text-[#D9B96E] text-[10px] uppercase font-semibold tracking-wider">
                   {hero.badge}
                 </span>
-                <h2 className="text-2xl sm:text-4xl font-display font-extrabold text-white tracking-wider">
+                <h2 className="text-2xl sm:text-4xl font-display font-bold text-white tracking-wide">
                   {hero.title}
                 </h2>
-                <p className="text-xs sm:text-sm font-display text-gold-300">
+                <p className="text-xs sm:text-sm font-display text-[#D9B96E]">
                   {hero.tamilTitle}
                 </p>
-                <p className="text-xs text-gray-300 line-clamp-3 max-w-xl mx-auto">
+                <p className="text-xs text-white/80 line-clamp-3 max-w-xl mx-auto leading-relaxed">
                   {hero.subtitle}
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                  <span className="px-4 py-2 rounded-xl bg-crimson-600 text-white font-semibold text-xs border border-gold-500/40 shadow">
+                  <span className="px-4 py-2 rounded-xl bg-[#C6A04A] text-[#102137] font-semibold text-xs shadow-sm">
                     {hero.ctaText || 'Begin Your Training'}
                   </span>
-                  <span className="px-4 py-2 rounded-xl bg-charcoal-800 text-gray-300 font-semibold text-xs border border-charcoal-700">
+                  <span className="px-4 py-2 rounded-xl bg-white/10 text-white font-semibold text-xs border border-white/20">
                     {hero.secondaryCtaText || 'Watch Archival Documentary'}
                   </span>
                 </div>
@@ -300,124 +302,99 @@ export const AdminSections: React.FC = () => {
           </div>
 
           {/* Form Fields */}
-          <div className="p-6 rounded-2xl bg-charcoal-900 border border-charcoal-800 space-y-4">
-            <h2 className="text-sm font-display font-bold text-white uppercase tracking-wider text-gold-400">
+          <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] space-y-4 shadow-sm">
+            <h2 className="text-sm font-display font-bold uppercase tracking-wider text-[#102137]">
               Hero Text & Messaging
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
-                <label className="block text-xs font-semibold text-gray-300 mb-1">Badge Text</label>
+                <label className="block text-xs font-semibold text-[#182332] mb-1">Badge Text</label>
                 <input
                   type="text"
                   value={hero.badge}
                   onChange={(e) => handleHeroChange('badge', e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1">Main Headline</label>
+                <label className="block text-xs font-semibold text-[#182332] mb-1">Main Headline</label>
                 <input
                   type="text"
                   value={hero.title}
                   onChange={(e) => handleHeroChange('title', e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1">Tamil Header & Subtitle</label>
+                <label className="block text-xs font-semibold text-[#182332] mb-1">Tamil Header & Subtitle</label>
                 <input
                   type="text"
                   value={hero.tamilTitle}
                   onChange={(e) => handleHeroChange('tamilTitle', e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-xs font-semibold text-gray-300 mb-1">Hero Narrative Subtitle</label>
+                <label className="block text-xs font-semibold text-[#182332] mb-1">Hero Narrative Subtitle</label>
                 <textarea
                   rows={3}
                   value={hero.subtitle}
                   onChange={(e) => handleHeroChange('subtitle', e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                 />
               </div>
             </div>
           </div>
 
           {/* Media & Action Links */}
-          <div className="p-6 rounded-2xl bg-charcoal-900 border border-charcoal-800 space-y-4">
-            <h2 className="text-sm font-display font-bold text-white uppercase tracking-wider text-gold-400">
+          <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] space-y-4 shadow-sm">
+            <h2 className="text-sm font-display font-bold uppercase tracking-wider text-[#102137]">
               Media Backdrops & Action Buttons
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1 flex items-center space-x-1.5">
-                  <ImageIcon className="w-3.5 h-3.5 text-gold-400" />
-                  <span>Background Image Path</span>
-                </label>
-                <input
-                  type="text"
+              <div className="md:col-span-2">
+                <CloudImageUpload
                   value={hero.bgImage}
-                  onChange={(e) => handleHeroChange('bgImage', e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs font-mono focus:outline-none focus:border-gold-500"
+                  onChange={(url) => handleHeroChange('bgImage', url)}
+                  label="Hero Action Background Image (Cloud Backblaze B2)"
+                  folder="hero"
                 />
-                <div className="flex gap-2 mt-2 text-[11px] text-gray-400">
-                  <span className="text-gray-500">Presets:</span>
-                  <button
-                    type="button"
-                    onClick={() => handleHeroChange('bgImage', '/uploads/silambam-back.jpg')}
-                    className="hover:text-gold-400 underline"
-                  >
-                    silambam-back.jpg
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleHeroChange('bgImage', '/uploads/mariapaqiam4.png')}
-                    className="hover:text-gold-400 underline"
-                  >
-                    mariapaqiam4.png
-                  </button>
-                </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1 flex items-center space-x-1.5">
-                  <Video className="w-3.5 h-3.5 text-gold-400" />
+                <label className="block text-xs font-semibold text-[#182332] mb-1 flex items-center space-x-1.5">
+                  <Video className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
                   <span>Archival Video Path</span>
                 </label>
                 <input
                   type="text"
                   value={hero.videoUrl}
                   onChange={(e) => handleHeroChange('videoUrl', e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs font-mono focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs font-mono focus:outline-none focus:border-[#102137]"
                 />
-                <div className="flex gap-2 mt-2 text-[11px] text-gray-400">
-                  <span className="text-gray-500">Presets:</span>
-                  <button
-                    type="button"
-                    onClick={() => handleHeroChange('videoUrl', '/uploads/VID-20231026-WA0019.mp4')}
-                    className="hover:text-gold-400 underline"
-                  >
-                    WA0019.mp4
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleHeroChange('videoUrl', '/uploads/athletica.mp4')}
-                    className="hover:text-gold-400 underline"
-                  >
-                    athletica.mp4
-                  </button>
-                </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1 flex items-center space-x-1.5">
-                  <LinkIcon className="w-3.5 h-3.5 text-gold-400" />
+                <label className="block text-xs font-semibold text-[#182332] mb-1 flex items-center space-x-1.5">
+                  <LinkIcon className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
+                  <span>Secondary Video CTA Text</span>
+                </label>
+                <input
+                  type="text"
+                  value={hero.secondaryCtaText || ''}
+                  onChange={(e) => handleHeroChange('secondaryCtaText', e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-xs font-semibold text-[#182332] mb-1 flex items-center space-x-1.5">
+                  <LinkIcon className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
                   <span>Primary CTA Button Text & Destination</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -426,59 +403,46 @@ export const AdminSections: React.FC = () => {
                     value={hero.ctaText || ''}
                     onChange={(e) => handleHeroChange('ctaText', e.target.value)}
                     placeholder="Button Text"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                   />
                   <input
                     type="text"
                     value={hero.ctaLink || ''}
                     onChange={(e) => handleHeroChange('ctaLink', e.target.value)}
                     placeholder="/join-training"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs font-mono focus:outline-none focus:border-gold-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs font-mono focus:outline-none focus:border-[#102137]"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1 flex items-center space-x-1.5">
-                  <LinkIcon className="w-3.5 h-3.5 text-gold-400" />
-                  <span>Secondary Video CTA Text</span>
-                </label>
-                <input
-                  type="text"
-                  value={hero.secondaryCtaText || ''}
-                  onChange={(e) => handleHeroChange('secondaryCtaText', e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
-                />
               </div>
             </div>
           </div>
 
           {/* Key Metrics / Stats */}
-          <div className="p-6 rounded-2xl bg-charcoal-900 border border-charcoal-800 space-y-4">
-            <h2 className="text-sm font-display font-bold text-white uppercase tracking-wider text-gold-400">
+          <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] space-y-4 shadow-sm">
+            <h2 className="text-sm font-display font-bold uppercase tracking-wider text-[#102137]">
               Hero Metric Callouts (4 Badges)
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {hero.stats.map((stat, idx) => (
-                <div key={idx} className="p-3.5 rounded-xl bg-charcoal-950 border border-charcoal-700 space-y-2">
-                  <span className="text-[10px] text-gray-500 font-mono">Metric #{idx + 1}</span>
+                <div key={idx} className="p-3.5 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] space-y-2">
+                  <span className="text-[10px] text-[#64748B] font-mono">Metric #{idx + 1}</span>
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-0.5">Label</label>
+                    <label className="block text-[11px] text-[#182332] mb-0.5">Label</label>
                     <input
                       type="text"
                       value={stat.label}
                       onChange={(e) => handleStatChange(idx, 'label', e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-charcoal-900 border border-charcoal-700 text-white text-xs"
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] text-gray-400 mb-0.5">Value</label>
+                    <label className="block text-[11px] text-[#182332] mb-0.5">Value</label>
                     <input
                       type="text"
                       value={stat.value}
                       onChange={(e) => handleStatChange(idx, 'value', e.target.value)}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-charcoal-900 border border-charcoal-700 text-gold-400 font-bold text-xs"
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#E8E3D9] text-[#102137] font-bold text-xs focus:outline-none focus:border-[#102137]"
                     />
                   </div>
                 </div>
@@ -491,51 +455,51 @@ export const AdminSections: React.FC = () => {
       {/* Tab 2: Quick Facts */}
       {activeTab === 'quickFacts' && (
         <div className="space-y-4">
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[#64748B]">
             Edit the four key historical milestones highlighted below the hero section.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {facts.map((fact) => (
-              <div key={fact.id} className="p-5 rounded-2xl bg-charcoal-900 border border-charcoal-800 space-y-3">
+              <div key={fact.id} className="p-5 rounded-2xl bg-white border border-[#E8E3D9] space-y-3 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-gold-400 uppercase">{fact.badge}</span>
+                  <span className="text-xs font-mono font-bold text-[#C6A04A] uppercase tracking-wider">{fact.badge}</span>
                   <input
                     type="text"
                     value={fact.year}
                     onChange={(e) => handleFactChange(fact.id, 'year', e.target.value)}
                     placeholder="Year"
-                    className="w-16 px-2 py-1 rounded-lg bg-charcoal-950 border border-charcoal-700 text-right text-xs font-mono text-white"
+                    className="w-20 px-2.5 py-1 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] text-right text-xs font-mono text-[#102137] font-bold focus:outline-none focus:border-[#102137]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] text-gray-400 mb-0.5">Title</label>
+                  <label className="block text-[11px] text-[#182332] mb-0.5 font-semibold">Title</label>
                   <input
                     type="text"
                     value={fact.title}
                     onChange={(e) => handleFactChange(fact.id, 'title', e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs font-semibold"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs font-semibold focus:outline-none focus:border-[#102137]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] text-gray-400 mb-0.5">Summary</label>
+                  <label className="block text-[11px] text-[#182332] mb-0.5 font-semibold">Summary</label>
                   <textarea
                     rows={3}
                     value={fact.description}
                     onChange={(e) => handleFactChange(fact.id, 'description', e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] text-gray-400 mb-0.5">Linked Page</label>
+                  <label className="block text-[11px] text-[#182332] mb-0.5 font-semibold">Linked Page</label>
                   <input
                     type="text"
                     value={fact.link}
                     onChange={(e) => handleFactChange(fact.id, 'link', e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-xl bg-charcoal-950 border border-charcoal-700 text-gold-400 text-xs font-mono"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-[#E8E3D9] text-[#102137] text-xs font-mono focus:outline-none focus:border-[#102137]"
                   />
                 </div>
               </div>
@@ -547,38 +511,38 @@ export const AdminSections: React.FC = () => {
       {/* Tab 3: Section Order & Visibility */}
       {activeTab === 'sections' && (
         <div className="space-y-4">
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[#64748B]">
             Control which sections appear on the public homepage and adjust their vertical presentation order.
           </p>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {sections.map((section, idx) => (
               <div
                 key={section.id}
-                className={`p-4 rounded-2xl border transition-colors flex items-center justify-between ${
+                className={`p-4 rounded-2xl border transition-all flex items-center justify-between ${
                   section.enabled
-                    ? 'bg-charcoal-900 border-charcoal-800'
-                    : 'bg-charcoal-950/60 border-charcoal-850 opacity-60'
+                    ? 'bg-white border-[#E8E3D9] shadow-sm'
+                    : 'bg-[#F8F5EE] border-[#E8E3D9] opacity-60'
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <span className="w-6 h-6 rounded-lg bg-charcoal-800 flex items-center justify-center font-mono text-xs text-gold-400 font-bold">
+                  <span className="w-7 h-7 rounded-lg bg-[#102137] text-[#C6A04A] flex items-center justify-center font-mono text-xs font-bold shrink-0">
                     {section.order}
                   </span>
                   <div>
-                    <p className="text-xs font-bold text-white">{section.name}</p>
-                    <p className="text-[10px] text-gray-500 font-mono">ID: {section.id}</p>
+                    <p className="text-xs font-bold text-[#102137]">{section.name}</p>
+                    <p className="text-[10px] text-[#64748B] font-mono">ID: {section.id}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 shrink-0">
                   <button
                     type="button"
                     onClick={() => toggleSection(section.id)}
-                    className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-colors ${
+                    className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-colors border ${
                       section.enabled
-                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                        : 'bg-charcoal-800 text-gray-400'
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                        : 'bg-gray-100 text-[#64748B] border-gray-200'
                     }`}
                   >
                     {section.enabled ? 'Visible' : 'Hidden'}
@@ -588,20 +552,20 @@ export const AdminSections: React.FC = () => {
                     type="button"
                     disabled={idx === 0}
                     onClick={() => moveSection(idx, 'up')}
-                    className="p-1.5 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 disabled:opacity-30 text-gray-300"
+                    className="p-2 rounded-lg bg-white hover:bg-[#F8F5EE] border border-[#E8E3D9] disabled:opacity-30 text-[#182332]"
                     title="Move Up"
                   >
-                    <ArrowUp className="w-3.5 h-3.5" />
+                    <ArrowUp className="w-3.5 h-3.5 shrink-0" />
                   </button>
 
                   <button
                     type="button"
                     disabled={idx === sections.length - 1}
                     onClick={() => moveSection(idx, 'down')}
-                    className="p-1.5 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 disabled:opacity-30 text-gray-300"
+                    className="p-2 rounded-lg bg-white hover:bg-[#F8F5EE] border border-[#E8E3D9] disabled:opacity-30 text-[#182332]"
                     title="Move Down"
                   >
-                    <ArrowDown className="w-3.5 h-3.5" />
+                    <ArrowDown className="w-3.5 h-3.5 shrink-0" />
                   </button>
                 </div>
               </div>

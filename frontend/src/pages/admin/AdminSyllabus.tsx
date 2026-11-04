@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import {
   Plus,
   Edit2,
-  Trash2
+  Trash2,
+  BookOpen,
+  CheckCircle2,
+  AlertCircle,
+  X
 } from 'lucide-react';
 import { adminApi } from '../../services/api';
 import { AdminRequestError, getAdminRequestError } from '../../components/admin/AdminRequestState';
@@ -67,10 +71,13 @@ export const AdminSyllabus: React.FC = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-display font-bold text-white">
-            10-Stage Traditional Syllabus Manager
+          <h1 className="text-2xl sm:text-3xl font-display font-bold text-[#102137] flex items-center space-x-3">
+            <span className="p-2 rounded-xl bg-[#102137]/5 text-[#102137] border border-[#E8E3D9] flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-[#C6A04A]" />
+            </span>
+            <span>10-Stage Traditional Syllabus Manager</span>
           </h1>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-[#64748B] mt-1">
             Manage the sequential stages of the ancient Tamil custom martial curriculum.
           </p>
         </div>
@@ -88,9 +95,9 @@ export const AdminSyllabus: React.FC = () => {
               sort_order: stages.length + 1,
             })
           }
-          className="px-4 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white font-semibold text-xs tracking-wider uppercase transition-colors shadow flex items-center space-x-1.5"
+          className="px-4 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white font-medium text-xs tracking-wider uppercase transition-all shadow-sm border border-[#102137] inline-flex items-center gap-2 shrink-0"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-[#C6A04A]" />
           <span>Add Stage</span>
         </button>
       </div>
@@ -99,22 +106,29 @@ export const AdminSyllabus: React.FC = () => {
         <div
           className={`p-4 rounded-xl text-xs flex items-center justify-between ${
             feedback.type === 'success'
-              ? 'bg-emerald-950/80 border border-emerald-700/60 text-emerald-300'
-              : 'bg-crimson-950/80 border border-crimson-700/60 text-crimson-300'
+              ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+              : 'bg-rose-50 border border-rose-200 text-rose-800'
           }`}
         >
-          <span>{feedback.message}</span>
-          <button onClick={() => setFeedback(null)} className="text-gray-400 hover:text-white">✕</button>
+          <div className="flex items-center space-x-2">
+            {feedback.type === 'success' ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+            )}
+            <span>{feedback.message}</span>
+          </div>
+          <button onClick={() => setFeedback(null)} className="text-[#64748B] hover:text-[#182332]">✕</button>
         </div>
       )}
 
       {/* Stages List */}
       {loading ? (
-        <div className="py-12 text-center text-xs text-gray-500 font-mono">Loading syllabus stages...</div>
+        <div className="py-12 text-center text-xs text-[#64748B] font-mono">Loading syllabus stages...</div>
       ) : loadError ? (
         <AdminRequestError message={loadError} onRetry={() => fetchStages()} />
       ) : stages.length === 0 ? (
-        <div className="rounded-2xl border border-charcoal-800 bg-charcoal-900 p-10 text-center text-sm text-gray-300">
+        <div className="rounded-2xl border border-[#E8E3D9] bg-white p-10 text-center text-sm text-[#64748B]">
           No syllabus stages have been added yet.
         </div>
       ) : (
@@ -122,40 +136,40 @@ export const AdminSyllabus: React.FC = () => {
           {stages.map((stage) => (
             <div
               key={stage.id}
-              className="p-6 rounded-2xl bg-charcoal-900 border border-charcoal-800 hover:border-charcoal-700 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg"
+              className="p-5 sm:p-6 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm hover:shadow-md"
             >
               <div className="flex items-start space-x-4">
-                <span className="w-10 h-10 rounded-xl bg-crimson-950 border border-crimson-700 flex items-center justify-center font-mono font-bold text-sm text-gold-400 flex-shrink-0">
+                <span className="w-12 h-12 rounded-2xl bg-[#102137] border border-[#183B5B] flex items-center justify-center font-mono font-bold text-base text-[#C6A04A] shadow-sm shrink-0">
                   {stage.stage_number}
                 </span>
-                <div className="space-y-1">
-                  <span className="text-xs font-mono font-bold text-gold-400">
+                <div className="space-y-1 min-w-0">
+                  <span className="text-xs font-mono font-bold text-[#C6A04A] block">
                     {stage.tamil_name}
                   </span>
-                  <h3 className="text-base font-display font-bold text-white">
+                  <h3 className="text-base font-display font-bold text-[#102137]">
                     {stage.english_name}
                   </h3>
-                  <p className="text-xs text-gray-400 line-clamp-2 max-w-2xl leading-relaxed">
+                  <p className="text-xs text-[#64748B] line-clamp-2 max-w-2xl leading-relaxed">
                     {stage.overview}
                   </p>
-                  <div className="flex flex-wrap gap-3 text-[11px] text-gray-500 pt-1 font-mono">
-                    <span>Weapons: {stage.weapon_focus || 'None'}</span>
-                    {stage.animal_movements && <span>• Postures: {stage.animal_movements}</span>}
+                  <div className="flex flex-wrap gap-3 text-[11px] text-[#64748B] pt-1 font-mono">
+                    <span className="text-[#102137] font-semibold">Weapons: {stage.weapon_focus || 'None'}</span>
+                    {stage.animal_movements && <span className="text-[#C6A04A]">• Postures: {stage.animal_movements}</span>}
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2 flex-shrink-0">
+              <div className="flex items-center space-x-2 shrink-0 self-end md:self-center">
                 <button
                   onClick={() => setEditingStage(stage)}
-                  className="px-3 py-1.5 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 text-gold-400 text-xs font-semibold flex items-center space-x-1"
+                  className="px-3 py-1.5 rounded-lg bg-white hover:bg-[#F8F5EE] text-[#102137] text-xs font-semibold inline-flex items-center gap-1.5 border border-[#E8E3D9] transition-colors"
                 >
-                  <Edit2 className="w-3.5 h-3.5" />
+                  <Edit2 className="w-3.5 h-3.5 text-[#C6A04A]" />
                   <span>Edit</span>
                 </button>
                 <button
                   onClick={() => handleDelete(stage.id)}
-                  className="px-3 py-1.5 rounded-lg bg-charcoal-800 hover:bg-crimson-950 text-gray-400 hover:text-crimson-400 text-xs font-semibold flex items-center space-x-1"
+                  className="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold inline-flex items-center gap-1.5 border border-rose-200 transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Delete</span>
@@ -168,24 +182,24 @@ export const AdminSyllabus: React.FC = () => {
 
       {/* Edit / Create Modal */}
       {editingStage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-          <div data-admin-dialog role="dialog" aria-modal="true" aria-label="Syllabus stage editor" tabIndex={-1} className="relative w-full max-w-2xl bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-5 bg-charcoal-950 flex justify-between items-center border-b border-charcoal-800">
-              <h3 className="text-base font-display font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#102137]/60 backdrop-blur-sm">
+          <div data-admin-dialog role="dialog" aria-modal="true" aria-label="Syllabus stage editor" tabIndex={-1} className="relative w-full max-w-2xl bg-white rounded-3xl overflow-hidden border border-[#E8E3D9] shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-5 bg-[#F8F5EE] flex justify-between items-center border-b border-[#E8E3D9]">
+              <h3 className="text-base font-display font-bold text-[#102137]">
                 {editingStage.id ? `Edit Stage ${editingStage.stage_number}` : 'Create New Syllabus Stage'}
               </h3>
               <button
                 onClick={() => setEditingStage(null)}
-                className="text-gray-400 hover:text-white px-2 py-1 rounded bg-charcoal-800 text-xs"
+                className="text-[#64748B] hover:text-[#182332] p-1.5 rounded-lg hover:bg-white transition-colors"
               >
-                ✕ Cancel
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleSave} className="p-6 space-y-4">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                  <label className="block text-xs font-semibold text-[#182332] uppercase mb-1">
                     Stage Number (1–10)
                   </label>
                   <input
@@ -197,11 +211,11 @@ export const AdminSyllabus: React.FC = () => {
                     onChange={(e) =>
                       setEditingStage({ ...editingStage, stage_number: parseInt(e.target.value) })
                     }
-                    className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137] font-mono"
                   />
                 </div>
-                <div className="col-span-2">
-                  <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-[#182332] uppercase mb-1">
                     Tamil Title (e.g. கம்பு வீச்சு)
                   </label>
                   <input
@@ -209,13 +223,13 @@ export const AdminSyllabus: React.FC = () => {
                     required
                     value={editingStage.tamil_name || ''}
                     onChange={(e) => setEditingStage({ ...editingStage, tamil_name: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500 font-mono"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137] font-mono"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#182332] uppercase mb-1">
                   English Designation
                 </label>
                 <input
@@ -223,12 +237,12 @@ export const AdminSyllabus: React.FC = () => {
                   required
                   value={editingStage.english_name || ''}
                   onChange={(e) => setEditingStage({ ...editingStage, english_name: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#182332] uppercase mb-1">
                   Overview & Pedagogical Goal
                 </label>
                 <textarea
@@ -236,58 +250,58 @@ export const AdminSyllabus: React.FC = () => {
                   required
                   value={editingStage.overview || ''}
                   onChange={(e) => setEditingStage({ ...editingStage, overview: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                  <label className="block text-xs font-semibold text-[#182332] uppercase mb-1">
                     Key Techniques
                   </label>
                   <input
                     type="text"
                     value={editingStage.key_techniques || ''}
                     onChange={(e) => setEditingStage({ ...editingStage, key_techniques: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                  <label className="block text-xs font-semibold text-[#182332] uppercase mb-1">
                     Weapon Focus
                   </label>
                   <input
                     type="text"
                     value={editingStage.weapon_focus || ''}
                     onChange={(e) => setEditingStage({ ...editingStage, weapon_focus: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#182332] uppercase mb-1">
                   Animal Postures / Battlefield Movements
                 </label>
                 <input
                   type="text"
                   value={editingStage.animal_movements || ''}
                   onChange={(e) => setEditingStage({ ...editingStage, animal_movements: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#102137]"
                 />
               </div>
 
-              <div className="pt-4 border-t border-charcoal-800 flex justify-end space-x-3">
+              <div className="pt-4 border-t border-[#E8E3D9] flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setEditingStage(null)}
-                  className="px-4 py-2 rounded-xl bg-charcoal-800 text-gray-300 text-xs font-semibold hover:bg-charcoal-700"
+                  className="px-4 py-2 rounded-xl bg-white text-[#64748B] hover:text-[#182332] text-xs font-semibold border border-[#E8E3D9]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow"
+                  className="px-5 py-2 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white text-xs font-medium tracking-wider uppercase transition-all shadow-sm"
                 >
                   Save Stage
                 </button>

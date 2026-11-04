@@ -75,18 +75,18 @@ const RequireRole: React.FC<{ role: 'super_admin'; children: React.ReactNode }> 
 
   if (user?.role !== role) {
     return (
-      <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl bg-charcoal-900 border border-crimson-800/60 text-center space-y-4 shadow-2xl">
-        <div className="w-14 h-14 mx-auto rounded-2xl bg-crimson-950 border border-crimson-700 flex items-center justify-center text-crimson-400 font-bold text-xl">
+      <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl bg-white border border-[#E8E3D9] text-center space-y-4 shadow-sm">
+        <div className="w-14 h-14 mx-auto rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] font-bold text-xl">
           !
         </div>
-        <h2 className="text-xl font-display font-bold text-white">Access Restricted</h2>
-        <p className="text-xs text-gray-400 leading-relaxed">
-          This administration section requires <span className="font-mono text-gold-400 font-bold uppercase">{role.replace('_', ' ')}</span> privileges. Your current authenticated role is <span className="font-mono text-gray-300 font-bold uppercase">{user?.role || 'editor'}</span>.
+        <h2 className="text-xl font-bold text-[#102137]">Access Restricted</h2>
+        <p className="text-xs text-[#64748B] leading-relaxed">
+          This administration section requires <span className="font-mono text-[#102137] font-bold uppercase">{role.replace('_', ' ')}</span> privileges. Your current authenticated role is <span className="font-mono text-[#64748B] font-bold uppercase">{user?.role || 'editor'}</span>.
         </p>
         <div className="pt-2">
           <Link
             to="/admin/dashboard"
-            className="inline-flex items-center px-4 py-2 rounded-xl bg-charcoal-800 hover:bg-charcoal-700 text-gold-400 font-semibold text-xs border border-charcoal-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white font-semibold text-xs border border-[#C6A04A]/40 transition-colors shadow-xs"
           >
             ← Return to Dashboard
           </Link>
@@ -101,18 +101,18 @@ const RequireRole: React.FC<{ role: 'super_admin'; children: React.ReactNode }> 
 // Helper: Dedicated Admin 404
 const AdminNotFound: React.FC = () => {
   return (
-    <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl bg-charcoal-900 border border-charcoal-800 text-center space-y-4 shadow-2xl">
-      <div className="w-14 h-14 mx-auto rounded-2xl bg-crimson-950 border border-crimson-700 flex items-center justify-center text-crimson-400 font-mono text-xl font-bold">
+    <div className="max-w-xl mx-auto my-12 p-8 rounded-3xl bg-white border border-[#E8E3D9] text-center space-y-4 shadow-sm">
+      <div className="w-14 h-14 mx-auto rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] font-mono text-xl font-bold">
         404
       </div>
-      <h2 className="text-xl font-display font-bold text-white">Admin Page Not Found</h2>
-      <p className="text-xs text-gray-400 leading-relaxed">
+      <h2 className="text-xl font-bold text-[#102137]">Admin Page Not Found</h2>
+      <p className="text-xs text-[#64748B] leading-relaxed">
         The requested administration route does not exist. Use the sidebar to navigate to an available module.
       </p>
       <div className="pt-2">
         <Link
           to="/admin/dashboard"
-          className="inline-flex items-center px-4 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-charcoal-950 font-bold text-xs uppercase tracking-wider transition-colors shadow-md shadow-gold-500/20"
+          className="inline-flex items-center px-5 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white font-bold text-xs uppercase tracking-wider transition-colors shadow-xs border border-[#C6A04A]/40"
         >
           ← Back to Dashboard
         </Link>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Edit2, Trash2, ExternalLink } from 'lucide-react';
 import { adminApi } from '../../services/api';
 import { AdminRequestError, getAdminRequestError } from '../../components/admin/AdminRequestState';
+import { CloudImageUpload } from '../../components/common/CloudImageUpload';
 import type { Achievement } from '../../types';
 
 export const AdminAchievements: React.FC = () => {
@@ -36,7 +37,7 @@ export const AdminAchievements: React.FC = () => {
     try {
       if (editingItem.id) {
         await adminApi.updateAchievement(editingItem.id, editingItem);
-        setFeedback({ type: 'success', message: 'Achievement updated successfully.' });
+        setFeedback({ type: 'success', message: 'Achievement record updated successfully.' });
       } else {
         await adminApi.createAchievement(editingItem);
         setFeedback({ type: 'success', message: 'New achievement recorded successfully.' });
@@ -60,13 +61,13 @@ export const AdminAchievements: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-display font-bold text-white">
-            Achievements & Awards Manager
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#102137] tracking-tight">
+            Achievements & Recognitions
           </h1>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-[#64748B] mt-1">
             Manage certified records from the Malaysia Book of Records, UNESCO, and international awards.
           </p>
         </div>
@@ -79,89 +80,105 @@ export const AdminAchievements: React.FC = () => {
               year: new Date().getFullYear(),
               awarding_organization: '',
               description: '',
-              cover_image_url: '/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png',
+              cover_image_url: '',
               evidence_url: '',
               is_featured: false,
               status: 'published',
             })
           }
-          className="px-4 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white font-semibold text-xs tracking-wider uppercase transition-colors shadow flex items-center space-x-1.5"
+          className="px-4 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white font-medium text-xs tracking-wider uppercase transition-all shadow-sm inline-flex items-center gap-2 border border-[#C6A04A]/60 shrink-0"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-[#D9B96E] shrink-0" />
           <span>Add Achievement</span>
         </button>
       </div>
 
       {feedback && (
         <div
-          className={`p-4 rounded-xl text-xs flex items-center justify-between ${
+          role="status"
+          className={`p-4 rounded-xl text-xs flex items-center justify-between border ${
             feedback.type === 'success'
-              ? 'bg-emerald-950/80 border border-emerald-700/60 text-emerald-300'
-              : 'bg-crimson-950/80 border border-crimson-700/60 text-crimson-300'
+              ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+              : 'bg-red-50 border-red-200 text-red-700'
           }`}
         >
           <span>{feedback.message}</span>
-          <button onClick={() => setFeedback(null)} className="text-gray-400 hover:text-white">✕</button>
+          <button onClick={() => setFeedback(null)} className="text-xs font-bold px-2">✕</button>
         </div>
       )}
 
-      {/* Grid */}
-      {loading ? (
-        <div className="py-12 text-center text-xs text-gray-500 font-mono">Loading records...</div>
-      ) : loadError ? (
-        <AdminRequestError message={loadError} onRetry={() => fetchAchievements()} />
-      ) : achievements.length === 0 ? (
-        <div className="rounded-2xl border border-charcoal-800 bg-charcoal-900 p-10 text-center text-sm text-gray-300">
-          No achievement records have been added yet.
-        </div>
+      {loadError ? (
+        <AdminRequestError message={loadError} onRetry={fetchAchievements} />
+      ) : loading ? (
+        <div className="p-12 text-center text-[#64748B] text-xs">Loading achievements...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {achievements.map((item) => (
+          {achievements.map((ach) => (
             <div
-              key={item.id}
-              className="p-5 rounded-2xl bg-charcoal-900 border border-charcoal-800 shadow-xl flex flex-col justify-between space-y-4"
+              key={ach.id}
+              className="p-5 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm flex flex-col justify-between space-y-4 hover:border-[#C6A04A] transition-all"
             >
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-mono font-bold text-crimson-400 uppercase">
-                    {item.category}
-                  </span>
-                  <span className="text-xs font-mono font-bold text-gold-400 bg-charcoal-800 px-2 py-0.5 rounded">
-                    {item.year}
-                  </span>
+              <div className="space-y-3">
+                {ach.cover_image_url && (
+                  <div className="w-full h-40 rounded-xl overflow-hidden bg-[#F8F5EE] border border-[#E8E3D9]">
+                    <img
+                      src={ach.cover_image_url}
+                      alt={ach.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[10px] font-semibold text-[#C6A04A] uppercase tracking-wider">
+                      {ach.category} • {ach.year}
+                    </span>
+                    {ach.is_featured && (
+                      <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#102137] text-white">
+                        Featured
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-base font-bold text-[#102137] mt-1 line-clamp-2">
+                    {ach.title}
+                  </h3>
+                  <p className="text-xs font-medium text-[#183B5B] mt-0.5">
+                    {ach.awarding_organization}
+                  </p>
                 </div>
-                <h3 className="text-base font-display font-bold text-white mb-1">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-gray-300 font-semibold mb-2">
-                  {item.awarding_organization}
-                </p>
-                <p className="text-xs text-gray-400 line-clamp-3 leading-relaxed">
-                  {item.description}
+
+                <p className="text-xs text-[#182332] line-clamp-3 leading-relaxed">
+                  {ach.description}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-charcoal-800 flex items-center justify-between text-xs">
-                <span
-                  className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                    item.is_featured ? 'bg-gold-950 border border-gold-700 text-gold-400' : 'text-gray-500'
-                  }`}
-                >
-                  {item.is_featured ? 'Featured' : 'Standard'}
-                </span>
+              <div className="pt-3 border-t border-[#E8E3D9] flex items-center justify-between">
+                {ach.evidence_url ? (
+                  <a
+                    href={ach.evidence_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-[#C6A04A] hover:text-[#102137] font-semibold inline-flex items-center gap-1"
+                  >
+                    <span>Verification</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                ) : <span />}
 
                 <div className="flex items-center space-x-2">
                   <button
-                    onClick={() => setEditingItem(item)}
-                    className="px-2.5 py-1 rounded-lg bg-charcoal-800 text-gold-400 hover:text-white text-xs font-semibold"
+                    onClick={() => setEditingItem(ach)}
+                    className="px-3 py-1.5 rounded-lg bg-[#F8F5EE] hover:bg-[#E8E3D9] text-[#102137] text-xs font-semibold inline-flex items-center gap-1.5 border border-[#E8E3D9] transition-colors"
                   >
-                    Edit
+                    <Edit2 className="w-3.5 h-3.5 shrink-0" />
+                    <span>Edit</span>
                   </button>
                   <button
-                    onClick={() => handleDelete(item.id)}
-                    className="px-2.5 py-1 rounded-lg bg-charcoal-800 text-gray-400 hover:text-crimson-400 text-xs font-semibold"
+                    onClick={() => handleDelete(ach.id)}
+                    className="px-3 py-1.5 rounded-lg bg-white hover:bg-red-50 text-red-600 text-xs font-semibold inline-flex items-center gap-1.5 border border-red-200 transition-colors"
                   >
-                    Delete
+                    <Trash2 className="w-3.5 h-3.5 shrink-0" />
+                    <span>Delete</span>
                   </button>
                 </div>
               </div>
@@ -172,15 +189,15 @@ export const AdminAchievements: React.FC = () => {
 
       {/* Edit Modal */}
       {editingItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-          <div data-admin-dialog role="dialog" aria-modal="true" aria-label="Achievement editor" tabIndex={-1} className="relative w-full max-w-xl bg-charcoal-900 rounded-2xl overflow-hidden border border-charcoal-700 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-5 bg-charcoal-950 flex justify-between items-center border-b border-charcoal-800">
-              <h3 className="text-base font-display font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div data-admin-dialog role="dialog" aria-modal="true" aria-label="Achievement editor" tabIndex={-1} className="relative w-full max-w-xl bg-white rounded-3xl overflow-hidden border border-[#E8E3D9] shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-5 bg-[#F8F5EE] flex justify-between items-center border-b border-[#E8E3D9]">
+              <h3 className="text-base font-bold text-[#102137]">
                 {editingItem.id ? 'Edit Achievement Record' : 'Record New Achievement'}
               </h3>
               <button
                 onClick={() => setEditingItem(null)}
-                className="text-gray-400 hover:text-white px-2 py-1 rounded bg-charcoal-800 text-xs"
+                className="text-[#64748B] hover:text-[#102137] px-2.5 py-1 rounded-lg bg-white border border-[#E8E3D9] text-xs font-medium"
               >
                 ✕ Cancel
               </button>
@@ -188,7 +205,7 @@ export const AdminAchievements: React.FC = () => {
 
             <form onSubmit={handleSave} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#102137] uppercase mb-1">
                   Achievement Title
                 </label>
                 <input
@@ -196,44 +213,44 @@ export const AdminAchievements: React.FC = () => {
                   required
                   value={editingItem.title || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  placeholder="e.g. Oldest Silambam Association in Malaysia"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#C6A04A]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                  <label className="block text-xs font-semibold text-[#102137] uppercase mb-1">
                     Category
                   </label>
                   <select
                     value={editingItem.category || 'National Record'}
                     onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#C6A04A]"
                   >
-                    <option value="National Record">National Record</option>
-                    <option value="International Recognition">International Recognition</option>
+                    <option value="National Record">National Record (MBOR)</option>
+                    <option value="International Recognition">International Recognition (UNESCO)</option>
                     <option value="Cultural Heritage">Cultural Heritage</option>
                     <option value="Global Media">Global Media</option>
-                    <option value="State Heritage">State Heritage</option>
+                    <option value="State Heritage">State Heritage Citation</option>
                   </select>
                 </div>
-
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
-                    Year Conferred
+                  <label className="block text-xs font-semibold text-[#102137] uppercase mb-1">
+                    Year Awarded
                   </label>
                   <input
                     type="number"
                     required
                     value={editingItem.year || new Date().getFullYear()}
-                    onChange={(e) => setEditingItem({ ...editingItem, year: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500 font-mono"
+                    onChange={(e) => setEditingItem({ ...editingItem, year: parseInt(e.target.value) || 2026 })}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#C6A04A]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#102137] uppercase mb-1">
                   Awarding Organization
                 </label>
                 <input
@@ -242,25 +259,21 @@ export const AdminAchievements: React.FC = () => {
                   value={editingItem.awarding_organization || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, awarding_organization: e.target.value })}
                   placeholder="The Malaysia Book of Records / UNESCO"
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#C6A04A]"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
-                  Cover Photo URL or Upload Path
-                </label>
-                <input
-                  type="text"
-                  value={editingItem.cover_image_url || ''}
-                  onChange={(e) => setEditingItem({ ...editingItem, cover_image_url: e.target.value })}
-                  placeholder="/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png"
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500 font-mono"
-                />
-              </div>
+              {/* Cloud B2 Image Upload */}
+              <CloudImageUpload
+                label="Certificate / Cover Image"
+                value={editingItem.cover_image_url || ''}
+                onChange={(url) => setEditingItem({ ...editingItem, cover_image_url: url })}
+                altText={editingItem.title || 'Achievement'}
+                helperText="Upload official award certificate or citation photograph."
+              />
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#102137] uppercase mb-1">
                   Official Verification / Source URL
                 </label>
                 <input
@@ -268,12 +281,12 @@ export const AdminAchievements: React.FC = () => {
                   value={editingItem.evidence_url || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, evidence_url: e.target.value })}
                   placeholder="https://www.malaysiarecords.com.my"
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500 font-mono"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#C6A04A] font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-300 uppercase mb-1">
+                <label className="block text-xs font-semibold text-[#102137] uppercase mb-1">
                   Detailed Description & Citation
                 </label>
                 <textarea
@@ -281,7 +294,7 @@ export const AdminAchievements: React.FC = () => {
                   required
                   value={editingItem.description || ''}
                   onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#C6A04A]"
                 />
               </div>
 
@@ -291,26 +304,26 @@ export const AdminAchievements: React.FC = () => {
                   id="featuredCheck"
                   checked={editingItem.is_featured || false}
                   onChange={(e) => setEditingItem({ ...editingItem, is_featured: e.target.checked })}
-                  className="w-4 h-4 rounded border-charcoal-700 bg-charcoal-950 text-crimson-600 focus:ring-0"
+                  className="w-4 h-4 rounded border-[#E8E3D9] text-[#102137] focus:ring-[#C6A04A]"
                 />
-                <label htmlFor="featuredCheck" className="text-xs text-gray-300 font-semibold cursor-pointer">
-                  Display as Featured Milestone on Homepage
+                <label htmlFor="featuredCheck" className="text-xs font-medium text-[#182332]">
+                  Highlight as Featured Milestone on Homepage
                 </label>
               </div>
 
-              <div className="pt-4 border-t border-charcoal-800 flex justify-end space-x-3">
+              <div className="pt-4 border-t border-[#E8E3D9] flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setEditingItem(null)}
-                  className="px-4 py-2 rounded-xl bg-charcoal-800 text-gray-300 text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl border border-[#E8E3D9] bg-white text-[#64748B] hover:text-[#102137] text-xs font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-bold uppercase tracking-wider transition-colors shadow"
+                  className="px-5 py-2 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white text-xs font-semibold border border-[#C6A04A]/60 shadow-sm"
                 >
-                  Save Achievement Record
+                  Save Achievement
                 </button>
               </div>
             </form>

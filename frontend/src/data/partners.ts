@@ -10,7 +10,7 @@ export const partnersPressList: PartnerPress[] = [
     quote_or_excerpt:
       'Beyond Penang\'s world-famous street food lies an extraordinary living tapestry of ancient martial arts. Aadhiran Silambam showcases stick-fighting traditions that trace their lineage thousands of years into antiquity.',
     article_url: 'https://edition.cnn.com/travel/article/penang-not-about-street-food/index.html',
-    logo_or_image_url: '/uploads/img10.jpg',
+    logo_or_image_url: '/api/public/media/stream/silambam/eced5c4f-1abd-4801-b796-932a4459ec99.jpg',
     is_featured: true,
   },
   {
@@ -22,7 +22,7 @@ export const partnersPressList: PartnerPress[] = [
     quote_or_excerpt:
       'Aadhiran Silambam exemplifies community-level safeguarding of traditional martial expressions with intact Guru-Student lineage transmission.',
     article_url: 'https://www.unesco-ichcap.org',
-    logo_or_image_url: '/uploads/july-2015_orig.png',
+    logo_or_image_url: '/api/public/media/stream/silambam/9a003fb4-99f2-4cfd-846d-d6d2ce4a3850.png',
     is_featured: true,
   },
   {
@@ -34,7 +34,7 @@ export const partnersPressList: PartnerPress[] = [
     quote_or_excerpt:
       'Persatuan Aadhiran Silambam Pulau Pinang represents the authentic pulse of Penang\'s living cultural heritage, actively engaging the local community in living tradition.',
     article_url: 'https://gtwhi.com.my',
-    logo_or_image_url: '/uploads/48397540-957165591150493-3850920351072518144-o.jpg',
+    logo_or_image_url: '/api/public/media/stream/silambam/9661e79a-b91d-4307-b538-70ed6647bafb.jpg',
     is_featured: true,
   },
   {
@@ -46,7 +46,7 @@ export const partnersPressList: PartnerPress[] = [
     quote_or_excerpt:
       'A rare and cherished intangible cultural asset that has kept our state\'s historic ties with ancient South Indian traditions alive and flourishing.',
     article_url: 'https://pht.org.my',
-    logo_or_image_url: '/uploads/portfolio-2-1.jpg',
+    logo_or_image_url: '/api/public/media/stream/silambam/0829d994-3b31-4777-8670-ad5f281524f8.jpg',
     is_featured: false,
   },
 ];

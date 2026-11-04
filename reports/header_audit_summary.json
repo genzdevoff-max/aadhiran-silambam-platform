@@ -1,0 +1,563 @@
+{
+  "viewports": {
+    "320": {
+      "viewportWidth": 320,
+      "headerHeight": 65,
+      "navHeight": 65,
+      "topBarVisible": false,
+      "containerRect": {
+        "width": 320,
+        "height": 64,
+        "top": 0,
+        "left": 0,
+        "right": 320
+      },
+      "logoRect": {
+        "width": 199.2,
+        "height": 36,
+        "top": 14,
+        "left": 16,
+        "right": 215.2
+      },
+      "desktopNavVisible": false,
+      "desktopNavRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "desktopCtaVisible": false,
+      "desktopCtaRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "mobileToggleVisible": true,
+      "mobileToggleRect": {
+        "width": 40,
+        "height": 40,
+        "top": 12,
+        "left": 264,
+        "right": 304
+      },
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 320
+    },
+    "375": {
+      "viewportWidth": 375,
+      "headerHeight": 65,
+      "navHeight": 65,
+      "topBarVisible": false,
+      "containerRect": {
+        "width": 375,
+        "height": 64,
+        "top": 0,
+        "left": 0,
+        "right": 375
+      },
+      "logoRect": {
+        "width": 199.2,
+        "height": 36,
+        "top": 14,
+        "left": 16,
+        "right": 215.2
+      },
+      "desktopNavVisible": false,
+      "desktopNavRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "desktopCtaVisible": false,
+      "desktopCtaRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "mobileToggleVisible": true,
+      "mobileToggleRect": {
+        "width": 40,
+        "height": 40,
+        "top": 12,
+        "left": 319,
+        "right": 359
+      },
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 375
+    },
+    "430": {
+      "viewportWidth": 430,
+      "headerHeight": 65,
+      "navHeight": 65,
+      "topBarVisible": false,
+      "containerRect": {
+        "width": 430,
+        "height": 64,
+        "top": 0,
+        "left": 0,
+        "right": 430
+      },
+      "logoRect": {
+        "width": 199.2,
+        "height": 36,
+        "top": 14,
+        "left": 16,
+        "right": 215.2
+      },
+      "desktopNavVisible": false,
+      "desktopNavRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "desktopCtaVisible": false,
+      "desktopCtaRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "mobileToggleVisible": true,
+      "mobileToggleRect": {
+        "width": 40,
+        "height": 40,
+        "top": 12,
+        "left": 374,
+        "right": 414
+      },
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 430
+    },
+    "768": {
+      "viewportWidth": 768,
+      "headerHeight": 73,
+      "navHeight": 73,
+      "topBarVisible": false,
+      "containerRect": {
+        "width": 768,
+        "height": 72,
+        "top": 0,
+        "left": 0,
+        "right": 768
+      },
+      "logoRect": {
+        "width": 228.2,
+        "height": 41.6,
+        "top": 15.2,
+        "left": 24,
+        "right": 252.2
+      },
+      "desktopNavVisible": false,
+      "desktopNavRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "desktopCtaVisible": false,
+      "desktopCtaRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "mobileToggleVisible": true,
+      "mobileToggleRect": {
+        "width": 40,
+        "height": 40,
+        "top": 16,
+        "left": 704,
+        "right": 744
+      },
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 768
+    },
+    "1024": {
+      "viewportWidth": 1024,
+      "headerHeight": 104,
+      "navHeight": 73,
+      "topBarVisible": true,
+      "containerRect": {
+        "width": 1024,
+        "height": 72,
+        "top": 30.6,
+        "left": 0,
+        "right": 1024
+      },
+      "logoRect": {
+        "width": 228.2,
+        "height": 41.6,
+        "top": 45.8,
+        "left": 20,
+        "right": 248.2
+      },
+      "desktopNavVisible": true,
+      "desktopNavRect": {
+        "width": 559.1,
+        "height": 30,
+        "top": 51.6,
+        "left": 276.1,
+        "right": 835.2
+      },
+      "desktopCtaVisible": true,
+      "desktopCtaRect": {
+        "width": 559.1,
+        "height": 30,
+        "top": 51.6,
+        "left": 276.1,
+        "right": 835.2
+      },
+      "mobileToggleVisible": true,
+      "mobileToggleRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1024
+    },
+    "1280": {
+      "viewportWidth": 1280,
+      "headerHeight": 104,
+      "navHeight": 73,
+      "topBarVisible": true,
+      "containerRect": {
+        "width": 1280,
+        "height": 72,
+        "top": 30.6,
+        "left": 0,
+        "right": 1280
+      },
+      "logoRect": {
+        "width": 285.8,
+        "height": 41.6,
+        "top": 45.8,
+        "left": 32,
+        "right": 317.8
+      },
+      "desktopNavVisible": true,
+      "desktopNavRect": {
+        "width": 684.5,
+        "height": 30,
+        "top": 51.6,
+        "left": 361.9,
+        "right": 1046.4
+      },
+      "desktopCtaVisible": true,
+      "desktopCtaRect": {
+        "width": 684.5,
+        "height": 30,
+        "top": 51.6,
+        "left": 361.9,
+        "right": 1046.4
+      },
+      "mobileToggleVisible": true,
+      "mobileToggleRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280
+    },
+    "1440": {
+      "viewportWidth": 1440,
+      "headerHeight": 104,
+      "navHeight": 73,
+      "topBarVisible": true,
+      "containerRect": {
+        "width": 1280,
+        "height": 72,
+        "top": 30.6,
+        "left": 80,
+        "right": 1360
+      },
+      "logoRect": {
+        "width": 285.8,
+        "height": 41.6,
+        "top": 45.8,
+        "left": 112,
+        "right": 397.8
+      },
+      "desktopNavVisible": true,
+      "desktopNavRect": {
+        "width": 684.5,
+        "height": 30,
+        "top": 51.6,
+        "left": 441.9,
+        "right": 1126.4
+      },
+      "desktopCtaVisible": true,
+      "desktopCtaRect": {
+        "width": 684.5,
+        "height": 30,
+        "top": 51.6,
+        "left": 441.9,
+        "right": 1126.4
+      },
+      "mobileToggleVisible": true,
+      "mobileToggleRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1440
+    },
+    "1920": {
+      "viewportWidth": 1920,
+      "headerHeight": 104,
+      "navHeight": 73,
+      "topBarVisible": true,
+      "containerRect": {
+        "width": 1280,
+        "height": 72,
+        "top": 30.6,
+        "left": 320,
+        "right": 1600
+      },
+      "logoRect": {
+        "width": 330.2,
+        "height": 41.6,
+        "top": 45.8,
+        "left": 352,
+        "right": 682.2
+      },
+      "desktopNavVisible": true,
+      "desktopNavRect": {
+        "width": 789.3,
+        "height": 34,
+        "top": 49.6,
+        "left": 694.2,
+        "right": 1483.4
+      },
+      "desktopCtaVisible": true,
+      "desktopCtaRect": {
+        "width": 789.3,
+        "height": 34,
+        "top": 49.6,
+        "left": 694.2,
+        "right": 1483.4
+      },
+      "mobileToggleVisible": true,
+      "mobileToggleRect": {
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "left": 0,
+        "right": 0
+      },
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1920
+    }
+  },
+  "routes": {
+    "Home": {
+      "path": "/",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_home_1280px.png"
+    },
+    "About": {
+      "path": "/about",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_about_1280px.png"
+    },
+    "History & Lineage": {
+      "path": "/history-lineage",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_history___lineage_1280px.png"
+    },
+    "Training Syllabus": {
+      "path": "/training-syllabus",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_training_syllabus_1280px.png"
+    },
+    "Instructors": {
+      "path": "/instructors",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_instructors_1280px.png"
+    },
+    "Achievements": {
+      "path": "/achievements",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_achievements_1280px.png"
+    },
+    "Events": {
+      "path": "/events",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_events_1280px.png"
+    },
+    "Gallery": {
+      "path": "/gallery",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_gallery_1280px.png"
+    },
+    "Videos": {
+      "path": "/videos",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_videos_1280px.png"
+    },
+    "News": {
+      "path": "/news",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_news_1280px.png"
+    },
+    "News Detail": {
+      "path": "/news/silambam-malaysia-book-of-records-2022",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_news_detail_1280px.png"
+    },
+    "Heritage Works": {
+      "path": "/heritage-works",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_heritage_works_1280px.png"
+    },
+    "Partners & Press": {
+      "path": "/partners-press",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_partners___press_1280px.png"
+    },
+    "Contact": {
+      "path": "/contact",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_contact_1280px.png"
+    },
+    "Join Training": {
+      "path": "/join-training",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_join_training_1280px.png"
+    },
+    "Privacy Policy": {
+      "path": "/privacy-policy",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_privacy_policy_1280px.png"
+    },
+    "404 Page": {
+      "path": "/nonexistent-page-test-404",
+      "status": 200,
+      "headerFound": true,
+      "navFound": true,
+      "logoFound": true,
+      "hasHorizontalOverflow": false,
+      "scrollWidth": 1280,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "screenshot": "reports/runs/route_404_page_1280px.png"
+    }
+  },
+  "dropdowns": {},
+  "timestamp": "2026-11-04T18:51:15.274Z"
+}

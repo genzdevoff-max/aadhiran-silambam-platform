@@ -3,8 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEnquiry = exports.updateEnquiry = exports.listEnquiries = exports.deleteMediaAsset = exports.getMediaReferences = exports.updateMediaAsset = exports.listMediaAssets = exports.uploadMedia = exports.deleteAlbum = exports.updateAlbum = exports.createAlbum = exports.listAlbums = exports.deletePartnersPress = exports.updatePartnersPress = exports.createPartnersPress = exports.listPartnersPress = exports.deleteHeritage = exports.updateHeritage = exports.createHeritage = exports.listHeritage = exports.deleteNews = exports.updateNews = exports.createNews = exports.listNews = exports.deleteEvent = exports.updateEvent = exports.createEvent = exports.listEvents = exports.deleteAchievement = exports.updateAchievement = exports.createAchievement = exports.listAchievements = exports.deleteInstructor = exports.updateInstructor = exports.createInstructor = exports.listInstructors = exports.deleteSyllabusStage = exports.updateSyllabusStage = exports.createSyllabusStage = exports.listSyllabusStages = exports.updateSectionSetting = exports.getDashboardStats = void 0;
+exports.testEmailConnection = exports.updateEmailConfig = exports.getEmailConfig = exports.deleteEnquiry = exports.updateEnquiry = exports.listEnquiries = exports.deleteMediaAsset = exports.getMediaReferences = exports.updateMediaAsset = exports.listMediaAssets = exports.uploadSingleMedia = exports.uploadMedia = exports.deleteAlbum = exports.updateAlbum = exports.createAlbum = exports.listAlbums = exports.deletePartnersPress = exports.updatePartnersPress = exports.createPartnersPress = exports.listPartnersPress = exports.deleteHeritage = exports.updateHeritage = exports.createHeritage = exports.listHeritage = exports.deleteNews = exports.updateNews = exports.createNews = exports.listNews = exports.deleteEvent = exports.updateEvent = exports.createEvent = exports.listEvents = exports.deleteAchievement = exports.updateAchievement = exports.createAchievement = exports.listAchievements = exports.deleteInstructor = exports.updateInstructor = exports.createInstructor = exports.listInstructors = exports.deleteSyllabusStage = exports.updateSyllabusStage = exports.createSyllabusStage = exports.listSyllabusStages = exports.updateSectionSetting = exports.getDashboardStats = void 0;
 const db_1 = require("../config/db");
+const emailService_1 = require("../services/emailService");
+const b2Storage_1 = require("../services/b2Storage");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // --- Dashboard Overview ---
@@ -637,7 +639,7 @@ const deleteAlbum = async (req, res) => {
     }
 };
 exports.deleteAlbum = deleteAlbum;
-// --- Multi-File Media Upload & Reference Tracking ---
+// --- Multi-File & Single-File Media Upload to B2 Cloud Storage ---
 const uploadMedia = async (req, res) => {
     try {
         const files = req.files;
@@ -648,37 +650,84 @@ const uploadMedia = async (req, res) => {
         const { album_id, caption, alt_text } = req.body;
         const uploadedAssets = [];
         for (const f of files) {
-            const filePath = `/uploads/${f.filename}`;
+            // 1. Upload to Backblaze B2 cloud storage
+            const b2 = await (0, b2Storage_1.uploadToB2)(f, true);
+            const b2FileName = path_1.default.basename(b2.key);
+            // 2. Persist in database with B2 key and permanent cloud delivery URL
             const insertRes = await (0, db_1.query)(`
         INSERT INTO media_assets (
-          file_name, original_name, file_path, mime_type, file_size, alt_text, caption, album_id, is_featured
+          file_name, original_name, file_path, mime_type, file_size, alt_text, caption, album_id, is_featured, b2_key, b2_url
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, false)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, false, $9, $10)
         RETURNING *
       `, [
-                f.filename,
+                b2FileName,
                 f.originalname,
-                filePath,
+                b2.url,
                 f.mimetype,
                 f.size,
                 alt_text || f.originalname,
                 caption || '',
-                album_id || null
+                album_id || null,
+                b2.key,
+                b2.url
             ]);
             uploadedAssets.push(insertRes.rows[0]);
         }
         res.status(201).json({
             success: true,
-            message: `Successfully uploaded ${uploadedAssets.length} media asset(s).`,
+            message: `Successfully uploaded ${uploadedAssets.length} media asset(s) to cloud storage.`,
             media: uploadedAssets
         });
     }
     catch (error) {
         console.error('uploadMedia error:', error);
-        res.status(500).json({ success: false, message: error.message || 'Failed to upload media files.' });
+        res.status(500).json({ success: false, message: error.message || 'Failed to upload media files to cloud storage.' });
     }
 };
 exports.uploadMedia = uploadMedia;
+const uploadSingleMedia = async (req, res) => {
+    try {
+        const file = req.file;
+        if (!file) {
+            res.status(400).json({ success: false, message: 'No file provided for upload.' });
+            return;
+        }
+        const { album_id, caption, alt_text } = req.body;
+        const b2 = await (0, b2Storage_1.uploadToB2)(file, true);
+        const b2FileName = path_1.default.basename(b2.key);
+        const insertRes = await (0, db_1.query)(`
+      INSERT INTO media_assets (
+        file_name, original_name, file_path, mime_type, file_size, alt_text, caption, album_id, is_featured, b2_key, b2_url
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, false, $9, $10)
+      RETURNING *
+    `, [
+            b2FileName,
+            file.originalname,
+            b2.url,
+            file.mimetype,
+            file.size,
+            alt_text || file.originalname,
+            caption || '',
+            album_id || null,
+            b2.key,
+            b2.url
+        ]);
+        res.status(201).json({
+            success: true,
+            message: 'Image uploaded successfully to Backblaze B2.',
+            url: b2.url,
+            key: b2.key,
+            media: insertRes.rows[0]
+        });
+    }
+    catch (error) {
+        console.error('uploadSingleMedia error:', error);
+        res.status(500).json({ success: false, message: error.message || 'Failed to upload media file.' });
+    }
+};
+exports.uploadSingleMedia = uploadSingleMedia;
 const listMediaAssets = async (req, res) => {
     try {
         const { albumId, search } = req.query;
@@ -755,14 +804,31 @@ const deleteMediaAsset = async (req, res) => {
             });
             return;
         }
-        const mediaRes = await (0, db_1.query)('SELECT file_name FROM media_assets WHERE id = $1', [id]);
+        const mediaRes = await (0, db_1.query)('SELECT file_name, b2_key FROM media_assets WHERE id = $1', [id]);
         if (mediaRes.rowCount === 0) {
             res.status(404).json({ success: false, message: 'Media asset not found.' });
             return;
         }
-        const fileName = mediaRes.rows[0].file_name;
+        const { file_name: fileName, b2_key: b2Key } = mediaRes.rows[0];
         await (0, db_1.query)('DELETE FROM media_assets WHERE id = $1', [id]);
-        // Attempt to unlink physical file if exists in uploads
+        // Delete object from Backblaze B2 if key exists
+        if (b2Key) {
+            try {
+                await (0, b2Storage_1.deleteFromB2)(b2Key);
+            }
+            catch (b2Err) {
+                console.warn('Could not delete asset from Backblaze B2:', b2Err.message);
+            }
+        }
+        // Clean up local cache if exists
+        const cachePath = path_1.default.resolve(__dirname, '../../uploads/b2_cache', fileName);
+        if (fs_1.default.existsSync(cachePath)) {
+            try {
+                fs_1.default.unlinkSync(cachePath);
+            }
+            catch (err) { }
+        }
+        // Attempt to unlink physical legacy file if exists in uploads
         const diskPath = path_1.default.resolve(__dirname, '../../uploads', fileName);
         if (fs_1.default.existsSync(diskPath)) {
             try {
@@ -844,3 +910,74 @@ const deleteEnquiry = async (req, res) => {
     }
 };
 exports.deleteEnquiry = deleteEnquiry;
+// --- Email & SMTP Management ---
+const getEmailConfig = async (req, res) => {
+    try {
+        const settings = await (0, emailService_1.getEmailSettings)();
+        // Return settings with password masked
+        res.json({
+            success: true,
+            settings: {
+                ...settings,
+                hasPassword: Boolean(settings.smtpPass),
+                smtpPass: settings.smtpPass ? '••••••••' : '',
+            },
+        });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: error.message || 'Failed to retrieve email settings.' });
+    }
+};
+exports.getEmailConfig = getEmailConfig;
+const updateEmailConfig = async (req, res) => {
+    try {
+        const payload = req.body;
+        const current = await (0, emailService_1.getEmailSettings)();
+        // If password is sent as the mask or empty, keep existing password
+        if (!payload.smtpPass || payload.smtpPass === '••••••••') {
+            delete payload.smtpPass;
+        }
+        const updated = await (0, emailService_1.saveEmailSettings)({
+            ...payload,
+            smtpPass: payload.smtpPass || current.smtpPass,
+        });
+        res.json({
+            success: true,
+            message: 'Email and SMTP settings saved successfully.',
+            settings: {
+                ...updated,
+                hasPassword: Boolean(updated.smtpPass),
+                smtpPass: updated.smtpPass ? '••••••••' : '',
+            },
+        });
+    }
+    catch (error) {
+        res.status(400).json({ success: false, message: error.message || 'Failed to update email settings.' });
+    }
+};
+exports.updateEmailConfig = updateEmailConfig;
+const testEmailConnection = async (req, res) => {
+    try {
+        const { targetEmail, customConfig } = req.body;
+        const current = await (0, emailService_1.getEmailSettings)();
+        const recipient = targetEmail || current.adminNotificationEmail || current.smtpUser;
+        if (!recipient) {
+            res.status(400).json({ success: false, message: 'Please specify a recipient email address for testing.' });
+            return;
+        }
+        // Merge customConfig with existing password if password is mask
+        if (customConfig && (!customConfig.smtpPass || customConfig.smtpPass === '••••••••')) {
+            customConfig.smtpPass = current.smtpPass;
+        }
+        const result = await (0, emailService_1.sendTestEmail)(recipient, customConfig);
+        res.json(result);
+    }
+    catch (error) {
+        console.error('testEmailConnection error:', error);
+        res.status(400).json({
+            success: false,
+            message: error.message || 'Failed to establish connection to SMTP server.',
+        });
+    }
+};
+exports.testEmailConnection = testEmailConnection;

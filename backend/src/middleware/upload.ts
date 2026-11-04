@@ -69,7 +69,15 @@ export const validateUploadedFiles = async (
   _res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const files = (req.files || []) as Express.Multer.File[];
+  const files: Express.Multer.File[] = [];
+  if (Array.isArray(req.files)) {
+    files.push(...req.files);
+  } else if (req.files && typeof req.files === 'object') {
+    Object.values(req.files).forEach((group) => files.push(...group));
+  }
+  if (req.file) {
+    files.push(req.file);
+  }
 
   try {
     for (const file of files) {

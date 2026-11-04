@@ -20,6 +20,7 @@ import {
   getSettings,
   submitContactEnquiry,
   submitJoinEnquiry,
+  streamMediaAsset,
 } from '../controllers/publicController';
 import {
   validateBody,
@@ -47,6 +48,9 @@ router.get('/heritage', getHeritageProjects);
 router.get('/heritage/:slug', getHeritageBySlug);
 router.get('/partners-press', getPartnersPress);
 router.get('/settings', getSettings);
+
+// Public B2 Cloud Media Streaming (authenticated proxy with caching)
+router.get('/media/stream/*', streamMediaAsset);
 
 // Public form submissions with validation
 router.post('/enquiries', validateBody(contactEnquirySchema), submitContactEnquiry);

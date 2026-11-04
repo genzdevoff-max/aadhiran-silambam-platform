@@ -6,7 +6,9 @@ import {
   AlertCircle,
   Send,
   Info,
+  ShieldCheck
 } from 'lucide-react';
+import { publicApi } from '../../services/api';
 
 export const JoinTraining: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +24,9 @@ export const JoinTraining: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccessMessage, setSubmitSuccessMessage] = useState<string | null>(null);
   const [validatedData, setValidatedData] = useState<{
     submitted: boolean;
     name: string;
@@ -64,9 +69,18 @@ export const JoinTraining: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validatedData?.submitted) return;
+    if (validatedData?.submitted || submitting) return;
+
+    if (formData.honeypot) {
+      setValidatedData({
+        submitted: true,
+        name: formData.fullName.trim(),
+        ageGroup: formData.ageGroup,
+      });
+      return;
+    }
 
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
@@ -74,11 +88,30 @@ export const JoinTraining: React.FC = () => {
       return;
     }
 
-    setValidatedData({
-      submitted: true,
-      name: formData.fullName.trim(),
-      ageGroup: formData.ageGroup,
-    });
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await publicApi.submitJoin({
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        ageGroup: formData.ageGroup,
+        experienceLevel: formData.experienceLevel,
+        preferredLocation: formData.preferredLocation,
+        message: formData.message.trim(),
+      });
+      setValidatedData({
+        submitted: true,
+        name: formData.fullName.trim(),
+        ageGroup: formData.ageGroup,
+      });
+      setSubmitSuccessMessage(res.message || 'Admission application received! Our chief instructor will reach out regarding batch timing and venue location.');
+    } catch (err: any) {
+      const msg = err.response?.data?.message || 'Unable to submit application right now. Please check your connection or contact our headquarters directly.';
+      setSubmitError(msg);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -94,72 +127,82 @@ export const JoinTraining: React.FC = () => {
       honeypot: '',
     });
     setErrors({});
+    setSubmitError(null);
+    setSubmitSuccessMessage(null);
     setValidatedData(null);
   };
 
   return (
-    <div className="bg-charcoal-950 text-gray-200">
-      {/* Header Banner */}
-      <section className="relative py-24 bg-gradient-to-b from-charcoal-900 to-charcoal-950 border-b border-charcoal-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-crimson-950 border border-crimson-700/60 text-gold-400 text-xs font-semibold uppercase tracking-wider mb-4">
-            <Flame className="w-3.5 h-3.5 text-crimson-500" />
+    <div className="bg-[#FDFBF7] text-[#182332] min-h-screen">
+      {/* Header Banner - Heritage Navy */}
+      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#C6A04A]/30">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C6A04A_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
+            <Flame className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>Traditional Gurukulam Enrolment</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-display font-extrabold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">
             Join Aadhiran Silambam Training
           </h1>
-          <p className="mt-3 text-lg font-display text-gold-400 font-semibold tracking-wide">
+          <p className="mt-3 text-lg font-semibold text-[#D9B96E] tracking-wide">
             பயிற்சியில் சேர விண்ணப்பிக்க • Authentic Instruction in George Town, Penang
           </p>
-          <div className="flex items-center justify-center space-x-2 text-xs text-gray-400 mt-4">
-            <Link to="/" className="hover:text-gold-400">Home</Link>
+          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-4 font-medium">
+            <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-gray-300">Join Training</span>
+            <span className="text-[#D9B96E]">Join Training</span>
           </div>
         </div>
       </section>
 
       {/* Main Form Section */}
-      <section className="py-20 border-b border-charcoal-800">
+      <section className="py-20 border-b border-[#E8E3D9]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="p-8 sm:p-12 rounded-3xl bg-charcoal-900 border border-charcoal-800 shadow-2xl space-y-8">
-            <div className="border-b border-charcoal-800 pb-6">
-              <h2 className="text-2xl font-display font-bold text-white">
+          <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[#E8E3D9] shadow-sm space-y-8">
+            <div className="border-b border-[#E8E3D9] pb-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#182332]">
                 Student Enrolment Application
               </h2>
-              <p className="text-xs text-gray-400 mt-1">
-                Fill in your candidate details. Intake is open to all backgrounds with serious commitment to traditional discipline.
+              <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
+                Fill in your candidate details. Intake is open to all backgrounds with serious commitment to traditional discipline and cultural heritage.
               </p>
             </div>
 
-            {/* Phase Notice Badge */}
-            <div className="p-4 rounded-xl bg-gold-950/40 border border-gold-700/50 text-gold-300 text-xs flex items-start space-x-3">
-              <Info className="w-5 h-5 flex-shrink-0 text-gold-400 mt-0.5" />
+            {/* Live Form Notice Badge */}
+            <div className="p-4 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs flex items-start space-x-3">
+              <Info className="w-5 h-5 shrink-0 text-[#C6A04A] mt-0.5" />
               <div className="space-y-1">
-                <p className="font-semibold text-gold-300">This form is not connected yet</p>
-                <p className="text-gray-300 text-[11px] leading-relaxed">
-                  Your entries are checked in this browser only. Nothing is sent or saved. To enquire about training, contact the association directly at +60 16-414 7856.
+                <p className="font-semibold text-[#102137]">Direct Intake Portal • George Town Headquarters</p>
+                <p className="text-[#64748B] text-[11px] leading-relaxed">
+                  Your admission request is routed directly to the Chief Instructor's desk. An email confirmation and intake coordinator phone reach-out will follow within 24–48 hours.
                 </p>
               </div>
             </div>
 
+            {submitError && (
+              <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center space-x-2.5">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+                <span>{submitError}</span>
+              </div>
+            )}
+
             {validatedData?.submitted ? (
-              <div className="p-6 rounded-2xl bg-charcoal-950 border border-charcoal-800 space-y-4 text-center">
-                <div className="w-12 h-12 rounded-full bg-emerald-950 border border-emerald-600 flex items-center justify-center text-emerald-400 mx-auto">
-                  <CheckCircle2 className="w-6 h-6" />
+              <div className="p-8 rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] space-y-4 text-center">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-700 mx-auto shrink-0 shadow-xs">
+                  <CheckCircle2 className="w-6 h-6 shrink-0" />
                 </div>
-                <h4 className="text-lg font-display font-bold text-white">
-                  Enrolment Form Validated
+                <h4 className="text-xl font-bold text-[#102137]">
+                  Admission Application Registered
                 </h4>
-                <p className="text-xs text-gray-300 leading-relaxed max-w-md mx-auto">
-                  The application fields for <strong className="text-gold-400">{validatedData.name}</strong> ({validatedData.ageGroup}) passed browser validation. Nothing was sent or saved. Please call +60 16-414 7856 to enquire about training.
+                <p className="text-xs text-[#64748B] leading-relaxed max-w-md mx-auto">
+                  Thank you, <strong className="text-[#102137]">{validatedData.name}</strong> ({validatedData.ageGroup}). {submitSuccessMessage || 'Your candidate profile has been registered into the association roster. Our Chief Instructor will contact you regarding class schedules, venue directions, and the traditional induction orientation.'}
                 </p>
                 <div className="pt-2">
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="px-5 py-2 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 text-xs text-gray-300 transition-colors"
+                    className="px-6 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-xs font-semibold text-white transition-all shadow-sm"
                   >
                     Submit Another Application
                   </button>
@@ -182,9 +225,9 @@ export const JoinTraining: React.FC = () => {
                   <div>
                     <label
                       htmlFor="joinFullName"
-                      className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2"
+                      className="block text-xs font-semibold text-[#182332] uppercase tracking-wider mb-2"
                     >
-                      Applicant Full Name <span className="text-crimson-500">*</span>
+                      Applicant Full Name <span className="text-[#C6A04A]">*</span>
                     </label>
                     <input
                       id="joinFullName"
@@ -193,15 +236,15 @@ export const JoinTraining: React.FC = () => {
                       value={formData.fullName}
                       onChange={handleChange}
                       placeholder="Full legal name"
-                      className={`w-full px-4 py-3 rounded-xl bg-charcoal-950 border text-white placeholder-gray-500 text-xs focus:outline-none transition-colors ${
+                      className={`w-full px-4 py-3 rounded-xl bg-[#F8F5EE] border text-[#182332] placeholder-[#64748B] text-xs focus:outline-none transition-colors ${
                         errors.fullName
-                          ? 'border-crimson-500 focus:border-crimson-400'
-                          : 'border-charcoal-700 focus:border-gold-500'
+                          ? 'border-red-400 focus:border-red-500'
+                          : 'border-[#E8E3D9] focus:border-[#C6A04A]'
                       }`}
                     />
                     {errors.fullName && (
-                      <p className="mt-1.5 text-[11px] text-crimson-400 flex items-center">
-                        <AlertCircle className="w-3 h-3 mr-1 flex-shrink-0" />
+                      <p className="mt-1.5 text-[11px] text-red-600 flex items-center">
+                        <AlertCircle className="w-3 h-3 mr-1 shrink-0" />
                         {errors.fullName}
                       </p>
                     )}
@@ -210,9 +253,9 @@ export const JoinTraining: React.FC = () => {
                   <div>
                     <label
                       htmlFor="joinEmail"
-                      className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2"
+                      className="block text-xs font-semibold text-[#182332] uppercase tracking-wider mb-2"
                     >
-                      Email Address <span className="text-crimson-500">*</span>
+                      Email Address <span className="text-[#C6A04A]">*</span>
                     </label>
                     <input
                       id="joinEmail"
@@ -221,15 +264,15 @@ export const JoinTraining: React.FC = () => {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="name@example.com"
-                      className={`w-full px-4 py-3 rounded-xl bg-charcoal-950 border text-white placeholder-gray-500 text-xs focus:outline-none transition-colors ${
+                      className={`w-full px-4 py-3 rounded-xl bg-[#F8F5EE] border text-[#182332] placeholder-[#64748B] text-xs focus:outline-none transition-colors ${
                         errors.email
-                          ? 'border-crimson-500 focus:border-crimson-400'
-                          : 'border-charcoal-700 focus:border-gold-500'
+                          ? 'border-red-400 focus:border-red-500'
+                          : 'border-[#E8E3D9] focus:border-[#C6A04A]'
                       }`}
                     />
                     {errors.email && (
-                      <p className="mt-1.5 text-[11px] text-crimson-400 flex items-center">
-                        <AlertCircle className="w-3 h-3 mr-1 flex-shrink-0" />
+                      <p className="mt-1.5 text-[11px] text-red-600 flex items-center">
+                        <AlertCircle className="w-3 h-3 mr-1 shrink-0" />
                         {errors.email}
                       </p>
                     )}
@@ -240,9 +283,9 @@ export const JoinTraining: React.FC = () => {
                   <div>
                     <label
                       htmlFor="joinPhone"
-                      className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2"
+                      className="block text-xs font-semibold text-[#182332] uppercase tracking-wider mb-2"
                     >
-                      Phone / WhatsApp <span className="text-crimson-500">*</span>
+                      Phone / WhatsApp <span className="text-[#C6A04A]">*</span>
                     </label>
                     <input
                       id="joinPhone"
@@ -251,15 +294,15 @@ export const JoinTraining: React.FC = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       placeholder="+60 1x-xxx xxxx"
-                      className={`w-full px-4 py-3 rounded-xl bg-charcoal-950 border text-white placeholder-gray-500 text-xs focus:outline-none transition-colors ${
+                      className={`w-full px-4 py-3 rounded-xl bg-[#F8F5EE] border text-[#182332] placeholder-[#64748B] text-xs focus:outline-none transition-colors ${
                         errors.phone
-                          ? 'border-crimson-500 focus:border-crimson-400'
-                          : 'border-charcoal-700 focus:border-gold-500'
+                          ? 'border-red-400 focus:border-red-500'
+                          : 'border-[#E8E3D9] focus:border-[#C6A04A]'
                       }`}
                     />
                     {errors.phone && (
-                      <p className="mt-1.5 text-[11px] text-crimson-400 flex items-center">
-                        <AlertCircle className="w-3 h-3 mr-1 flex-shrink-0" />
+                      <p className="mt-1.5 text-[11px] text-red-600 flex items-center">
+                        <AlertCircle className="w-3 h-3 mr-1 shrink-0" />
                         {errors.phone}
                       </p>
                     )}
@@ -268,7 +311,7 @@ export const JoinTraining: React.FC = () => {
                   <div>
                     <label
                       htmlFor="joinAgeGroup"
-                      className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2"
+                      className="block text-xs font-semibold text-[#182332] uppercase tracking-wider mb-2"
                     >
                       Age Group
                     </label>
@@ -277,7 +320,7 @@ export const JoinTraining: React.FC = () => {
                       name="ageGroup"
                       value={formData.ageGroup}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500 transition-colors"
+                      className="w-full px-4 py-3 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#C6A04A] transition-colors"
                     >
                       <option value="Children (6–12 Years)">Children (6–12 Years)</option>
                       <option value="Youth (13–17 Years)">Youth (13–17 Years)</option>
@@ -289,7 +332,7 @@ export const JoinTraining: React.FC = () => {
                   <div>
                     <label
                       htmlFor="joinExperience"
-                      className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2"
+                      className="block text-xs font-semibold text-[#182332] uppercase tracking-wider mb-2"
                     >
                       Martial Experience
                     </label>
@@ -298,7 +341,7 @@ export const JoinTraining: React.FC = () => {
                       name="experienceLevel"
                       value={formData.experienceLevel}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white text-xs focus:outline-none focus:border-gold-500 transition-colors"
+                      className="w-full px-4 py-3 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] text-xs focus:outline-none focus:border-[#C6A04A] transition-colors"
                     >
                       <option value="Complete Beginner">Complete Beginner</option>
                       <option value="Some Martial Arts">Some Martial Arts Experience</option>
@@ -311,7 +354,7 @@ export const JoinTraining: React.FC = () => {
                 <div>
                   <label
                     htmlFor="joinLocation"
-                    className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2"
+                    className="block text-xs font-semibold text-[#182332] uppercase tracking-wider mb-2"
                   >
                     Training Center
                   </label>
@@ -321,14 +364,14 @@ export const JoinTraining: React.FC = () => {
                     name="preferredLocation"
                     readOnly
                     value="George Town Headquarters — Lebuh King, Penang"
-                    className="w-full px-4 py-3 rounded-xl bg-charcoal-950/60 border border-charcoal-800 text-gold-400 font-mono text-xs cursor-not-allowed"
+                    className="w-full px-4 py-3 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#102137] font-semibold text-xs cursor-not-allowed"
                   />
                 </div>
 
                 <div>
                   <label
                     htmlFor="joinMessage"
-                    className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2"
+                    className="block text-xs font-semibold text-[#182332] uppercase tracking-wider mb-2"
                   >
                     Motivations & Background
                   </label>
@@ -339,13 +382,13 @@ export const JoinTraining: React.FC = () => {
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Tell us what draws you to Aadhiran Silambam (e.g. cultural preservation, self defense, fitness)..."
-                    className="w-full px-4 py-3 rounded-xl bg-charcoal-950 border border-charcoal-700 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-gold-500 transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#182332] placeholder-[#64748B] text-xs focus:outline-none focus:border-[#C6A04A] transition-colors"
                   />
                 </div>
 
                 {/* Code of Conduct Acknowledgment */}
-                <div className={`p-4 rounded-xl bg-charcoal-950 border transition-colors ${
-                  errors.agreeToCode ? 'border-crimson-500' : 'border-charcoal-800'
+                <div className={`p-4 rounded-xl bg-[#F8F5EE] border transition-colors ${
+                  errors.agreeToCode ? 'border-red-400' : 'border-[#E8E3D9]'
                 }`}>
                   <label className="flex items-start space-x-3 cursor-pointer">
                     <input
@@ -353,26 +396,32 @@ export const JoinTraining: React.FC = () => {
                       name="agreeToCode"
                       checked={formData.agreeToCode}
                       onChange={handleChange}
-                      className="mt-1 w-4 h-4 rounded border-charcoal-700 bg-charcoal-900 text-crimson-600 focus:ring-0 focus:ring-offset-0"
+                      className="mt-1 w-4 h-4 rounded border-[#E8E3D9] text-[#102137] focus:ring-0 focus:ring-offset-0"
                     />
-                    <span className="text-xs text-gray-300 leading-relaxed">
-                      I acknowledge that Aadhiran Silambam is a traditional 5,000-year Tamil discipline. I agree to respect the Gurukulam lineage, observe ethical restraint, and understand that Aadhiran does not engage in commercial belt-selling. <span className="text-crimson-500">*</span>
+                    <span className="text-xs text-[#182332] leading-relaxed">
+                      I acknowledge that Aadhiran Silambam is a traditional 5,000-year Tamil discipline. I agree to respect the Gurukulam lineage, observe ethical restraint, and understand that Aadhiran does not engage in commercial belt-selling. <span className="text-[#C6A04A] font-bold">*</span>
                     </span>
                   </label>
                   {errors.agreeToCode && (
-                    <p className="mt-2 text-[11px] text-crimson-400 flex items-center">
-                      <AlertCircle className="w-3 h-3 mr-1 flex-shrink-0" />
+                    <p className="mt-2 text-[11px] text-red-600 flex items-center">
+                      <AlertCircle className="w-3 h-3 mr-1 shrink-0" />
                       {errors.agreeToCode}
                     </p>
                   )}
                 </div>
 
+                <div className="flex items-center space-x-2 text-xs text-[#64748B]">
+                  <ShieldCheck className="w-4 h-4 text-[#C6A04A] shrink-0" />
+                  <span>Transparent fee structure with zero hidden gradings or commercial contracts.</span>
+                </div>
+
                 <button
                   type="submit"
-                  className="w-full py-4 rounded-xl bg-crimson-600 hover:bg-crimson-500 text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-xl shadow-crimson-900/60 flex items-center justify-center space-x-2"
+                  disabled={submitting}
+                  className="w-full py-4 rounded-xl bg-[#102137] hover:bg-[#183B5B] disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-md border border-[#C6A04A]/40 flex items-center justify-center space-x-2"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Validate Application (Not Sent)</span>
+                  <Send className="w-4 h-4 shrink-0 text-[#C6A04A]" />
+                  <span>{submitting ? 'Submitting Application...' : 'Submit Admission Application'}</span>
                 </button>
               </form>
             )}

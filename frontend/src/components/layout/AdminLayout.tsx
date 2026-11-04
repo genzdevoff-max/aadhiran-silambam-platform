@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
 import {
-  Shield,
   LayoutDashboard,
   Layers,
   Users,
@@ -103,10 +102,14 @@ export const AdminLayout: React.FC = () => {
       }
 
       if (event.key !== 'Tab') return;
-      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )).filter((element) => element.offsetParent !== null);
-      if (focusable.length === 0) {
+
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((element) => element.offsetParent !== null || element === document.activeElement);
+
+      if (!focusable.length) {
         event.preventDefault();
         dialog.focus();
         return;
@@ -114,10 +117,11 @@ export const AdminLayout: React.FC = () => {
 
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+
+      if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+      } else if (!event.shiftKey && document.activeElement === last) {
         event.preventDefault();
         first.focus();
       }
@@ -166,7 +170,7 @@ export const AdminLayout: React.FC = () => {
                   Boolean(candidate.compareDocumentPosition(branch) & Node.DOCUMENT_POSITION_FOLLOWING)
                 );
               if (label) {
-                  if (!control.id) control.id = `admin-field-${++nextFieldId}`;
+                if (!control.id) control.id = `admin-field-${++nextFieldId}`;
                 label.htmlFor = control.id;
                 if (control.required && !label.textContent?.trim().endsWith('*')) {
                   label.dataset.adminRequired = 'true';
@@ -190,113 +194,48 @@ export const AdminLayout: React.FC = () => {
               (control instanceof HTMLSelectElement ? control.selectedOptions[0]?.textContent : undefined);
             if (name) control.setAttribute('aria-label', name.trim());
           }
+
+          const dirty = control.dataset.adminInitialValue !== undefined &&
+            control.dataset.adminInitialValue !== valueOf(control);
+          if (dirty) control.dataset.adminDirty = 'true';
+          else delete control.dataset.adminDirty;
         }
 
-        const changed = controls(form).some((control) => control.dataset.adminInitialValue !== valueOf(control));
-        if (changed) form.dataset.adminDirty = 'true';
+        const isFormDirty = controls(form).some((control) => control.dataset.adminDirty === 'true');
+        if (isFormDirty) form.dataset.adminDirty = 'true';
         else delete form.dataset.adminDirty;
       }
-
-      document.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
-        '.admin-workspace input:not([type="hidden"]), .admin-workspace select, .admin-workspace textarea'
-      ).forEach((control) => {
-        if (control.labels?.length || control.getAttribute('aria-label')) return;
-        const name = control.getAttribute('placeholder') ||
-          control.getAttribute('name')?.replace(/[_-]+/g, ' ') ||
-          (control instanceof HTMLSelectElement ? control.selectedOptions[0]?.textContent : undefined);
-        if (name) control.setAttribute('aria-label', name.trim());
-      });
-
-      document.querySelectorAll<HTMLElement>(
-        '.admin-workspace [class*="bg-emerald-950"][class*="p-4"], .admin-workspace [class*="bg-crimson-950"][class*="p-4"]'
-      ).forEach((message) => {
-        const isError = message.className.includes('bg-crimson-950');
-        message.setAttribute('role', isError ? 'alert' : 'status');
-        message.setAttribute('aria-live', isError ? 'assertive' : 'polite');
-      });
     };
 
-    const savedButtonStates = new WeakMap<HTMLButtonElement, boolean>();
-    const submissions = new WeakMap<HTMLFormElement, {
-      requestIds: Set<string>;
-      failed: boolean;
-      timeout?: number;
-    }>();
-    const finishPendingForm = (form: HTMLFormElement, succeeded: boolean) => {
-      if (form.dataset.adminPending !== 'true') return;
-      const submission = submissions.get(form);
-      if (submission?.timeout) window.clearTimeout(submission.timeout);
-      form.dataset.adminPending = 'false';
-      if (succeeded && form.dataset.adminRequestStarted === 'true') {
-        for (const control of controls(form)) control.dataset.adminInitialValue = valueOf(control);
-        delete form.dataset.adminDirty;
+    const resetFormBaseline = (form: HTMLFormElement) => {
+      delete form.dataset.adminDirty;
+      for (const control of controls(form)) {
+        control.dataset.adminInitialValue = valueOf(control);
+        delete control.dataset.adminDirty;
       }
-      delete form.dataset.adminRequestStarted;
-      for (const button of Array.from(form.querySelectorAll<HTMLButtonElement>('button[type="submit"]'))) {
-        button.disabled = savedButtonStates.get(button) ?? false;
-        savedButtonStates.delete(button);
-        button.removeAttribute('aria-busy');
-      }
-      submissions.delete(form);
-      syncForms();
     };
+
+    const dirtyForms = () =>
+      forms().filter((form) => form.dataset.adminDirty === 'true' && document.body.contains(form));
 
     const onSubmit = (event: Event) => {
-      const form = event.target;
-      if (!(form instanceof HTMLFormElement) || !form.closest('.admin-workspace')) return;
-      if (form.dataset.adminPending === 'true') {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        return;
+      if (event.target instanceof HTMLFormElement) {
+        event.target.dataset.adminSubmitting = 'true';
       }
-
-      form.dataset.adminPending = 'true';
-      for (const button of Array.from(form.querySelectorAll<HTMLButtonElement>('button[type="submit"]'))) {
-        savedButtonStates.set(button, button.disabled);
-        button.disabled = true;
-        button.setAttribute('aria-busy', 'true');
-      }
-      const submission = { requestIds: new Set<string>(), failed: false } as {
-        requestIds: Set<string>;
-        failed: boolean;
-        timeout?: number;
-      };
-      submissions.set(form, submission);
-      submission.timeout = window.setTimeout(() => finishPendingForm(form, true), 0);
     };
 
     const onApiActivity = (event: Event) => {
-      const detail = (event as CustomEvent<{
-        id: string;
-        phase: 'start' | 'end';
-        succeeded?: boolean;
-      }>).detail;
-      if (detail.phase === 'start') {
+      const customEvent = event as CustomEvent<{ phase: 'start' | 'end'; activeMutationCount: number; succeeded?: boolean }>;
+      if (customEvent.detail?.phase === 'end' && customEvent.detail.succeeded) {
         for (const form of forms()) {
-          const submission = submissions.get(form);
-          if (submission && form.dataset.adminPending === 'true') {
-            if (submission.timeout) window.clearTimeout(submission.timeout);
-            submission.requestIds.add(detail.id);
-            form.dataset.adminRequestStarted = 'true';
+          if (form.dataset.adminSubmitting === 'true') {
+            delete form.dataset.adminSubmitting;
+            resetFormBaseline(form);
           }
-        }
-        return;
-      }
-
-      for (const form of forms()) {
-        const submission = submissions.get(form);
-        if (!submission || !submission.requestIds.delete(detail.id)) continue;
-        submission.failed ||= detail.succeeded === false;
-        if (submission.requestIds.size === 0) {
-          submission.timeout = window.setTimeout(
-            () => finishPendingForm(form, !submission.failed),
-            0
-          );
         }
       }
     };
 
-    const dirtyForms = () => forms().filter((form) => form.dataset.adminDirty === 'true');
     const onClick = (event: MouseEvent) => {
       if (!(event.target instanceof Element)) return;
       const dirty = dirtyForms();
@@ -360,52 +299,55 @@ export const AdminLayout: React.FC = () => {
     };
   }, []);
 
-  // If loading session verification, display clean loading screen
+  // Loading Screen in Heritage Navy & Gold
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-charcoal-950 flex flex-col items-center justify-center text-gold-400 font-mono text-sm space-y-4">
-        <div className="w-10 h-10 border-2 border-gold-400 border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs uppercase tracking-wider text-gray-400">Verifying administrator session...</p>
+      <div className="min-h-screen bg-[#FDFBF7] flex flex-col items-center justify-center text-[#102137] font-sans text-sm space-y-4">
+        <div className="w-10 h-10 border-3 border-[#C6A04A] border-t-transparent rounded-full animate-spin" />
+        <p className="text-xs uppercase tracking-wider text-[#64748B] font-medium">Verifying administrator session...</p>
       </div>
     );
   }
 
-  // If unauthenticated, redirect to login with return location
+  // Redirect to login if unauthenticated
   if (!isAuthenticated) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
   return (
-    <div className="admin-workspace min-h-screen bg-charcoal-950 text-gray-200 flex">
+    <div className="admin-workspace h-screen w-screen overflow-hidden bg-[#FDFBF7] text-[#182332] flex relative font-sans">
       {/* Mobile Sidebar Overlay */}
       {mobileSidebarOpen && (
         <div
-          aria-hidden="true"
-          className="fixed inset-0 z-40 bg-black/80 lg:hidden"
           onClick={() => setMobileSidebarOpen(false)}
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden transition-opacity"
+          aria-hidden="true"
         />
       )}
 
-      {/* Sidebar Component */}
+      {/* Sidebar Navigation — Primary Navy (#102137) with Gold (#C6A04A) Highlights */}
       <aside
+        id="admin-navigation"
         aria-label="Admin navigation"
-        className={`fixed lg:static top-0 bottom-0 left-0 z-50 w-72 bg-charcoal-900 border-r border-charcoal-800 flex flex-col justify-between transition-transform duration-300 ${
+        className={`fixed lg:relative inset-y-0 left-0 z-50 w-72 h-screen shrink-0 bg-[#102137] border-r border-[#183B5B] shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-in-out ${
           mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        <div>
-          {/* Brand Logo */}
-          <div className="p-6 border-b border-charcoal-800 flex items-center justify-between">
-            <Link to="/admin/dashboard" className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-crimson-600 to-crimson-900 flex items-center justify-center text-gold-400 border border-gold-500/30 shadow-md">
-                <Shield className="w-5 h-5 text-gold-300" />
+        <div className="flex flex-col h-full overflow-hidden">
+          {/* Brand Header */}
+          <div className="p-5 border-b border-[#183B5B] flex items-center justify-between bg-[#0B1726]">
+            <Link to="/admin/dashboard" className="flex items-center space-x-3 group">
+              <div className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-[#102137] via-[#C6A04A] to-[#183B5B] p-0.5 shadow-md flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <div className="w-full h-full rounded-2xl bg-white p-0.5 flex items-center justify-center overflow-hidden">
+                  <img src="/logo.png" alt="Aadhiran Logo" className="w-full h-full object-contain" />
+                </div>
               </div>
-              <div>
-                <span className="block font-display font-bold text-white tracking-wider text-base">
+              <div className="min-w-0">
+                <span className="block font-bold text-white tracking-tight text-base truncate">
                   AADHIRAN CMS
                 </span>
-                <span className="block text-[10px] font-mono font-semibold text-gold-400 uppercase tracking-widest">
-                  Admin Control Panel
+                <span className="block text-[10px] font-mono font-semibold text-[#D9B96E] uppercase tracking-widest truncate">
+                  Management Portal
                 </span>
               </div>
             </Link>
@@ -413,14 +355,14 @@ export const AdminLayout: React.FC = () => {
               type="button"
               onClick={() => setMobileSidebarOpen(false)}
               aria-label="Close navigation"
-              className="lg:hidden text-gray-400 hover:text-white"
+              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 shrink-0"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 shrink-0" />
             </button>
           </div>
 
-          {/* Nav Items List */}
-          <nav className="p-4 space-y-1 max-h-[calc(100vh-190px)] overflow-y-auto">
+          {/* Navigation Links */}
+          <nav className="p-3.5 space-y-1 flex-1 overflow-y-auto scrollbar-thin">
             {navItems.map((item) => {
               const active = isActive(item.path);
               const Icon = item.icon;
@@ -430,109 +372,125 @@ export const AdminLayout: React.FC = () => {
                   to={item.path}
                   onClick={() => setMobileSidebarOpen(false)}
                   aria-current={active ? 'page' : undefined}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 group ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 group ${
                     active
-                      ? 'bg-crimson-600 text-white shadow-md shadow-crimson-900/40'
-                      : 'text-gray-400 hover:text-white hover:bg-charcoal-800'
+                      ? 'bg-[#183B5B] text-white font-semibold border-l-4 border-[#C6A04A] shadow-sm'
+                      : 'text-slate-300 hover:text-white hover:bg-[#183B5B]/60'
                   }`}
                 >
-                  <div className="flex items-center space-x-3">
-                    <Icon
-                      className={`w-4 h-4 ${
-                        active ? 'text-white' : 'text-gray-500 group-hover:text-gold-400'
+                  <div className="inline-flex items-center gap-3 min-w-0">
+                    <span
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                        active
+                          ? 'bg-[#C6A04A] text-[#102137]'
+                          : 'bg-[#183B5B] text-[#D9B96E] group-hover:text-white'
                       }`}
-                    />
-                    <span>{item.name}</span>
+                    >
+                      <Icon className="w-4 h-4 shrink-0" />
+                    </span>
+                    <span className="truncate">{item.name}</span>
                   </div>
-                  {active && <ChevronRight className="w-3.5 h-3.5 text-white/70" />}
+                  {active ? (
+                    <ChevronRight className="w-4 h-4 text-[#D9B96E] shrink-0" />
+                  ) : (
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300 shrink-0" />
+                  )}
                 </Link>
               );
             })}
           </nav>
-        </div>
 
-        {/* User Card & Logout */}
-        <div className="p-4 border-t border-charcoal-800 bg-charcoal-950/60">
-          <div className="flex items-center justify-between mb-3 px-1">
-            <div className="flex items-center space-x-2.5">
-              <div className="w-8 h-8 rounded-full bg-crimson-950 border border-crimson-700 flex items-center justify-center text-gold-400 font-bold text-xs">
-                {user?.fullName?.charAt(0) || 'A'}
+          {/* Footer User Info & Actions */}
+          <div className="p-4 border-t border-[#183B5B] bg-[#0B1726] shrink-0">
+            <div className="flex items-center justify-between mb-3 px-1">
+              <div className="inline-flex items-center gap-2.5 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-[#183B5B] border border-[#C6A04A]/60 flex items-center justify-center text-[#D9B96E] font-bold text-xs shrink-0">
+                  {user?.fullName?.charAt(0) || 'A'}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-bold text-white truncate">{user?.fullName || 'Administrator'}</p>
+                  <p className="text-[10px] text-[#D9B96E] capitalize font-medium">{user?.role?.replace('_', ' ') || 'Staff'}</p>
+                </div>
               </div>
-              <div className="truncate max-w-[130px]">
-                <p className="text-xs font-bold text-white truncate">{user?.fullName || 'Administrator'}</p>
-                <p className="text-[10px] text-gray-500 capitalize">{user?.role?.replace('_', ' ') || 'Staff'}</p>
-              </div>
+              <button
+                type="button"
+                onClick={logout}
+                aria-label="Sign out"
+                title="Sign Out"
+                className="p-2 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-950/40 transition-colors shrink-0"
+              >
+                <LogOut className="w-4 h-4 shrink-0" />
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={logout}
-              aria-label="Sign out"
-              title="Sign Out"
-              className="p-1.5 rounded-lg text-gray-400 hover:text-crimson-400 hover:bg-charcoal-800 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
 
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full py-2 px-3 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 text-gray-300 hover:text-white text-[11px] font-semibold flex items-center justify-center space-x-1.5 transition-colors border border-charcoal-700"
-          >
-            <span>View Public Website</span>
-            <ExternalLink className="w-3 h-3 text-gold-400" />
-          </a>
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-2.5 px-3 rounded-xl bg-[#183B5B] hover:bg-[#224D77] text-white text-[11px] font-medium inline-flex items-center justify-center gap-2 transition-all border border-[#183B5B] shadow-sm"
+            >
+              <span>View Public Website</span>
+              <ExternalLink className="w-3.5 h-3.5 text-[#D9B96E] shrink-0" />
+            </a>
+          </div>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Header Bar */}
-        <header className="h-16 bg-charcoal-900 border-b border-charcoal-800 px-4 sm:px-8 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+      {/* Main Content Workspace — Ivory Background (#FDFBF7) */}
+      <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden bg-[#FDFBF7]">
+        {/* Top Header Bar — White (#FFFFFF) */}
+        <header className="h-16 bg-white border-b border-[#E8E3D9] px-4 sm:px-8 flex items-center justify-between shrink-0 shadow-sm">
+          <div className="inline-flex items-center gap-3 min-w-0">
             <button
               type="button"
               onClick={() => setMobileSidebarOpen(true)}
               aria-label="Open navigation"
               aria-expanded={mobileSidebarOpen}
-              className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-charcoal-800"
+              className="lg:hidden p-2 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] text-[#102137] hover:text-[#C6A04A] shrink-0"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-5 h-5 shrink-0" />
             </button>
-            <span className="text-xs font-mono text-gold-400 hidden sm:inline-block">
-              Persatuan Aadhiran Silambam Pulau Pinang (EST. 1975)
-            </span>
+            <div className="inline-flex items-center gap-2 min-w-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0 hidden sm:inline-block" />
+              <span className="text-xs font-semibold text-[#102137] truncate">
+                Persatuan Aadhiran Silambam Pulau Pinang
+              </span>
+              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-[#F8F5EE] text-[#102137] border border-[#E8E3D9] hidden md:inline-block shrink-0">
+                EST. 1975
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-4 text-xs">
-            <span className="hidden sm:inline-block px-2.5 py-1 rounded bg-crimson-950 border border-crimson-800 text-crimson-300 font-mono font-bold">
+          <div className="inline-flex items-center gap-3 text-xs shrink-0">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F8F5EE] border border-[#E8E3D9] text-[#102137] font-mono font-medium text-[11px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
               ROLE: {user?.role?.toUpperCase()}
             </span>
             <button
               type="button"
               onClick={logout}
-              className="px-3 py-1.5 rounded-lg bg-charcoal-800 hover:bg-charcoal-700 text-gray-300 hover:text-crimson-300 transition-colors flex items-center space-x-1"
+              className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-red-50 text-red-600 border border-red-200 transition-colors inline-flex items-center gap-1.5 font-medium text-xs"
             >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Log Out</span>
+              <LogOut className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline">Log Out</span>
             </button>
           </div>
         </header>
 
         {/* Dynamic Nested Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-8 bg-charcoal-950">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#FDFBF7]">
           {currentPage && (
-            <nav aria-label="Breadcrumb" className="mb-6 text-xs text-gray-400">
-              <ol className="flex flex-wrap items-center gap-2">
+            <nav aria-label="Breadcrumb" className="mb-6 text-xs text-[#64748B]">
+              <ol className="inline-flex flex-wrap items-center gap-2">
                 <li>
-                  <Link to="/admin/dashboard" className="hover:text-gold-300 focus-visible:text-gold-300">
-                    Admin
+                  <Link to="/admin/dashboard" className="hover:text-[#102137] focus-visible:text-[#102137] inline-flex items-center gap-1 font-medium">
+                    <LayoutDashboard className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
+                    <span>Admin</span>
                   </Link>
                 </li>
-                <li aria-hidden="true">/</li>
-                <li aria-current="page" className="font-semibold text-gray-200">
-                  {currentPage.name}
+                <li aria-hidden="true" className="text-[#E8E3D9]">/</li>
+                <li aria-current="page" className="font-semibold text-[#102137] inline-flex items-center gap-1.5">
+                  <span>{currentPage.name}</span>
                 </li>
               </ol>
             </nav>

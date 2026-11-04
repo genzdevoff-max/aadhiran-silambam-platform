@@ -13,7 +13,7 @@ export const heritageProjectsList: HeritageProject[] = [
       'Preserves the authentic transmission of ancient Tamil martial knowledge in a UNESCO World Heritage City, ensuring youth awareness and government safeguarding.',
     full_content:
       'Comprehensive field interviews, video recordings of the ten stages, and documentation of oral martial sayings preserved by Chief Master Siva and senior disciples.',
-    cover_image_url: '/uploads/48397540-957165591150493-3850920351072518144-o.jpg',
+    cover_image_url: '/api/public/media/stream/silambam/9661e79a-b91d-4307-b538-70ed6647bafb.jpg',
     document_url: 'https://ich.unesco.org',
     is_featured: true,
   },
@@ -29,7 +29,7 @@ export const heritageProjectsList: HeritageProject[] = [
       'Positioned Aadhiran Silambam on the global academic and cultural diplomacy map, distinguishing authentic non-commercialized Silambam from modern sports offshoots.',
     full_content:
       'Publication featuring historical analysis of Grandmaster Mariapakkiam\'s 1936 migration, technical analysis of Kambu Veechu and Por Kaaladi, and high-resolution photo archives.',
-    cover_image_url: '/uploads/july-2015_orig.png',
+    cover_image_url: '/api/public/media/stream/silambam/9a003fb4-99f2-4cfd-846d-d6d2ce4a3850.png',
     document_url: 'https://www.unesco-ichcap.org',
     is_featured: true,
   },
@@ -45,7 +45,7 @@ export const heritageProjectsList: HeritageProject[] = [
       'Officially certified Persatuan Aadhiran Silambam Pulau Pinang as the Oldest Silambam Association in Malaysia, giving our lineage indisputable historical primacy.',
     full_content:
       'Official certificate presented at a gala ceremony in George Town on 28th August 2022 witnessed by state dignitaries and community elders.',
-    cover_image_url: '/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png',
+    cover_image_url: '/api/public/media/stream/silambam/298977c4-5bd2-4bf7-b091-e5e0cfe77163.png',
     document_url: 'https://www.malaysiarecords.com.my',
     is_featured: true,
   },

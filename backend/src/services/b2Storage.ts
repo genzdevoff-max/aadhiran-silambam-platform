@@ -1,4 +1,3 @@
-
 import {
   S3Client,
   PutObjectCommand,
@@ -41,7 +40,7 @@ const endpoint = B2_ENDPOINT!.replace(/\/+$/, "");
 const bucket = B2_BUCKET_NAME!;
 const objectPrefix = "silambam/";
 
-const s3Client = new S3Client({
+export const s3Client = new S3Client({
   endpoint,
   region: B2_REGION!,
   credentials: {
@@ -51,7 +50,7 @@ const s3Client = new S3Client({
   forcePathStyle: true,
 });
 
-function validateKey(key: string): void {
+export function validateKey(key: string): void {
   if (
     !key.startsWith(objectPrefix) ||
     key.includes("\\") ||
@@ -62,17 +61,23 @@ function validateKey(key: string): void {
   }
 }
 
-function publicUrl(key: string): string {
+/**
+ * Returns permanent usable URL for an asset stored in the private B2 bucket.
+ * Routes through the authenticated streaming proxy `/api/public/media/stream/:key`
+ * with long-lived Cache-Control and ETag validation.
+ */
+export function getUsableB2Url(key: string): string {
   validateKey(key);
-  return `${endpoint}/${bucket}/${key
-    .split("/")
-    .map(encodeURIComponent)
-    .join("/")}`;
+  return `/api/public/media/stream/${key}`;
+}
+
+export function publicUrl(key: string): string {
+  return getUsableB2Url(key);
 }
 
 export async function uploadToB2(
   file: Express.Multer.File,
-  isPublic = true
+  _isPublic = true
 ): Promise<{ key: string; url: string }> {
   if (!file?.path) {
     throw new Error("Upload file path is missing");
@@ -91,14 +96,7 @@ export async function uploadToB2(
       })
     );
 
-    const url = isPublic
-      ? publicUrl(key)
-      : await getSignedUrl(
-          s3Client,
-          new GetObjectCommand({ Bucket: bucket, Key: key }),
-          { expiresIn: 3600 }
-        );
-
+    const url = getUsableB2Url(key);
     return { key, url };
   } finally {
     try {
@@ -107,6 +105,52 @@ export async function uploadToB2(
       console.warn("[b2Storage] Could not remove temporary upload file.");
     }
   }
+}
+
+export async function uploadBufferToB2(
+  buffer: Buffer,
+  originalname: string,
+  mimetype: string
+): Promise<{ key: string; url: string }> {
+  const extension = path.extname(originalname);
+  const key = `${objectPrefix}${randomUUID()}${extension}`;
+
+  await s3Client.send(
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: buffer,
+      ContentType: mimetype || "application/octet-stream",
+    })
+  );
+
+  const url = getUsableB2Url(key);
+  return { key, url };
+}
+
+export async function getObjectFromB2(key: string): Promise<{
+  body: NodeJS.ReadableStream;
+  contentType: string;
+  contentLength?: number;
+  eTag?: string;
+  lastModified?: Date;
+}> {
+  validateKey(key);
+
+  const response = await s3Client.send(
+    new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    })
+  );
+
+  return {
+    body: response.Body as NodeJS.ReadableStream,
+    contentType: response.ContentType || (mime.lookup(key) as string) || "application/octet-stream",
+    contentLength: response.ContentLength,
+    eTag: response.ETag,
+    lastModified: response.LastModified,
+  };
 }
 
 export async function deleteFromB2(key: string): Promise<void> {
@@ -122,17 +166,7 @@ export async function deleteFromB2(key: string): Promise<void> {
 
 export async function getUrlForKey(
   key: string,
-  isPublic = true
+  _isPublic = true
 ): Promise<string> {
-  validateKey(key);
-
-  if (isPublic) {
-    return publicUrl(key);
-  }
-
-  return getSignedUrl(
-    s3Client,
-    new GetObjectCommand({ Bucket: bucket, Key: key }),
-    { expiresIn: 3600 }
-  );
+  return getUsableB2Url(key);
 }

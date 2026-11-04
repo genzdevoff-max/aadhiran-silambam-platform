@@ -1,7 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.submitJoinEnquiry = exports.submitContactEnquiry = exports.getSettings = exports.getPartnersPress = exports.getHeritageBySlug = exports.getHeritageProjects = exports.getNewsBySlug = exports.getNews = exports.getVideos = exports.getPhotos = exports.getAlbums = exports.getEventBySlug = exports.getEvents = exports.getAchievementById = exports.getAchievements = exports.getInstructors = exports.getSyllabus = exports.getLineage = exports.getAboutContent = exports.getHomeContent = void 0;
+exports.streamMediaAsset = exports.submitJoinEnquiry = exports.submitContactEnquiry = exports.getSettings = exports.getPartnersPress = exports.getHeritageBySlug = exports.getHeritageProjects = exports.getNewsBySlug = exports.getNews = exports.getVideos = exports.getPhotos = exports.getAlbums = exports.getEventBySlug = exports.getEvents = exports.getAchievementById = exports.getAchievements = exports.getInstructors = exports.getSyllabus = exports.getLineage = exports.getAboutContent = exports.getHomeContent = void 0;
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const mime_types_1 = __importDefault(require("mime-types"));
 const db_1 = require("../config/db");
+const emailService_1 = require("../services/emailService");
+const b2Storage_1 = require("../services/b2Storage");
 const getHomeContent = async (req, res) => {
     try {
         // 1. Site settings (hero, quick facts, general)
@@ -492,6 +500,14 @@ const submitContactEnquiry = async (req, res) => {
       INSERT INTO enquiries (enquiry_type, full_name, email, phone, message, status, ip_address)
       VALUES ('general', $1, $2, $3, $4, 'new', $5)
     `, [fullName.trim(), email.trim().toLowerCase(), phone.trim(), message.trim(), ip]);
+        // Dispatch asynchronous email notifications (admin alert + applicant confirmation)
+        (0, emailService_1.sendEnquiryNotification)({
+            enquiry_type: 'general',
+            full_name: fullName.trim(),
+            email: email.trim().toLowerCase(),
+            phone: phone.trim(),
+            message: message.trim(),
+        }).catch((err) => console.error('Enquiry notification background error:', err));
         res.status(201).json({
             success: true,
             message: 'Thank you! Your enquiry has been received. Our association officers will contact you shortly.'
@@ -531,6 +547,17 @@ const submitJoinEnquiry = async (req, res) => {
             message ? message.trim() : 'Admission enquiry for Aadhiran traditional syllabus training.',
             ip
         ]);
+        // Dispatch asynchronous email notifications (admin alert + applicant confirmation)
+        (0, emailService_1.sendEnquiryNotification)({
+            enquiry_type: 'join_training',
+            full_name: fullName.trim(),
+            email: email.trim().toLowerCase(),
+            phone: phone.trim(),
+            age_group: ageGroup || 'adult',
+            experience_level: experienceLevel || 'beginner',
+            preferred_location: preferredLocation || 'George Town',
+            message: message ? message.trim() : 'Admission enquiry for Aadhiran traditional syllabus training.',
+        }).catch((err) => console.error('Join enquiry notification background error:', err));
         res.status(201).json({
             success: true,
             message: 'Admission enquiry received! Our chief instructor will reach out regarding batch timing and venue location.'
@@ -542,3 +569,86 @@ const submitJoinEnquiry = async (req, res) => {
     }
 };
 exports.submitJoinEnquiry = submitJoinEnquiry;
+/**
+ * Public streaming proxy for Backblaze B2 private bucket assets.
+ * Fetches the object using authenticated credentials, caches locally for ultra-fast subsequent hits,
+ * and sets long-lived HTTP caching headers (Cache-Control: immutable, ETag).
+ */
+const streamMediaAsset = async (req, res) => {
+    try {
+        const rawPath = (req.params[0] || req.params.key || '').replace(/^\/+/, '');
+        if (!rawPath) {
+            res.status(400).json({ success: false, message: 'Missing media asset key.' });
+            return;
+        }
+        // Security validation against directory traversal and null-byte injection
+        if (rawPath.includes('..') || rawPath.includes('\\') || rawPath.includes('\0')) {
+            res.status(400).json({ success: false, message: 'Invalid asset path.' });
+            return;
+        }
+        const key = rawPath.startsWith('silambam/') ? rawPath : `silambam/${rawPath}`;
+        const keyBasename = path_1.default.basename(key);
+        // Cache directory inside uploads/b2_cache
+        const cacheDir = path_1.default.resolve(__dirname, '../../uploads/b2_cache');
+        const cacheFilePath = path_1.default.join(cacheDir, keyBasename);
+        // Check disk cache first for sub-millisecond response
+        if (fs_1.default.existsSync(cacheFilePath)) {
+            const stat = fs_1.default.statSync(cacheFilePath);
+            const mimeType = mime_types_1.default.lookup(cacheFilePath) || 'application/octet-stream';
+            const etag = `"${stat.size}-${stat.mtimeMs}"`;
+            if (req.headers['if-none-match'] === etag) {
+                res.status(304).end();
+                return;
+            }
+            res.setHeader('Content-Type', mimeType);
+            res.setHeader('Content-Length', stat.size);
+            res.setHeader('ETag', etag);
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+            fs_1.default.createReadStream(cacheFilePath).pipe(res);
+            return;
+        }
+        // Otherwise fetch object from private B2 bucket
+        try {
+            const b2Object = await (0, b2Storage_1.getObjectFromB2)(key);
+            const mimeType = b2Object.contentType || mime_types_1.default.lookup(key) || 'application/octet-stream';
+            const etag = b2Object.eTag || `"${Date.now()}"`;
+            if (req.headers['if-none-match'] === etag) {
+                res.status(304).end();
+                return;
+            }
+            res.setHeader('Content-Type', mimeType);
+            if (b2Object.contentLength) {
+                res.setHeader('Content-Length', b2Object.contentLength);
+            }
+            res.setHeader('ETag', etag);
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+            if (!fs_1.default.existsSync(cacheDir)) {
+                fs_1.default.mkdirSync(cacheDir, { recursive: true });
+            }
+            const cacheStream = fs_1.default.createWriteStream(cacheFilePath);
+            const b2Stream = b2Object.body;
+            b2Stream.pipe(cacheStream);
+            b2Stream.pipe(res);
+        }
+        catch (b2Err) {
+            // Fallback: check if the legacy file exists in uploads/
+            const legacyPath = path_1.default.resolve(__dirname, '../../uploads', keyBasename);
+            if (fs_1.default.existsSync(legacyPath)) {
+                const stat = fs_1.default.statSync(legacyPath);
+                const mimeType = mime_types_1.default.lookup(legacyPath) || 'application/octet-stream';
+                res.setHeader('Content-Type', mimeType);
+                res.setHeader('Content-Length', stat.size);
+                res.setHeader('Cache-Control', 'public, max-age=86400');
+                fs_1.default.createReadStream(legacyPath).pipe(res);
+                return;
+            }
+            console.warn(`[streamMediaAsset] Asset not found in B2 or local uploads for key: ${key} (${b2Err.message})`);
+            res.status(404).json({ success: false, message: 'Media asset not found.' });
+        }
+    }
+    catch (error) {
+        console.error('streamMediaAsset error:', error);
+        res.status(500).json({ success: false, message: 'Failed to stream media asset.' });
+    }
+};
+exports.streamMediaAsset = streamMediaAsset;

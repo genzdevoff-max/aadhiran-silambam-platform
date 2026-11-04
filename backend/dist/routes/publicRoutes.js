@@ -22,6 +22,8 @@ router.get('/heritage', publicController_1.getHeritageProjects);
 router.get('/heritage/:slug', publicController_1.getHeritageBySlug);
 router.get('/partners-press', publicController_1.getPartnersPress);
 router.get('/settings', publicController_1.getSettings);
+// Public B2 Cloud Media Streaming (authenticated proxy with caching)
+router.get('/media/stream/*', publicController_1.streamMediaAsset);
 // Public form submissions with validation
 router.post('/enquiries', (0, validate_1.validateBody)(validate_1.contactEnquirySchema), publicController_1.submitContactEnquiry);
 router.post('/join-enquiry', (0, validate_1.validateBody)(validate_1.joinEnquirySchema), publicController_1.submitJoinEnquiry);

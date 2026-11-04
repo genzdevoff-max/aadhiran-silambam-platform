@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { query } from '../config/db';
 import { AuthenticatedRequest } from '../middleware/auth';
+import { getEmailSettings, saveEmailSettings, sendTestEmail } from '../services/emailService';
+import { uploadToB2, deleteFromB2 } from '../services/b2Storage';
 import fs from 'fs';
 import path from 'path';
 
@@ -613,7 +615,7 @@ export const deleteAlbum = async (req: AuthenticatedRequest, res: Response): Pro
   }
 };
 
-// --- Multi-File Media Upload & Reference Tracking ---
+// --- Multi-File & Single-File Media Upload to B2 Cloud Storage ---
 export const uploadMedia = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const files = req.files as Express.Multer.File[];
@@ -626,34 +628,84 @@ export const uploadMedia = async (req: AuthenticatedRequest, res: Response): Pro
     const uploadedAssets = [];
 
     for (const f of files) {
-      const filePath = `/uploads/${f.filename}`;
+      // 1. Upload to Backblaze B2 cloud storage
+      const b2 = await uploadToB2(f, true);
+      const b2FileName = path.basename(b2.key);
+
+      // 2. Persist in database with B2 key and permanent cloud delivery URL
       const insertRes = await query(`
         INSERT INTO media_assets (
-          file_name, original_name, file_path, mime_type, file_size, alt_text, caption, album_id, is_featured
+          file_name, original_name, file_path, mime_type, file_size, alt_text, caption, album_id, is_featured, b2_key, b2_url
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, false)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, false, $9, $10)
         RETURNING *
       `, [
-        f.filename,
+        b2FileName,
         f.originalname,
-        filePath,
+        b2.url,
         f.mimetype,
         f.size,
         alt_text || f.originalname,
         caption || '',
-        album_id || null
+        album_id || null,
+        b2.key,
+        b2.url
       ]);
       uploadedAssets.push(insertRes.rows[0]);
     }
 
     res.status(201).json({
       success: true,
-      message: `Successfully uploaded ${uploadedAssets.length} media asset(s).`,
+      message: `Successfully uploaded ${uploadedAssets.length} media asset(s) to cloud storage.`,
       media: uploadedAssets
     });
   } catch (error: any) {
     console.error('uploadMedia error:', error);
-    res.status(500).json({ success: false, message: error.message || 'Failed to upload media files.' });
+    res.status(500).json({ success: false, message: error.message || 'Failed to upload media files to cloud storage.' });
+  }
+};
+
+export const uploadSingleMedia = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const file = req.file;
+    if (!file) {
+      res.status(400).json({ success: false, message: 'No file provided for upload.' });
+      return;
+    }
+
+    const { album_id, caption, alt_text } = req.body;
+    const b2 = await uploadToB2(file, true);
+    const b2FileName = path.basename(b2.key);
+
+    const insertRes = await query(`
+      INSERT INTO media_assets (
+        file_name, original_name, file_path, mime_type, file_size, alt_text, caption, album_id, is_featured, b2_key, b2_url
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, false, $9, $10)
+      RETURNING *
+    `, [
+      b2FileName,
+      file.originalname,
+      b2.url,
+      file.mimetype,
+      file.size,
+      alt_text || file.originalname,
+      caption || '',
+      album_id || null,
+      b2.key,
+      b2.url
+    ]);
+
+    res.status(201).json({
+      success: true,
+      message: 'Image uploaded successfully to Backblaze B2.',
+      url: b2.url,
+      key: b2.key,
+      media: insertRes.rows[0]
+    });
+  } catch (error: any) {
+    console.error('uploadSingleMedia error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Failed to upload media file.' });
   }
 };
 
@@ -735,16 +787,33 @@ export const deleteMediaAsset = async (req: AuthenticatedRequest, res: Response)
       return;
     }
 
-    const mediaRes = await query('SELECT file_name FROM media_assets WHERE id = $1', [id]);
+    const mediaRes = await query('SELECT file_name, b2_key FROM media_assets WHERE id = $1', [id]);
     if (mediaRes.rowCount === 0) {
       res.status(404).json({ success: false, message: 'Media asset not found.' });
       return;
     }
 
-    const fileName = mediaRes.rows[0].file_name;
+    const { file_name: fileName, b2_key: b2Key } = mediaRes.rows[0];
     await query('DELETE FROM media_assets WHERE id = $1', [id]);
 
-    // Attempt to unlink physical file if exists in uploads
+    // Delete object from Backblaze B2 if key exists
+    if (b2Key) {
+      try {
+        await deleteFromB2(b2Key);
+      } catch (b2Err: any) {
+        console.warn('Could not delete asset from Backblaze B2:', b2Err.message);
+      }
+    }
+
+    // Clean up local cache if exists
+    const cachePath = path.resolve(__dirname, '../../uploads/b2_cache', fileName);
+    if (fs.existsSync(cachePath)) {
+      try {
+        fs.unlinkSync(cachePath);
+      } catch (err) {}
+    }
+
+    // Attempt to unlink physical legacy file if exists in uploads
     const diskPath = path.resolve(__dirname, '../../uploads', fileName);
     if (fs.existsSync(diskPath)) {
       try {
@@ -823,5 +892,79 @@ export const deleteEnquiry = async (req: AuthenticatedRequest, res: Response): P
     res.json({ success: true, message: 'Enquiry deleted successfully.' });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to delete enquiry.' });
+  }
+};
+
+// --- Email & SMTP Management ---
+export const getEmailConfig = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const settings = await getEmailSettings();
+    // Return settings with password masked
+    res.json({
+      success: true,
+      settings: {
+        ...settings,
+        hasPassword: Boolean(settings.smtpPass),
+        smtpPass: settings.smtpPass ? '••••••••' : '',
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message || 'Failed to retrieve email settings.' });
+  }
+};
+
+export const updateEmailConfig = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const payload = req.body;
+    const current = await getEmailSettings();
+
+    // If password is sent as the mask or empty, keep existing password
+    if (!payload.smtpPass || payload.smtpPass === '••••••••') {
+      delete payload.smtpPass;
+    }
+
+    const updated = await saveEmailSettings({
+      ...payload,
+      smtpPass: payload.smtpPass || current.smtpPass,
+    });
+
+    res.json({
+      success: true,
+      message: 'Email and SMTP settings saved successfully.',
+      settings: {
+        ...updated,
+        hasPassword: Boolean(updated.smtpPass),
+        smtpPass: updated.smtpPass ? '••••••••' : '',
+      },
+    });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message || 'Failed to update email settings.' });
+  }
+};
+
+export const testEmailConnection = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    const { targetEmail, customConfig } = req.body;
+    const current = await getEmailSettings();
+    const recipient = targetEmail || current.adminNotificationEmail || current.smtpUser;
+
+    if (!recipient) {
+      res.status(400).json({ success: false, message: 'Please specify a recipient email address for testing.' });
+      return;
+    }
+
+    // Merge customConfig with existing password if password is mask
+    if (customConfig && (!customConfig.smtpPass || customConfig.smtpPass === '••••••••')) {
+      customConfig.smtpPass = current.smtpPass;
+    }
+
+    const result = await sendTestEmail(recipient, customConfig);
+    res.json(result);
+  } catch (error: any) {
+    console.error('testEmailConnection error:', error);
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Failed to establish connection to SMTP server.',
+    });
   }
 };

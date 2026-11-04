@@ -68,8 +68,8 @@ export const heroContent = {
   tamilTitle: 'ஆதிரன் சிலம்பம் • GEORGE TOWN, PENANG',
   subtitle:
     'The authentic Guru-Student martial heritage originating from the Kurunji Mountains of South India, safeguarded in George Town, Penang since 1936.',
-  bgImage: '/uploads/silambam-back.jpg',
-  videoUrl: '/uploads/VID-20231026-WA0019.mp4',
+  bgImage: '/api/public/media/stream/silambam/b417be8b-6b26-4914-848f-fdc546a2abd2.jpg',
+  videoUrl: '/api/public/media/stream/silambam/a1983947-2a3d-4b64-bbee-5d71b43fa908.mp4',
   stats: [
     { label: 'Lineage Heritage', value: '5,000 Yrs' },
     { label: 'Penang Custodianship', value: 'Since 1936' },

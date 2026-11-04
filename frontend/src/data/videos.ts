@@ -14,8 +14,8 @@ export const videosList: AuthenticVideo[] = [
     id: 'v1',
     title: 'Aadhiran Silambam of Penang: The Untold Story',
     tamil_title: 'ஆதிரன் சிலம்பம் • சொல்லப்படாத வரலாறு',
-    src: '/uploads/VID-20231026-WA0019.mp4',
-    poster: '/uploads/silambam-back.jpg',
+    src: '/api/public/media/stream/silambam/a1983947-2a3d-4b64-bbee-5d71b43fa908.mp4',
+    poster: '/api/public/media/stream/silambam/b417be8b-6b26-4914-848f-fdc546a2abd2.jpg',
     category: 'Documentary',
     duration: 'Historical Feature',
     description:
@@ -25,8 +25,8 @@ export const videosList: AuthenticVideo[] = [
     id: 'v2',
     title: 'Authentic Kurunji Stances & Twirling Manoeuvres',
     tamil_title: 'கம்பு வீச்சு மற்றும் கால்வரிசை நுட்பங்கள்',
-    src: '/uploads/VID-20231026-WA0020.mp4',
-    poster: '/uploads/portfolio-2.jpg',
+    src: '/api/public/media/stream/silambam/33c38e76-0cca-4f21-8890-5d5fa51befcc.mp4',
+    poster: '/api/public/media/stream/silambam/8e1ad48b-144a-45c6-beb7-fc35c8558653.jpg',
     category: 'Technique',
     duration: 'Training Reel',
     description:
@@ -36,8 +36,8 @@ export const videosList: AuthenticVideo[] = [
     id: 'v3',
     title: 'Athletic Training & Traditional Combat Stances',
     tamil_title: 'பாரம்பரிய சிலம்ப தற்காப்பு பயிற்சி',
-    src: '/uploads/athletica.mp4',
-    poster: '/uploads/portfolio-1.jpg',
+    src: '/api/public/media/stream/silambam/fb875dcc-a09a-4af3-9728-5a15bc9fb19b.mp4',
+    poster: '/api/public/media/stream/silambam/a059447c-775a-4b7b-8b9f-29577190746a.jpg',
     category: 'Combat',
     duration: 'Full Demonstration',
     description:

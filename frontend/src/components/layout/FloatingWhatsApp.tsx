@@ -37,11 +37,11 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
         {/* Desktop Hover Tooltip */}
         <span
           role="tooltip"
-          className="pointer-events-none absolute right-full mr-3 hidden sm:inline-flex items-center px-3 py-1.5 rounded-lg bg-[#0B1B3D] border border-[#142C66] text-white text-xs font-semibold whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          className="pointer-events-none absolute right-full mr-3 hidden sm:inline-flex items-center px-3 py-1.5 rounded-lg bg-[#102137] border border-[#183B5B] text-white text-xs font-medium whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         >
           <span>Chat on WhatsApp</span>
           <span
-            className="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 bg-[#0B1B3D] border-r border-t border-[#142C66] rotate-45"
+            className="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 bg-[#102137] border-r border-t border-[#183B5B] rotate-45"
             aria-hidden="true"
           />
         </span>

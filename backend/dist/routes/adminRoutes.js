@@ -54,6 +54,7 @@ router.put('/albums/:id', adminController_1.updateAlbum);
 router.delete('/albums/:id', adminController_1.deleteAlbum);
 // Media Assets & Uploads
 router.post('/media/upload', upload_1.upload.array('files', 15), upload_1.validateUploadedFiles, adminController_1.uploadMedia);
+router.post('/media/upload-single', upload_1.upload.single('file'), upload_1.validateUploadedFiles, adminController_1.uploadSingleMedia);
 router.get('/media', adminController_1.listMediaAssets);
 router.put('/media/:id', adminController_1.updateMediaAsset);
 router.get('/media/:id/references', adminController_1.getMediaReferences);
@@ -62,4 +63,8 @@ router.delete('/media/:id', adminController_1.deleteMediaAsset);
 router.get('/enquiries', adminController_1.listEnquiries);
 router.put('/enquiries/:id', adminController_1.updateEnquiry);
 router.delete('/enquiries/:id', adminController_1.deleteEnquiry);
+// Email & Notifications Management
+router.get('/email/settings', adminController_1.getEmailConfig);
+router.put('/email/settings', adminController_1.updateEmailConfig);
+router.post('/email/test', adminController_1.testEmailConnection);
 exports.default = router;

@@ -130,6 +130,7 @@ export interface MediaAsset {
   caption?: string;
   album_id?: string;
   album_title?: string;
+  album_slug?: string;
   is_featured: boolean;
   created_at?: string;
   reference_count?: number;
@@ -185,6 +186,8 @@ export interface SiteSettingsData {
     twitter: string;
     whatsapp?: string;
   };
+  logoUrl?: string;
+  faviconUrl?: string;
   footerNotice?: string;
 }
 
@@ -199,7 +202,7 @@ export interface HeroConfig {
   ctaLink?: string;
   secondaryCtaText?: string;
   secondaryCtaLink?: string;
-  stats: Array<{ label: string; value: string }>;
+  stats: Array<{ label: string; value: string; detail?: string }>;
 }
 
 export interface SectionVisibilityItem {
@@ -217,4 +220,19 @@ export interface QuickFact {
   year: string;
   link: string;
 }
+
+export interface EmailSettings {
+  smtpHost: string;
+  smtpPort: number;
+  smtpSecure: boolean;
+  smtpUser: string;
+  smtpPass: string;
+  hasPassword?: boolean;
+  fromEmail: string;
+  fromName: string;
+  adminNotificationEmail: string;
+  enableAdminNotification: boolean;
+  enableApplicantConfirmation: boolean;
+}
+
 
