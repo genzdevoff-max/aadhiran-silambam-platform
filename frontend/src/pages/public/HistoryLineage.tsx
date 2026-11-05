@@ -83,27 +83,27 @@ export const HistoryLineage: React.FC = () => {
   ];
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332]">
+    <div className="bg-[#F8FAFC] text-[#182332]">
       {/* 1. Header Banner - Deep Heritage Navy */}
       <section className="relative py-20 sm:py-28 bg-[#102137] border-b border-[#183B5B] text-white overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/80 border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-5 backdrop-blur-md">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-5 backdrop-blur-md">
             <Compass className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>Guru-Student Lineage (குருகுலம்)</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold text-white tracking-tight">
-            History & 5,000-Year Lineage
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tight uppercase">
+            5,000-Year Ancient Lineage
           </h1>
-          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-medium tracking-wide">
-            ஆதிரன் சிலம்ப வரலாறு <span className="text-[#64748B] font-sans mx-2">•</span> From Kurunji Mountains to Penang
+          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
+            ஆதிரன் சிலம்ப வரலாறு <span className="text-slate-400 font-sans mx-2">•</span> From Kurunji Mountains to Penang
           </p>
 
-          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-white/80 leading-relaxed font-normal">
+          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
             How a primordial warrior science facing colonial eradication in India found safe haven in George Town, Penang in 1936.
           </p>
 
-          <div className="flex items-center justify-center space-x-2 text-xs text-white/70 mt-6">
+          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-6 font-medium">
             <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
             <span className="text-[#D9B96E]">History & Lineage</span>
@@ -111,8 +111,8 @@ export const HistoryLineage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. The Lineage Custodians: Dual Spotlight - Ivory Background */}
-      <section className="py-20 border-b border-[#E8E3D9] bg-[#FDFBF7]">
+      {/* 2. The Lineage Custodians: Dual Spotlight */}
+      <section className="py-20 border-b border-slate-200 bg-[#F8FAFC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Story Exposition */}

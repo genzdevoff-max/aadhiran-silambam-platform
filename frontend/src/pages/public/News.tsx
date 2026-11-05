@@ -36,30 +36,30 @@ export const News: React.FC = () => {
   const categories = Array.from(new Set(articles.map((a) => a.category).filter(Boolean)));
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332]">
+    <div className="bg-[#F8FAFC] text-[#182332]">
       {/* Header Banner - Deep Heritage Navy */}
       <section className="relative py-20 sm:py-24 bg-[#102137] border-b border-[#183B5B] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/80 border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-4 shadow-sm">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-4 shadow-sm">
             <BookOpen className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
-            <span>Association Chronicles & Research</span>
+            <span>Academy Chronicles & Research</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-display font-bold text-white tracking-tight">
-            News & Blog Articles
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-white tracking-tight uppercase">
+            News & Updates
           </h1>
-          <p className="mt-3 text-lg font-display text-[#D9B96E] font-medium tracking-wide">
+          <p className="mt-3 text-lg font-display text-[#D9B96E] font-semibold tracking-wide">
             செய்திகள் மற்றும் கட்டுரைகள் • Historical Research & Official Dispatches
           </p>
-          <div className="flex items-center justify-center space-x-2 text-xs text-white/70 mt-4">
+          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-4 font-medium">
             <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-[#D9B96E] font-medium">News & Blog</span>
+            <span className="text-[#D9B96E]">News & Blog</span>
           </div>
         </div>
       </section>
 
       {/* Search & Filter Bar */}
-      <section className="py-5 bg-white border-b border-[#E8E3D9] sticky top-[65px] z-30 shadow-xs">
+      <section className="py-5 bg-white border-b border-slate-200 sticky top-[65px] z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="relative w-full md:w-80">
             <Search className="w-4 h-4 text-[#64748B] absolute left-3.5 top-1/2 -translate-y-1/2 shrink-0" />

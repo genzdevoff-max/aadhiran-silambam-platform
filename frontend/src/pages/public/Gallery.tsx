@@ -64,20 +64,20 @@ export const Gallery: React.FC = () => {
   }, [handleKeyDown]);
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332] min-h-screen">
+    <div className="bg-[#F8FAFC] text-[#182332] min-h-screen">
       {/* 1. Header Banner - Heritage Navy */}
-      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#C6A04A]/30">
+      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#183B5B]">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C6A04A_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-5 shadow-xs">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-5 shadow-xs">
             <Camera className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>Living Photographic Archives</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">
-            Photo Gallery & Albums
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tight uppercase">
+            Photo Gallery
           </h1>
-          <p className="mt-3 text-lg sm:text-xl text-[#D9B96E] font-medium tracking-wide">
+          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
             புகைப்பட தொகுப்பு <span className="text-slate-400 mx-2">•</span> Rare Archival Records from 1936 to Present Day
           </p>
 
@@ -94,7 +94,7 @@ export const Gallery: React.FC = () => {
       </section>
 
       {/* 2. Visual Album Overview Cards */}
-      <section className="py-12 bg-white border-b border-[#E8E3D9]">
+      <section className="py-12 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-2">

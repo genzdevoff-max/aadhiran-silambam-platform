@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Mandatory Heritage Navy & Gold Design System
+        // Sports & Martial Arts Identity Design System
         primary: {
           navy: '#102137',
           DEFAULT: '#102137',
@@ -18,10 +18,10 @@ export default {
           DEFAULT: '#183B5B',
         },
         navy: {
-          950: '#0a1524',
+          950: '#0B1726', // Deep Navy
           900: '#102137', // Primary Navy
           850: '#142b46',
-          800: '#183B5B', // Secondary Navy
+          800: '#183B5B', // Secondary Blue
           700: '#224d77',
           600: '#2d6296',
           500: '#3e7ebc',
@@ -32,43 +32,32 @@ export default {
           50: '#f2f7fd',
         },
         gold: {
-          antique: '#C6A04A', // Antique Gold
+          antique: '#C6A04A', // Gold
           light: '#D9B96E',   // Light Gold
           DEFAULT: '#C6A04A',
           950: '#352504',
           900: '#523c0b',
           800: '#7a5a15',
           700: '#a37b25',
-          600: '#C6A04A',     // Antique Gold
-          500: '#D9B96E',     // Light Gold
+          600: '#C6A04A',
+          500: '#D9B96E',
           400: '#e4ca8c',
           300: '#eddcae',
           200: '#f5edd1',
           100: '#faf6e8',
           50: '#fdfbf4',
         },
-        ivory: {
-          DEFAULT: '#FDFBF7', // Ivory Background
-          paper: '#F8F5EE',   // Paper Background
-          900: '#d9d2c4',
-          800: '#e8e2d5',
-          700: '#f0ece3',
-          600: '#F8F5EE',     // Paper
-          500: '#FDFBF7',     // Ivory
-          400: '#ffffff',
-        },
         brand: {
           navy: '#102137',
+          navyDeep: '#0B1726',
           navySecondary: '#183B5B',
-          navyDark: '#0B1726',
           gold: '#C6A04A',
           goldLight: '#D9B96E',
-          ivory: '#FDFBF7',
-          paper: '#F8F5EE',
           white: '#FFFFFF',
+          lightBg: '#F8FAFC',
           text: '#182332',
           textMuted: '#64748B',
-          border: '#E8E3D9',
+          border: '#E2E8F0',
         },
       },
       fontFamily: {
@@ -78,11 +67,11 @@ export default {
         poppins: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
       },
       boxShadow: {
-        'heritage-sm': '0 1px 3px 0 rgba(16, 33, 55, 0.05), 0 1px 2px -1px rgba(16, 33, 55, 0.04)',
-        'heritage': '0 4px 14px -2px rgba(16, 33, 55, 0.08), 0 2px 6px -2px rgba(16, 33, 55, 0.04)',
-        'heritage-lg': '0 12px 30px -4px rgba(16, 33, 55, 0.12), 0 4px 12px -3px rgba(16, 33, 55, 0.06)',
-        'gold-glow': '0 0 25px -4px rgba(198, 160, 74, 0.35)',
-        'navy-glow': '0 0 25px -4px rgba(16, 33, 55, 0.35)',
+        'sports-sm': '0 1px 3px 0 rgba(16, 33, 55, 0.06), 0 1px 2px -1px rgba(16, 33, 55, 0.04)',
+        'sports': '0 4px 14px -2px rgba(16, 33, 55, 0.08), 0 2px 6px -2px rgba(16, 33, 55, 0.04)',
+        'sports-lg': '0 16px 32px -4px rgba(16, 33, 55, 0.12), 0 4px 12px -3px rgba(16, 33, 55, 0.06)',
+        'gold-glow': '0 0 25px -4px rgba(198, 160, 74, 0.4)',
+        'navy-glow': '0 0 25px -4px rgba(16, 33, 55, 0.4)',
       },
     },
   },

@@ -1,0 +1,154 @@
+{
+  "timestamp": "2026-11-05T15:06:24.370Z",
+  "theme": "Anchor Sports World — Modern Sports-Brand Redesign",
+  "loadTimeMs": 2493,
+  "timing": {
+    "fcp": 1704,
+    "domInteractive": 167,
+    "domContentLoaded": 1544,
+    "loadEvent": 1548
+  },
+  "mborVerification": {
+    "rendered": true,
+    "modalTested": true,
+    "certInfo": {
+      "complete": true,
+      "naturalWidth": 551,
+      "naturalHeight": 738,
+      "clientWidth": 431,
+      "clientHeight": 577,
+      "src": "http://localhost:5173/api/public/media/stream/silambam/298977c4-5bd2-4bf7-b091-e5e0cfe77163.png"
+    }
+  },
+  "hasMarquee": true,
+  "sportsCardsCount": 15,
+  "viewportResults": [
+    {
+      "width": 1920,
+      "overflow": false,
+      "screenshot": "sports_home_vp_1920.png"
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "screenshot": "sports_home_vp_1440.png"
+    },
+    {
+      "width": 1280,
+      "overflow": false,
+      "screenshot": "sports_home_vp_1280.png"
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "screenshot": "sports_home_vp_1024.png"
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "screenshot": "sports_home_vp_768.png"
+    },
+    {
+      "width": 430,
+      "overflow": false,
+      "screenshot": "sports_home_vp_430.png"
+    },
+    {
+      "width": 375,
+      "overflow": false,
+      "screenshot": "sports_home_vp_375.png"
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "screenshot": "sports_home_vp_320.png"
+    }
+  ],
+  "routeResults": [
+    {
+      "path": "/about",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/history-lineage",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/training-syllabus",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/instructors",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/achievements",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/events",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/gallery",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/videos",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/news",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/heritage-works",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/partners-press",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/contact",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/join-training",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    },
+    {
+      "path": "/privacy-policy",
+      "status": 200,
+      "title": "Aadhiran Silambam — Ancient Tamil Martial Arts Academy | George Town, Penang",
+      "verified": true
+    }
+  ],
+  "failedRequests": []
+}

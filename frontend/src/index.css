@@ -4,71 +4,74 @@
 @layer base {
   :root {
     --color-primary-navy: #102137;
+    --color-deep-navy: #0B1726;
     --color-secondary-navy: #183B5B;
-    --color-antique-gold: #C6A04A;
+    --color-gold: #C6A04A;
     --color-light-gold: #D9B96E;
-    --color-ivory: #FDFBF7;
-    --color-paper: #F8F5EE;
     --color-white: #FFFFFF;
+    --color-light-bg: #F8FAFC;
     --color-primary-text: #182332;
     --color-secondary-text: #64748B;
-    --color-border: #E8E3D9;
+    --color-border: #E2E8F0;
   }
 
   html {
     scroll-behavior: smooth;
     font-family: 'Poppins', system-ui, -apple-system, sans-serif;
     color: #182332;
-    background-color: #FDFBF7;
+    background-color: #F8FAFC;
   }
 
   body {
-    background-color: #FDFBF7;
+    background-color: #F8FAFC;
     color: #182332;
     font-family: 'Poppins', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
-  /* Consistent Responsive Headings scale */
+  /* Athletic & Modern Heading Typography using Outfit */
   h1, .h1 {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Outfit', 'Poppins', sans-serif;
+    font-weight: 800;
+    color: #102137;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+
+  h2, .h2 {
+    font-family: 'Outfit', 'Poppins', sans-serif;
     font-weight: 700;
     color: #102137;
     line-height: 1.2;
     letter-spacing: -0.02em;
   }
 
-  h2, .h2 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
+  h3, .h3 {
+    font-family: 'Outfit', 'Poppins', sans-serif;
+    font-weight: 700;
     color: #102137;
     line-height: 1.25;
     letter-spacing: -0.01em;
   }
 
-  h3, .h3 {
-    font-family: 'Poppins', sans-serif;
+  h4, .h4 {
+    font-family: 'Outfit', 'Poppins', sans-serif;
     font-weight: 600;
     color: #102137;
     line-height: 1.3;
   }
 
-  h4, .h4 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: #102137;
-  }
-
   p {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
     font-weight: 400;
     color: #182332;
   }
 
   button, a {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   }
 }
 
@@ -78,7 +81,7 @@
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #F8F5EE;
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
   background: #C6A04A;
@@ -88,62 +91,111 @@
   background: #183B5B;
 }
 
-/* Button utility classes */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background-color: #102137;
-  color: #FFFFFF;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
-  padding: 0.625rem 1.25rem;
-  border-radius: 0.75rem;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 3px 0 rgba(16, 33, 55, 0.1);
-}
-.btn-primary:hover {
-  background-color: #183B5B;
-  box-shadow: 0 4px 12px -2px rgba(16, 33, 55, 0.2);
+/* Continuous Sports Marquee Strip Animation */
+@keyframes sports-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
-.btn-secondary {
+.animate-sports-marquee {
+  display: flex;
+  width: max-content;
+  animation: sports-marquee 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-sports-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Sports Button Utilities */
+.btn-sports-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   background-color: #C6A04A;
   color: #102137;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
-  padding: 0.625rem 1.25rem;
+  font-family: 'Outfit', 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 1px 3px 0 rgba(198, 160, 74, 0.2);
+  box-shadow: 0 4px 14px -2px rgba(198, 160, 74, 0.4);
 }
-.btn-secondary:hover {
+.btn-sports-primary:hover {
   background-color: #D9B96E;
-  box-shadow: 0 4px 12px -2px rgba(198, 160, 74, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -2px rgba(198, 160, 74, 0.5);
 }
 
-.btn-outline {
+.btn-sports-navy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #102137;
+  color: #FFFFFF;
+  font-family: 'Outfit', 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(198, 160, 74, 0.3);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 14px -2px rgba(16, 33, 55, 0.25);
+}
+.btn-sports-navy:hover {
+  background-color: #183B5B;
+  border-color: #C6A04A;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -2px rgba(16, 33, 55, 0.35);
+}
+
+.btn-sports-outline {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   background-color: transparent;
   color: #102137;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
-  padding: 0.625rem 1.25rem;
+  font-family: 'Outfit', 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
-  border: 1px solid #E8E3D9;
+  border: 2px solid #102137;
   transition: all 0.2s ease-in-out;
 }
-.btn-outline:hover {
+.btn-sports-outline:hover {
+  background-color: #102137;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* Sports Card Base */
+.sports-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px -2px rgba(16, 33, 55, 0.06);
+  transition: all 0.25s ease-in-out;
+}
+.sports-card:hover {
   border-color: #C6A04A;
-  background-color: #F8F5EE;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -4px rgba(16, 33, 55, 0.12);
 }
 
 /* Subtle gold section accent line */
@@ -153,20 +205,7 @@
   border: 0;
 }
 
-/* Heritage Card Base */
-.heritage-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E8E3D9;
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px 0 rgba(16, 33, 55, 0.04);
-  transition: all 0.25s ease-in-out;
-}
-.heritage-card:hover {
-  border-color: #C6A04A;
-  box-shadow: 0 8px 24px -4px rgba(16, 33, 55, 0.08);
-}
-
-/* Visible accessible focus rings */
+/* Accessible Focus Rings */
 :focus-visible {
   outline: 2px solid #C6A04A;
   outline-offset: 2px;

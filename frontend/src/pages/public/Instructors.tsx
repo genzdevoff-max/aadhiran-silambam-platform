@@ -28,36 +28,36 @@ export const Instructors: React.FC = () => {
   );
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332]">
+    <div className="bg-[#F8FAFC] text-[#182332]">
       {/* 1. Header Banner - Deep Heritage Navy */}
       <section className="relative py-20 sm:py-28 bg-[#102137] border-b border-[#183B5B] text-white overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/80 border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-5 backdrop-blur-md">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-5 backdrop-blur-md">
             <Users className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>Guru-Student Tradition (குருகுலம்)</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold text-white tracking-tight">
-            Masters & Living Custodians
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tight uppercase">
+            Masters & Coaching Staff
           </h1>
-          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-medium tracking-wide">
-            ஆசிரியர்கள் மற்றும் குருமார்கள் <span className="text-[#64748B] font-sans mx-2">•</span> Guardians of the Ancient Discipline
+          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
+            ஆசிரியர்கள் மற்றும் குருமார்கள் <span className="text-slate-400 font-sans mx-2">•</span> Guardians of the Ancient Discipline
           </p>
 
-          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-white/80 leading-relaxed font-normal">
+          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
             Certified masters with decades of dedicated Gurukulam practice, tested through authentic traditional pedagogy and recognized by national heritage bodies.
           </p>
 
-          <div className="flex items-center justify-center space-x-2 text-xs text-white/70 mt-6">
+          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-6 font-medium">
             <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-[#D9B96E] font-medium">Instructors</span>
+            <span className="text-[#D9B96E] font-semibold">Instructors & Coaches</span>
           </div>
         </div>
       </section>
 
-      {/* 2. Lineage Custodians Feature Spotlight - Ivory Background */}
-      <section className="py-20 border-b border-[#E8E3D9] bg-[#FDFBF7]">
+      {/* 2. Lineage Custodians Feature Spotlight */}
+      <section className="py-20 border-b border-slate-200 bg-[#F8FAFC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs uppercase font-bold text-[#C6A04A] tracking-widest block mb-2">

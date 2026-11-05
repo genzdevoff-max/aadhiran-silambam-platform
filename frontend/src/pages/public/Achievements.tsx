@@ -31,30 +31,30 @@ export const Achievements: React.FC = () => {
     : achievements.filter((a) => a.category.toLowerCase() === selectedCategory.toLowerCase());
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332]">
+    <div className="bg-[#F8FAFC] text-[#182332]">
       {/* Header Banner - Deep Heritage Navy */}
       <section className="relative py-20 sm:py-24 bg-[#102137] border-b border-[#183B5B] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/80 border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-4 shadow-sm">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-4 shadow-sm">
             <Award className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>Documented Accolades & Records</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-display font-bold text-white tracking-tight">
-            Achievements & Awards
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-white tracking-tight uppercase">
+            Achievements & Records
           </h1>
-          <p className="mt-3 text-lg font-display text-[#D9B96E] font-medium tracking-wide">
+          <p className="mt-3 text-lg font-display text-[#D9B96E] font-semibold tracking-wide">
             சாதனைகளும் விருதுகளும் • Official Verifications & Historic Milestones
           </p>
-          <div className="flex items-center justify-center space-x-2 text-xs text-white/70 mt-4">
+          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-4 font-medium">
             <Link to="/" className="hover:text-[#D9B96E]">Home</Link>
             <span>/</span>
-            <span className="text-[#D9B96E] font-medium">Achievements</span>
+            <span className="text-[#D9B96E]">Achievements</span>
           </div>
         </div>
       </section>
 
       {/* Filter Ribbon */}
-      <section className="py-4 bg-white border-b border-[#E8E3D9] sticky top-[65px] z-30 shadow-xs">
+      <section className="py-4 bg-white border-b border-slate-200 sticky top-[65px] z-30 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-[#C6A04A] shrink-0" />

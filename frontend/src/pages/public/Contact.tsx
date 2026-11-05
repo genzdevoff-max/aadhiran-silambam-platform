@@ -116,25 +116,25 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332] min-h-screen">
+    <div className="bg-[#F8FAFC] text-[#182332] min-h-screen">
       {/* Header Banner - Heritage Navy */}
-      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#C6A04A]/30">
+      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#183B5B]">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C6A04A_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-4 shadow-xs">
             <Mail className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
-            <span>Connect with Association Officers</span>
+            <span>Connect with Academy Officers</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">
-            Contact Aadhiran Silambam
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tight uppercase">
+            Contact Academy Dojo
           </h1>
-          <p className="mt-3 text-lg font-semibold text-[#D9B96E] tracking-wide">
+          <p className="mt-3 text-lg font-display text-[#D9B96E] font-semibold tracking-wide">
             தொடர்பு கொள்ள • George Town Heritage Headquarters
           </p>
           <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-4 font-medium">
             <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-[#D9B96E]">Contact</span>
+            <span className="text-[#D9B96E]">Contact Dojo</span>
           </div>
         </div>
       </section>

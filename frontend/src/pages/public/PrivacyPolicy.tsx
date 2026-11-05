@@ -4,16 +4,16 @@ import { Shield, Lock } from 'lucide-react';
 
 export const PrivacyPolicy: React.FC = () => {
   return (
-    <div className="bg-[#FDFBF7] text-[#182332] min-h-screen">
+    <div className="bg-[#F8FAFC] text-[#182332] min-h-screen">
       {/* Header Banner */}
-      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#C6A04A]/30">
+      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#183B5B]">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C6A04A_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-4 shadow-xs">
             <Lock className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>Personal Data Protection Notice (PDPA Malaysia)</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-display font-black text-white tracking-tight uppercase">
             Privacy Policy
           </h1>
           <p className="mt-3 text-sm text-slate-300 font-mono">

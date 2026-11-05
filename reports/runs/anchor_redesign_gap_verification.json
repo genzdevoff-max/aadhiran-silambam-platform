@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-11-05T15:36:28.382Z",
+  "theme": "Anchor Sports World Full Visual & Structural Match",
+  "loadTimeMs": 18453,
+  "sectionsCheck": {
+    "hero": true,
+    "heroH1Text": "TRAIN. MASTER. RISE.",
+    "marquee": true,
+    "disciplinesSection": true,
+    "disciplinesCardsCount": 8,
+    "overviewSection": true,
+    "mborRecognition": true,
+    "programsSection": true,
+    "programsCardsCount": 4,
+    "theAcademySection": false,
+    "enquirySection": true,
+    "faqSection": true,
+    "faqItemsCount": 6,
+    "reelsSection": true,
+    "testimonialsSection": true,
+    "finalCta": true
+  },
+  "mborVerification": {
+    "rendered": true,
+    "certInfo": {
+      "complete": true,
+      "naturalWidth": 551,
+      "naturalHeight": 738,
+      "clientWidth": 96,
+      "clientHeight": 128,
+      "src": "http://localhost:5173/api/public/media/stream/silambam/298977c4-5bd2-4bf7-b091-e5e0cfe77163.png"
+    },
+    "modalTested": true
+  },
+  "formSubmittedSuccessfully": true,
+  "failedRequests": [],
+  "viewportAudit": [
+    {
+      "width": 1920,
+      "overflow": false,
+      "screenshot": "aadhiran_anchor_vp_1920.png"
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "screenshot": "aadhiran_anchor_vp_1440.png"
+    },
+    {
+      "width": 1280,
+      "overflow": false,
+      "screenshot": "aadhiran_anchor_vp_1280.png"
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "screenshot": "aadhiran_anchor_vp_1024.png"
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "screenshot": "aadhiran_anchor_vp_768.png"
+    },
+    {
+      "width": 430,
+      "overflow": false,
+      "screenshot": "aadhiran_anchor_vp_430.png"
+    },
+    {
+      "width": 375,
+      "overflow": false,
+      "screenshot": "aadhiran_anchor_vp_375.png"
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "screenshot": "aadhiran_anchor_vp_320.png"
+    }
+  ]
+}

@@ -133,35 +133,35 @@ export const JoinTraining: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332] min-h-screen">
+    <div className="bg-[#F8FAFC] text-[#182332] min-h-screen">
       {/* Header Banner - Heritage Navy */}
-      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#C6A04A]/30">
+      <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#183B5B]">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C6A04A_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-4 shadow-xs">
             <Flame className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
-            <span>Traditional Gurukulam Enrolment</span>
+            <span>Academy Athlete Enrolment</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight">
-            Join Aadhiran Silambam Training
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tight uppercase">
+            Join Training Academy
           </h1>
-          <p className="mt-3 text-lg font-semibold text-[#D9B96E] tracking-wide">
+          <p className="mt-3 text-lg font-display text-[#D9B96E] font-semibold tracking-wide">
             பயிற்சியில் சேர விண்ணப்பிக்க • Authentic Instruction in George Town, Penang
           </p>
           <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-4 font-medium">
             <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-[#D9B96E]">Join Training</span>
+            <span className="text-[#D9B96E]">Enrolment</span>
           </div>
         </div>
       </section>
 
       {/* Main Form Section */}
-      <section className="py-20 border-b border-[#E8E3D9]">
+      <section className="py-20 border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[#E8E3D9] shadow-sm space-y-8">
-            <div className="border-b border-[#E8E3D9] pb-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#182332]">
+          <div className="p-8 sm:p-12 rounded-3xl bg-white border border-slate-200 shadow-md space-y-8">
+            <div className="border-b border-slate-200 pb-6">
+              <h2 className="text-2xl sm:text-3xl font-display font-extrabold text-[#102137] uppercase">
                 Student Enrolment Application
               </h2>
               <p className="text-xs text-[#64748B] mt-1 leading-relaxed">

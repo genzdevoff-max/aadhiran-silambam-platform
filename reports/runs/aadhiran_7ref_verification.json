@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-11-05T16:16:21.716Z",
+  "theme": "7 Local References Exact Visual & Structural Alignment",
+  "loadTimeMs": 1939,
+  "sectionsCheck": {
+    "ref1_hero": {
+      "h1": "TRAIN. MASTER. RISE.",
+      "hasPill": true,
+      "hasRatingPill": true,
+      "hasDualButtons": true
+    },
+    "ref2_choose_arena": {
+      "heading": "CHOOSE YOUR ARENA",
+      "masonryCardsCount": 8
+    },
+    "ref3_overview": {
+      "heading": "MORE THAN A MARTIAL ARTS ACADEMY",
+      "metricCardsCount": 11,
+      "hasMborBadge": true
+    },
+    "ref4_programs": {
+      "heading": "PROGRAMS & CLASSES",
+      "subhead": "Gurukulam Tracks",
+      "cardsCount": 8
+    },
+    "ref5_academy": {
+      "heading": "THE ACADEMY",
+      "numberedCardsCount": 4
+    },
+    "ref6_enquiry": {
+      "hasTogglePill": true,
+      "hasWhatsAppBtn": true,
+      "hasFormCard": true,
+      "hasSendEnquiryBtn": true
+    },
+    "ref7_cta_banner": {
+      "hasCtaBanner": true
+    }
+  },
+  "mborVerification": {
+    "rendered": true,
+    "certInfo": {
+      "complete": true,
+      "naturalWidth": 551,
+      "naturalHeight": 738,
+      "src": "http://localhost:5173/api/public/media/stream/silambam/298977c4-5bd2-4bf7-b091-e5e0cfe77163.png"
+    }
+  },
+  "formSubmitted": true,
+  "failedRequests": [],
+  "viewportAudit": [
+    {
+      "width": 1920,
+      "overflow": false,
+      "screenshot": "aadhiran_7ref_vp_1920.png"
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "screenshot": "aadhiran_7ref_vp_1440.png"
+    },
+    {
+      "width": 1280,
+      "overflow": false,
+      "screenshot": "aadhiran_7ref_vp_1280.png"
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "screenshot": "aadhiran_7ref_vp_1024.png"
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "screenshot": "aadhiran_7ref_vp_768.png"
+    },
+    {
+      "width": 430,
+      "overflow": false,
+      "screenshot": "aadhiran_7ref_vp_430.png"
+    },
+    {
+      "width": 375,
+      "overflow": false,
+      "screenshot": "aadhiran_7ref_vp_375.png"
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "screenshot": "aadhiran_7ref_vp_320.png"
+    }
+  ]
+}

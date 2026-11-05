@@ -43,27 +43,27 @@ export const TrainingSyllabus: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332]">
+    <div className="bg-[#F8FAFC] text-[#182332]">
       {/* 1. Header Banner - Deep Heritage Navy */}
       <section className="relative py-20 sm:py-28 bg-[#102137] border-b border-[#183B5B] text-white overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/80 border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-5 backdrop-blur-md">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-5 backdrop-blur-md">
             <Layers className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>Uncorrupted 10-Stage Gurukulam Curriculum</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tight uppercase">
             10-Stage Traditional Syllabus
           </h1>
-          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-medium tracking-wide">
-            பத்து நிலை பாடத்திட்டம் <span className="text-[#64748B] font-sans mx-2">•</span> From Elementary Twirling to Master Synthesis
+          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
+            பத்து நிலை பாடத்திட்டம் <span className="text-slate-400 font-sans mx-2">•</span> From Elementary Twirling to Master Synthesis
           </p>
 
-          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-white/80 leading-relaxed font-normal">
+          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
             Safeguarded without dilution in George Town since 1936. Progress is judged purely through physical mastery, weapon kinematics, and battlefield ethics.
           </p>
 
-          <div className="flex items-center justify-center space-x-2 text-xs text-white/70 mt-6">
+          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-6 font-medium">
             <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
             <span className="text-[#D9B96E]">Training & Syllabus</span>
@@ -72,7 +72,7 @@ export const TrainingSyllabus: React.FC = () => {
       </section>
 
       {/* 2. Philosophy Callout: The No-Belting Custom */}
-      <section className="py-12 bg-white border-b border-[#E8E3D9]">
+      <section className="py-12 bg-white border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="p-6 sm:p-8 rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] shadow-sm flex flex-col md:flex-row items-center gap-6">
             <div className="w-14 h-14 rounded-2xl bg-[#102137] text-[#C6A04A] flex items-center justify-center flex-shrink-0 shadow-md">

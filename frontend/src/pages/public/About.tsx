@@ -40,30 +40,30 @@ export const About: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-[#FDFBF7] text-[#182332]">
+    <div className="bg-[#F8FAFC] text-[#182332]">
       {/* Header Banner - Deep Heritage Navy & Gold Accent */}
       <section className="relative py-20 sm:py-24 bg-[#102137] border-b border-[#183B5B] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/80 border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider mb-4 shadow-sm">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-4 shadow-sm">
             <Shield className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
             <span>{info.siteName}</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-display font-bold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-white tracking-tight uppercase">
             About Aadhiran Silambam
           </h1>
-          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-medium tracking-wide">
+          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
             {info.tamilName} • Preserving Ancient Tamil Martial Wisdom
           </p>
-          <div className="flex items-center justify-center space-x-2 text-xs text-white/70 mt-4">
+          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-4 font-medium">
             <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-[#D9B96E]">About Aadhiran</span>
+            <span className="text-[#D9B96E]">About Academy</span>
           </div>
         </div>
       </section>
 
-      {/* Main Narrative & Association Heritage - Ivory Background */}
-      <section className="py-20 border-b border-[#E8E3D9] bg-[#FDFBF7]">
+      {/* Main Narrative & Association Heritage */}
+      <section className="py-20 border-b border-slate-200 bg-[#F8FAFC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-6">

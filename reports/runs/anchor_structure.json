@@ -1,0 +1,402 @@
+{
+  "title": "Anchor Sports World | Multi-Sports Arena in Coimbatore",
+  "headings": [
+    {
+      "tag": "H2",
+      "text": "Install Anchor Sports World",
+      "classes": "text-sm font-bold"
+    },
+    {
+      "tag": "H1",
+      "text": "Anchor Sports World — multi-sports arena in Coimbatore.\nPLAY TRAIN\nRISE",
+      "classes": "mt-7 w-full text-center leading-[0.88]"
+    },
+    {
+      "tag": "H2",
+      "text": "CHOOSE YOUR ARENA",
+      "classes": "split-parent overflow-hidden inline-block whitespace-normal mt-3 w-full text-center text-3xl font-extrabold tracking-tight text-[#0a1233] sm:text-5xl"
+    },
+    {
+      "tag": "H2",
+      "text": "More than a sports complex",
+      "classes": "mt-3 text-3xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl"
+    },
+    {
+      "tag": "H2",
+      "text": "Everything under one roof",
+      "classes": "mt-3 text-2xl font-extrabold tracking-tight text-white sm:text-4xl"
+    },
+    {
+      "tag": "H3",
+      "text": "Cricket Practice Nets",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Basketball Court",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Swimming Pool",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Pickleball, Volleyball & TT",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Martial Arts",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Experienced Coaches",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Day & Night Play",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Family-Friendly",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Ample Parking",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Events & Celebrations",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H3",
+      "text": "Safe & Well-Maintained",
+      "classes": "text-[14px] font-bold leading-snug text-white"
+    },
+    {
+      "tag": "H2",
+      "text": "PROGRAMS & CLASSES",
+      "classes": "mt-3 text-3xl font-extrabold tracking-tight text-[#0a1233] sm:text-5xl"
+    },
+    {
+      "tag": "H3",
+      "text": "Sports11",
+      "classes": "text-xl font-extrabold tracking-tight text-[#0a1233] sm:text-2xl"
+    },
+    {
+      "tag": "H4",
+      "text": "Chess",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Badminton",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Basketball",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Cricket",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Football",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Volleyball",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Skating",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Swimming",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Archery",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Silambam & Karate",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Fitness for Ladies",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H3",
+      "text": "Arts & Culture5",
+      "classes": "text-xl font-extrabold tracking-tight text-[#0a1233] sm:text-2xl"
+    },
+    {
+      "tag": "H4",
+      "text": "Cultural",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Vocal Music",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Bharathanatiyam",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Western Dance",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H4",
+      "text": "Global Art",
+      "classes": "absolute inset-x-0 bottom-0 p-3.5 text-[15px] font-bold leading-snug text-white md:p-4 md:text-base"
+    },
+    {
+      "tag": "H2",
+      "text": "The Academy",
+      "classes": "sr-only"
+    },
+    {
+      "tag": "H3",
+      "text": "Pro-grade arenas",
+      "classes": "relative mt-5 text-lg font-bold tracking-tight text-white md:text-xl"
+    },
+    {
+      "tag": "H3",
+      "text": "Book in seconds",
+      "classes": "relative mt-5 text-lg font-bold tracking-tight text-white md:text-xl"
+    },
+    {
+      "tag": "H3",
+      "text": "Open 16 hours a day",
+      "classes": "relative mt-5 text-lg font-bold tracking-tight text-white md:text-xl"
+    },
+    {
+      "tag": "H3",
+      "text": "A community of players",
+      "classes": "relative mt-5 text-lg font-bold tracking-tight text-white md:text-xl"
+    },
+    {
+      "tag": "H2",
+      "text": "Enquire about\nChess",
+      "classes": "mt-5 text-3xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl"
+    },
+    {
+      "tag": "H2",
+      "text": "FREQUENTLY ASKED",
+      "classes": "mt-3 text-3xl font-extrabold tracking-tight text-[#0a1233] sm:text-5xl"
+    },
+    {
+      "tag": "H3",
+      "text": "What sports facilities are available at Anchor Sports World?",
+      "classes": ""
+    },
+    {
+      "tag": "H3",
+      "text": "Can I book the turf or courts for private matches and practice sessions?",
+      "classes": ""
+    },
+    {
+      "tag": "H3",
+      "text": "Do you provide coaching and training programs?",
+      "classes": ""
+    },
+    {
+      "tag": "H3",
+      "text": "Is Anchor Sports World suitable for kids and families?",
+      "classes": ""
+    },
+    {
+      "tag": "H3",
+      "text": "Are the facilities available for night play?",
+      "classes": ""
+    },
+    {
+      "tag": "H3",
+      "text": "Can I host events or parties at Anchor Sports World?",
+      "classes": ""
+    },
+    {
+      "tag": "H2",
+      "text": "LATEST REELS",
+      "classes": "mt-3 text-3xl font-extrabold tracking-tight text-[#0a1233] sm:text-5xl"
+    },
+    {
+      "tag": "H2",
+      "text": "LOVED BY PLAYERS",
+      "classes": "split-parent overflow-hidden inline-block whitespace-normal mt-3 w-full text-center text-3xl font-extrabold tracking-tight text-[#0a1233] sm:text-5xl"
+    },
+    {
+      "tag": "H2",
+      "text": "READY TO PLAY?",
+      "classes": "split-parent overflow-hidden inline-block whitespace-normal w-full text-center text-4xl font-extrabold tracking-tight text-white sm:text-6xl"
+    }
+  ],
+  "sections": [
+    {
+      "index": 0,
+      "tag": "HEADER",
+      "id": "",
+      "className": "fixed inset-x-0 top-0 z-50 transition-all duration-300 bg-transparent",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(10, 10, 10)",
+      "height": 64,
+      "textPreview": "ANCHOR SPORTS WORLD Book Now"
+    },
+    {
+      "index": 1,
+      "tag": "SECTION",
+      "id": "",
+      "className": "relative flex min-h-[100dvh] flex-col overflow-hidden",
+      "bg": "rgb(6, 11, 38)",
+      "color": "rgb(10, 10, 10)",
+      "height": 854.78125,
+      "textPreview": "⚓ 15+ SPORTS UNDER ONE ROOF – TRAIN, PLAY, AND THRIVE. Anchor Sports World — multi-sports arena in Coimbatore. PLAY TRAIN RISE Where Passion Meets Performance. For Champions of All Ages. Pro-grade c"
+    },
+    {
+      "index": 2,
+      "tag": "SECTION",
+      "id": "",
+      "className": "relative bg-[#0a1233]",
+      "bg": "rgb(10, 18, 51)",
+      "color": "rgb(10, 10, 10)",
+      "height": 515.28125,
+      "textPreview": "BADMINTON ◆ TURF ◆ CRICKET NETS ◆ PICKLEBALL ◆ SWIMMING ◆ BASKETBALL ◆ VOLLEYBALL ◆ FOOTBALL ◆ SKATING RINK ◆ TABLE TENNIS ◆ SNOOKER ◆ VOCAL MUSIC ◆ WESTERN DANCE ◆ BHARATANATYAM ◆ BADMINTON ◆ TURF ◆ "
+    },
+    {
+      "index": 3,
+      "tag": "SECTION",
+      "id": "sports",
+      "className": "scroll-mt-20 bg-white py-20 md:py-28",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(10, 10, 10)",
+      "height": 1370,
+      "textPreview": "8 ARENAS, ONE VENUE CHOOSE YOUR ARENA Live availability and pricing for every court — open one to pick your slot. 🏸 Badminton 4 Courts · Book now 🏀 Basketball 1 Court · Book now 🏏 Cricket Ne"
+    },
+    {
+      "index": 4,
+      "tag": "SECTION",
+      "id": "about",
+      "className": "relative scroll-mt-20 overflow-hidden bg-[#0a1233] py-20 md:py-28",
+      "bg": "rgb(10, 18, 51)",
+      "color": "rgb(10, 10, 10)",
+      "height": 2894.25,
+      "textPreview": "OVERVIEW More than a sports complex DINIDH ANCHOR SPORTS WORLD PVT LTD Chinnavedampatti, Coimbatore Anchor Sports World is Coimbatore's premier multi-sports arena, bringing together 15+ sports and "
+    },
+    {
+      "index": 5,
+      "tag": "SECTION",
+      "id": "programs",
+      "className": "scroll-mt-20 bg-white py-20 md:py-28",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(10, 10, 10)",
+      "height": 2495.125,
+      "textPreview": "MORE THAN COURTS PROGRAMS & CLASSES Coached programmes running through the week — pick one to ask about batches, timings and fees. Sports11 Coached sport and fitness programmes. Chess Strategy, "
+    },
+    {
+      "index": 6,
+      "tag": "SECTION",
+      "id": "",
+      "className": "relative overflow-hidden bg-[#0a1233] py-24 md:py-32",
+      "bg": "rgb(10, 18, 51)",
+      "color": "rgb(10, 10, 10)",
+      "height": 1571.5,
+      "textPreview": "ANCHOR MULTI SPORTS ACADEMY The Academy Built for players who take their game seriously — and for anyone who just wants a great hour on court. 01 Pro-grade arenas Tournament-standard courts, flood"
+    },
+    {
+      "index": 7,
+      "tag": "SECTION",
+      "id": "",
+      "className": "bg-[#0a1233]",
+      "bg": "rgb(10, 18, 51)",
+      "color": "rgb(10, 10, 10)",
+      "height": 1434.046875,
+      "textPreview": "EVERY ARENA, ONE TAP AWAY Book a Slot STEP INSIDE Keep scrolling"
+    },
+    {
+      "index": 8,
+      "tag": "SECTION",
+      "id": "enquire",
+      "className": "scroll-mt-20 bg-[#060b26] py-20 md:py-28",
+      "bg": "rgb(6, 11, 38)",
+      "color": "rgb(10, 10, 10)",
+      "height": 1318.40625,
+      "textPreview": "Programs Corporate events JOIN A CLASS Enquire about Chess Tell us who's joining and we'll share the batch timings, fees and what to bring. Beginners welcome across every programme. WhatsApp us 08"
+    },
+    {
+      "index": 9,
+      "tag": "SECTION",
+      "id": "faq",
+      "className": "scroll-mt-20 bg-white py-20 md:py-28",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(10, 10, 10)",
+      "height": 931,
+      "textPreview": "GOOD TO KNOW FREQUENTLY ASKED What sports facilities are available at Anchor Sports World? We offer 15+ sports under one roof, including badminton, basketball, football, cricket, pickleball, swimmin"
+    },
+    {
+      "index": 10,
+      "tag": "SECTION",
+      "id": "",
+      "className": "relative overflow-hidden bg-white py-20 md:py-28",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(10, 10, 10)",
+      "height": 813.828125,
+      "textPreview": "STRAIGHT FROM THE COURTS LATEST REELS @anchorsportsworld REEL"
+    },
+    {
+      "index": 11,
+      "tag": "SECTION",
+      "id": "",
+      "className": "bg-white py-20 md:py-28",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(10, 10, 10)",
+      "height": 1063,
+      "textPreview": "WHAT PLAYERS SAY LOVED BY PLAYERS 0.0 from 125 Google reviews “Badminton courts are immaculate, AC works great even in summer.” Kavya Iyer “Best multi-sport academy in Coimbatore, courts are alway"
+    },
+    {
+      "index": 12,
+      "tag": "SECTION",
+      "id": "",
+      "className": "relative overflow-hidden bg-[#060b26]",
+      "bg": "rgb(6, 11, 38)",
+      "color": "rgb(10, 10, 10)",
+      "height": 988.484375,
+      "textPreview": "READY TO PLAY? Pick your sport, pick your slot — you'll be on court before you know it. Book Your Slot VISIT US Sf No: 605, Erangattu Thottam, Opp CMS College, Chinnavedampatti, Coimbatore – 6410"
+    },
+    {
+      "index": 13,
+      "tag": "FOOTER",
+      "id": "",
+      "className": "border-t border-white/10",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(10, 10, 10)",
+      "height": 186.5,
+      "textPreview": "© 2026 DINIDH ANCHOR SPORTS WORLD PVT LTD Book a Court Facilities Programs FAQ Corporate Events My Bookings Open the App Privacy Policy Terms & Conditions"
+    }
+  ]
+}
