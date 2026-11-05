@@ -35,6 +35,7 @@ import type { HeroConfig, QuickFact, Achievement, Instructor, EventItem, NewsArt
 
 export const Home: React.FC = () => {
   const [videoModalOpen, setVideoModalOpen] = useState<boolean>(false);
+  const [certModalOpen, setCertModalOpen] = useState<boolean>(false);
   const [hero, setHero] = useState<HeroConfig>(heroContent);
   const [facts, setFacts] = useState<QuickFact[]>(quickFacts);
   const [featuredAchievements, setFeaturedAchievements] = useState<Achievement[]>(
@@ -68,6 +69,13 @@ export const Home: React.FC = () => {
       })
       .catch(() => {});
   }, []);
+
+  const mborAchievement = featuredAchievements.find((a) =>
+    a.awarding_organization?.toLowerCase().includes('malaysia book of records') ||
+    a.title?.toLowerCase().includes('oldest silambam')
+  ) || achievementsList[0];
+
+  const mborCertificateUrl = mborAchievement?.cover_image_url || '/api/public/media/stream/silambam/298977c4-5bd2-4bf7-b091-e5e0cfe77163.png';
 
   const activeStage = syllabusStages.find((s) => s.stage_number === activeStageTab) || syllabusStages[0];
 
@@ -124,42 +132,42 @@ export const Home: React.FC = () => {
               </div>
 
               {/* Main Heading with High-Contrast Dual Tone Visual Hierarchy */}
-              <div className="space-y-1">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08]">
-                  AADHIRAN <span className="text-[#C6A04A]">SILAMBAM</span>
+              <div className="space-y-1.5">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white font-display leading-[1.05]">
+                  AADHIRAN <span className="text-[#C6A04A] drop-shadow-sm">SILAMBAM</span>
                 </h1>
-                <p className="text-base sm:text-lg font-medium text-[#D9B96E] tracking-wide pt-1">
+                <p className="text-base sm:text-lg font-semibold text-[#D9B96E] tracking-wide pt-1">
                   ஆதிரன் சிலம்ப சங்கம் <span className="text-slate-400 mx-1.5">•</span> George Town, Penang & Global
                 </p>
               </div>
 
               {/* Supporting Description with Balanced Line Length */}
               <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-xl font-normal">
-                Preserving the traditional art of Silambam through structured training, cultural heritage and martial arts excellence. Unbroken 10-stage <strong className="text-white font-semibold">Por Silambam</strong> battlefield combat and modern <strong className="text-white font-semibold">Sport Silambam</strong> athletic mastery in George Town since 1936.
+                Preserving the authentic martial art of Silambam through structured training, cultural heritage and combat excellence. Unbroken 10-stage <strong className="text-white font-semibold">Por Silambam</strong> battlefield combat and modern <strong className="text-white font-semibold">Sport Silambam</strong> athletic mastery in George Town since 1936.
               </p>
 
               {/* Action Buttons: Primary Gold, Secondary Navy, and Demo Reel */}
               <div className="flex flex-wrap items-center gap-3 pt-2 w-full sm:w-auto">
                 <Link
                   to="/join-training"
-                  className="px-6 py-3.5 rounded-xl bg-[#C6A04A] hover:bg-[#D9B96E] text-[#102137] font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 shadow-md flex items-center justify-center group shrink-0"
+                  className="px-6 py-4 rounded-xl bg-[#C6A04A] hover:bg-[#D9B96E] text-[#102137] font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all duration-200 shadow-xl hover:shadow-[#C6A04A]/30 hover:scale-[1.02] flex items-center justify-center group shrink-0"
                 >
                   <span>Begin Your Training</span>
-                  <ArrowRight className="w-4 h-4 ml-2 text-[#102137] group-hover:translate-x-1 transition-transform shrink-0" />
+                  <ArrowRight className="w-4 h-4 ml-2 text-[#102137] group-hover:translate-x-1.5 transition-transform shrink-0" />
                 </Link>
 
                 <Link
                   to="/history-lineage"
-                  className="px-5 py-3.5 rounded-xl bg-[#183B5B]/90 hover:bg-[#183B5B] text-white font-semibold text-xs sm:text-sm transition-all duration-200 border border-[#C6A04A]/40 hover:border-[#C6A04A] flex items-center justify-center backdrop-blur-sm shrink-0"
+                  className="px-5 py-4 rounded-xl bg-[#183B5B]/90 hover:bg-[#183B5B] text-white font-semibold text-xs sm:text-sm transition-all duration-200 border border-[#C6A04A]/50 hover:border-[#C6A04A] flex items-center justify-center backdrop-blur-sm shrink-0"
                 >
                   <Compass className="w-4 h-4 mr-2 text-[#C6A04A] shrink-0" />
-                  <span>Explore Our Heritage</span>
+                  <span>Explore Heritage</span>
                 </Link>
 
                 <button
                   onClick={() => setVideoModalOpen(true)}
                   aria-label="Watch Silambam demonstration video"
-                  className="px-4 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white font-medium text-xs sm:text-sm transition-all duration-200 border border-white/20 flex items-center justify-center backdrop-blur-sm shrink-0 cursor-pointer"
+                  className="px-4 py-4 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white font-medium text-xs sm:text-sm transition-all duration-200 border border-white/20 flex items-center justify-center backdrop-blur-sm shrink-0 cursor-pointer"
                 >
                   <Play className="w-3.5 h-3.5 mr-1.5 text-[#C6A04A] fill-current shrink-0" />
                   <span>Watch Reel</span>
@@ -171,9 +179,9 @@ export const Home: React.FC = () => {
                 {(hero.stats || heroContent.stats).map((stat, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-xl bg-[#183B5B]/60 border border-[#C6A04A]/25 backdrop-blur-sm"
+                    className="p-3.5 rounded-xl bg-[#183B5B]/80 border border-[#C6A04A]/35 backdrop-blur-sm shadow-sm"
                   >
-                    <div className="text-lg sm:text-xl font-bold text-[#D9B96E]">
+                    <div className="text-xl sm:text-2xl font-extrabold text-[#D9B96E] font-display">
                       {stat.value}
                     </div>
                     <div className="text-[11px] font-semibold text-white leading-tight mt-0.5">
@@ -196,12 +204,12 @@ export const Home: React.FC = () => {
       </section>
 
       {/* 3. RECOGNITION & CREDIBILITY STRIP */}
-      <section className="py-8 bg-white border-b border-[#E8E3D9]">
+      <section className="py-10 bg-[#F8F5EE] border-b border-[#E8E3D9]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="flex items-center space-x-2 shrink-0">
-              <Sparkles className="w-4 h-4 text-[#C6A04A]" />
-              <span className="text-xs font-bold uppercase tracking-wider text-[#102137]">
+              <Sparkles className="w-5 h-5 text-[#C6A04A]" />
+              <span className="text-xs font-extrabold uppercase tracking-widest text-[#102137]">
                 National & Global Recognitions
               </span>
             </div>
@@ -210,15 +218,15 @@ export const Home: React.FC = () => {
               {facts.map((fact) => (
                 <div
                   key={fact.id}
-                  className="p-3.5 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9] hover:border-[#C6A04A] transition-all"
+                  className="p-4 rounded-xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] hover:shadow-md transition-all group"
                 >
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-1.5">
                     <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#102137] text-[#D9B96E]">
                       {fact.badge}
                     </span>
-                    <span className="text-[11px] font-mono text-[#64748B]">{fact.year}</span>
+                    <span className="text-[11px] font-mono font-bold text-[#C6A04A]">{fact.year}</span>
                   </div>
-                  <h4 className="text-xs font-bold text-[#182332] truncate">{fact.title}</h4>
+                  <h4 className="text-xs font-bold text-[#182332] group-hover:text-[#102137] transition-colors truncate">{fact.title}</h4>
                   <p className="text-[11px] text-[#64748B] line-clamp-1 mt-0.5">
                     {fact.description}
                   </p>
@@ -241,6 +249,9 @@ export const Home: React.FC = () => {
                     src="/api/public/media/stream/silambam/64ce5275-b368-4d52-b9d7-540d4d7c9613.png"
                     alt="Master Siva Chief Master with Traditional Silambam Staff"
                     className="w-full h-full object-cover object-top filter contrast-105"
+                    loading="lazy"
+                    width={400}
+                    height={500}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-transparent to-transparent opacity-80" />
                 </div>
@@ -320,71 +331,78 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. HERITAGE & LINEAGE SPOTLIGHT (Alternating: Content on Left, Authentic Lineage Photo on Right) */}
-      <section className="py-20 bg-white border-b border-[#E8E3D9]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 5. HERITAGE & LINEAGE SPOTLIGHT (Alternating: Deep Heritage Navy Section) */}
+      <section className="py-20 bg-[#102137] text-white border-b border-[#183B5B] relative overflow-hidden">
+        {/* Subtle Ambient Background Gradients */}
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_20%,rgba(198,160,74,0.08),transparent_70%)]" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left: Historical Lineage Narrative & Milestones */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#F8F5EE] border border-[#E8E3D9] text-[#102137] text-xs font-semibold uppercase tracking-wider">
+              <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B]/90 border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-semibold uppercase tracking-wider">
                 <Shield className="w-3.5 h-3.5 text-[#C6A04A]" />
                 <span>5,000-Year Kurunji Mountain Martial Lineage</span>
               </div>
 
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#102137] tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-display tracking-tight leading-tight">
                 An Unbroken Lineage of Martial Masters & Living Heritage
               </h2>
 
-              <p className="text-sm sm:text-base text-[#64748B] leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
                 Silambam is an ancient battlefield martial art originating in the Kurunji mountain ranges of Tamil Nadu. Brought to George Town, Penang in 1936 by pioneering Tamil masters, the lineage has been continuously preserved under unbroken Guru-Shishya (Gurukulam) oral and physical transmission for over 90 years.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9]">
-                  <div className="text-2xl font-bold text-[#C6A04A] font-mono">1936</div>
-                  <div className="text-xs font-bold text-[#102137] mt-1">Penang Arrival</div>
-                  <p className="text-[11px] text-[#64748B] mt-0.5">Founding masters establish traditional gurukulam training in George Town.</p>
+                <div className="p-4 rounded-xl bg-[#183B5B]/80 border border-[#C6A04A]/30 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-[#D9B96E] font-display">1936</div>
+                  <div className="text-xs font-bold text-white mt-1">Penang Arrival</div>
+                  <p className="text-[11px] text-slate-300 mt-0.5">Founding masters establish traditional gurukulam training in George Town.</p>
                 </div>
-                <div className="p-4 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9]">
-                  <div className="text-2xl font-bold text-[#C6A04A] font-mono">1975</div>
-                  <div className="text-xs font-bold text-[#102137] mt-1">PPM Registered</div>
-                  <p className="text-[11px] text-[#64748B] mt-0.5">Officially registered under PPM-014-07-25021975 on 25 February 1975.</p>
+                <div className="p-4 rounded-xl bg-[#183B5B]/80 border border-[#C6A04A]/30 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-[#D9B96E] font-display">1975</div>
+                  <div className="text-xs font-bold text-white mt-1">PPM Registered</div>
+                  <p className="text-[11px] text-slate-300 mt-0.5">Officially registered under PPM-014-07-25021975 on 25 February 1975.</p>
                 </div>
-                <div className="p-4 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9]">
-                  <div className="text-2xl font-bold text-[#C6A04A] font-mono">2022</div>
-                  <div className="text-xs font-bold text-[#102137] mt-1">MBOR Certified</div>
-                  <p className="text-[11px] text-[#64748B] mt-0.5">Officially recognized by Malaysia Book of Records as Oldest Association.</p>
+                <div className="p-4 rounded-xl bg-[#183B5B]/80 border border-[#C6A04A]/30 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-[#D9B96E] font-display">2022</div>
+                  <div className="text-xs font-bold text-white mt-1">MBOR Certified</div>
+                  <p className="text-[11px] text-slate-300 mt-0.5">Officially recognized by Malaysia Book of Records as Oldest Association.</p>
                 </div>
               </div>
 
               <div className="pt-2">
                 <Link
                   to="/history-lineage"
-                  className="inline-flex items-center px-5 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm"
+                  className="inline-flex items-center px-5 py-3 rounded-xl bg-[#C6A04A] hover:bg-[#D9B96E] text-[#102137] text-xs font-bold uppercase tracking-wider transition-all shadow-md group"
                 >
-                  <BookOpen className="w-4 h-4 mr-2 text-[#C6A04A]" />
+                  <BookOpen className="w-4 h-4 mr-2 text-[#102137]" />
                   <span>Explore Complete Lineage Chronology</span>
-                  <ArrowRight className="w-4 h-4 ml-2 text-[#C6A04A]" />
+                  <ArrowRight className="w-4 h-4 ml-2 text-[#102137] group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </div>
 
             {/* Right: Authentic Photograph of Grandmaster Mariapakkiam */}
             <div className="lg:col-span-5 relative">
-              <div className="p-4 rounded-3xl bg-[#FDFBF7] border border-[#E8E3D9] shadow-xl">
+              <div className="p-4 rounded-3xl bg-[#183B5B]/90 border-2 border-[#C6A04A]/40 shadow-2xl backdrop-blur-md">
                 <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-slate-900 relative group">
                   <img
                     src="/api/public/media/stream/silambam/e1a90c59-7602-4fe0-8b73-0b9fba961691.png"
                     alt="Grandmaster Mariapakkiam 14th Descendant of Aadhiran Silambam Lineage"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
+                    width={400}
+                    height={500}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-transparent to-transparent opacity-70" />
-                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-xs font-bold border border-[#C6A04A]/40">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-transparent to-transparent opacity-75" />
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-xs font-bold border border-[#C6A04A]/50">
                     14th Lineage Descendant
                   </div>
-                  <div className="absolute bottom-4 inset-x-4 p-3 rounded-xl bg-[#102137]/90 backdrop-blur-xs text-white border border-white/10">
+                  <div className="absolute bottom-4 inset-x-4 p-3.5 rounded-xl bg-[#102137]/90 backdrop-blur-md text-white border border-[#C6A04A]/30">
                     <h4 className="text-sm font-bold text-white">Grandmaster Mariapakkiam</h4>
-                    <p className="text-[11px] text-[#D9B96E]">Founding Pioneer & Custodian of 10-Stage Kurunji Syllabus</p>
+                    <p className="text-[11px] text-[#D9B96E] font-medium">Founding Pioneer & Custodian of 10-Stage Kurunji Syllabus</p>
                   </div>
                 </div>
               </div>
@@ -647,6 +665,9 @@ export const Home: React.FC = () => {
                 src="/api/public/media/stream/silambam/b417be8b-6b26-4914-848f-fdc546a2abd2.jpg"
                 alt="Silambam Warrior Dynamic Spin"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
+                loading="lazy"
+                width={500}
+                height={400}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-[#102137]/30 to-transparent" />
               <div className="absolute bottom-4 inset-x-4 p-4 rounded-xl bg-[#102137]/85 backdrop-blur-md border border-white/15">
@@ -847,69 +868,99 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 10. ACHIEVEMENTS & RECORDS (Split Showcase with MBOR Certificate) */}
-      <section className="py-20 bg-white border-b border-[#E8E3D9]">
+      {/* 10. ACHIEVEMENTS & RECORDS (Prestigious MBOR Certificate Showcase) */}
+      <section id="mbor-recognition" className="py-20 bg-[#F8F5EE] border-b border-[#E8E3D9] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Left Column: Official Certificate Visual */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Official Certificate Visual Showcase */}
             <div className="lg:col-span-5 relative">
-              <div className="p-4 rounded-3xl bg-[#FDFBF7] border border-[#E8E3D9] shadow-xl">
-                <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 border border-[#E8E3D9] relative group">
+              <div className="p-3 sm:p-4 rounded-3xl bg-[#102137] border-2 border-[#C6A04A]/60 shadow-2xl relative">
+                {/* Gold Seal Corner Accents */}
+                <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#C6A04A]" />
+                <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#C6A04A]" />
+                <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#C6A04A]" />
+                <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#C6A04A]" />
+
+                <div 
+                  className="aspect-[3/4] sm:aspect-[4/5] rounded-2xl overflow-hidden bg-white border border-[#C6A04A]/40 relative group cursor-pointer shadow-inner flex items-center justify-center p-2"
+                  onClick={() => setCertModalOpen(true)}
+                  title="Click to view full certificate"
+                >
                   <img
-                    src="/api/public/media/stream/silambam/aadhiran-mbor-certificate.png"
-                    alt="Malaysia Book of Records Official Certificate"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    src={mborCertificateUrl}
+                    alt="The Malaysia Book of Records Official Certificate (2022) — Certified Oldest Silambam Association in Malaysia presented to Persatuan Aadhiran Silambam Pulau Pinang"
+                    className="w-full h-full object-contain filter group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
+                    width={550}
+                    height={740}
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      t.onerror = null;
+                      t.src = '/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png';
+                    }}
                   />
-                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-xs font-bold border border-[#C6A04A]/40">
-                    Official Record Certificate
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#102137]/90 text-[#D9B96E] text-xs font-bold border border-[#C6A04A]/50 shadow-md">
+                    Official Certificate
+                  </div>
+                  <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-md bg-[#102137]/80 text-white text-[10px] font-mono backdrop-blur-xs flex items-center space-x-1 group-hover:bg-[#C6A04A] group-hover:text-[#102137] transition-colors">
+                    <span>Enlarge</span>
+                    <Sparkles className="w-3 h-3" />
                   </div>
                 </div>
-                <div className="mt-3 text-center">
-                  <span className="text-xs font-bold text-[#102137] block">
-                    Certified by The Malaysia Book of Records (2022)
-                  </span>
-                  <span className="text-[11px] text-[#64748B]">
-                    Oldest Silambam Association in Malaysia • Founded 1975
-                  </span>
+
+                <div className="mt-3.5 px-2 pb-1 text-center">
+                  <div className="inline-flex items-center space-x-2 text-[#D9B96E] font-bold text-xs uppercase tracking-wider">
+                    <Award className="w-4 h-4 text-[#C6A04A]" />
+                    <span>The Malaysia Book of Records</span>
+                  </div>
+                  <h4 className="text-sm font-bold text-white mt-0.5">
+                    Certified Oldest Silambam Association in Malaysia
+                  </h4>
+                  <p className="text-[11px] text-slate-300 mt-0.5">
+                    Established 25 February 1975 • Unbroken Lineage Since 1936
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Right Column: Key Accolades Grid */}
-            <div className="lg:col-span-7 space-y-5">
-              <div className="flex items-center space-x-2">
-                <Trophy className="w-4 h-4 text-[#C6A04A]" />
-                <span className="text-xs uppercase font-bold text-[#102137] tracking-wider">
-                  Documented Accolades & Records
-                </span>
+            <div className="lg:col-span-7 space-y-6">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#102137] text-[#D9B96E] text-xs font-bold uppercase tracking-wider mb-2">
+                  <Trophy className="w-3.5 h-3.5 text-[#C6A04A]" />
+                  <span>Documented Accolades & Records</span>
+                </div>
+                <h3 className="text-3xl sm:text-4xl font-extrabold text-[#102137] font-display tracking-tight leading-tight">
+                  National Record Primacy & Global Distinction
+                </h3>
+                <p className="text-xs sm:text-sm text-[#64748B] mt-1.5 leading-relaxed">
+                  Every accolade conferred upon Aadhiran Silambam is formally documented with government ministries, global heritage bodies, and national record registries.
+                </p>
               </div>
 
-              <h3 className="text-3xl font-bold text-[#182332] leading-tight">
-                Recognized National & International Excellence
-              </h3>
-
-              <div className="space-y-3">
+              <div className="space-y-3.5">
                 {featuredAchievements.map((item) => (
                   <div
                     key={item.id}
-                    className="p-4 rounded-xl bg-[#FDFBF7] border border-[#E8E3D9] hover:border-[#C6A04A] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                    className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                   >
-                    <div>
-                      <div className="flex items-center space-x-2 mb-1">
-                        <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white text-[#102137] border border-[#E8E3D9]">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center space-x-2 mb-1.5">
+                        <span className="text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#102137] text-[#D9B96E]">
                           {item.category}
                         </span>
-                        <span className="text-xs font-mono text-[#64748B]">{item.year}</span>
+                        <span className="text-xs font-mono font-bold text-[#C6A04A]">{item.year}</span>
                       </div>
-                      <h4 className="text-sm font-bold text-[#182332] group-hover:text-[#102137] transition-colors">
+                      <h4 className="text-sm sm:text-base font-bold text-[#182332] group-hover:text-[#102137] transition-colors leading-snug">
                         {item.title}
                       </h4>
-                      <p className="text-xs text-[#64748B] line-clamp-1 mt-0.5">
+                      <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed mt-1">
                         {item.description}
                       </p>
                     </div>
-                    <div className="text-xs text-right font-medium text-[#102137] shrink-0 max-w-[200px] sm:max-w-[240px]">
-                      <span className="text-[10px] text-[#64748B] block">Conferred by</span>
+                    <div className="text-xs text-left sm:text-right font-medium text-[#102137] shrink-0 sm:max-w-[220px] pt-2 sm:pt-0 border-t sm:border-t-0 border-[#E8E3D9]">
+                      <span className="text-[10px] text-[#64748B] block uppercase tracking-wider">Conferred by</span>
                       <strong className="text-xs text-[#183B5B] block truncate" title={item.awarding_organization}>
                         {item.awarding_organization}
                       </strong>
@@ -918,14 +969,23 @@ export const Home: React.FC = () => {
                 ))}
               </div>
 
-              <div className="pt-2">
+              <div className="pt-2 flex flex-wrap gap-3">
                 <Link
                   to="/achievements"
-                  className="inline-flex items-center px-5 py-2.5 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-xs"
+                  className="inline-flex items-center px-5 py-3 rounded-xl bg-[#102137] hover:bg-[#183B5B] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md group"
                 >
                   <span>View All Awards & Historic Milestones</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-2 text-[#C6A04A]" />
+                  <ArrowRight className="w-3.5 h-3.5 ml-2 text-[#C6A04A] group-hover:translate-x-1 transition-transform" />
                 </Link>
+                <a
+                  href="https://www.malaysiarecords.com.my"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-4 py-3 rounded-xl bg-white hover:bg-[#F8F5EE] border border-[#E8E3D9] hover:border-[#C6A04A] text-[#102137] text-xs font-semibold uppercase tracking-wider transition-all shadow-xs"
+                >
+                  <Globe className="w-3.5 h-3.5 mr-1.5 text-[#C6A04A]" />
+                  <span>Verify at MalaysiaRecords.com.my</span>
+                </a>
               </div>
             </div>
           </div>
@@ -1056,6 +1116,64 @@ export const Home: React.FC = () => {
               >
                 Your browser does not support HTML5 video.
               </video>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 14. MALAYSIA BOOK OF RECORDS CERTIFICATE LIGHTBOX MODAL */}
+      {certModalOpen && (
+        <div 
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 sm:p-6"
+          onClick={() => setCertModalOpen(false)}
+        >
+          <div 
+            className="relative max-w-2xl w-full bg-[#102137] rounded-3xl p-4 sm:p-6 shadow-2xl border-2 border-[#C6A04A]/60 flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setCertModalOpen(false)}
+              aria-label="Close certificate lightbox"
+              className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/20 hover:bg-[#C6A04A] hover:text-[#102137] text-white flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="w-full text-center pb-3 border-b border-white/10 mb-4">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#D9B96E] font-bold block mb-1">
+                Official National Record Verification
+              </span>
+              <h3 className="text-lg sm:text-xl font-bold text-white">
+                The Malaysia Book of Records (2022)
+              </h3>
+              <p className="text-xs text-slate-300">
+                Oldest Silambam Association in Malaysia • Certified 28 August 2022
+              </p>
+            </div>
+
+            <div className="max-h-[70vh] overflow-y-auto rounded-xl bg-white p-2 shadow-inner w-full flex items-center justify-center">
+              <img
+                src={mborCertificateUrl}
+                alt="The Malaysia Book of Records Official Certificate Induction — Persatuan Aadhiran Silambam Pulau Pinang"
+                className="max-h-[65vh] w-auto object-contain mx-auto"
+                loading="eager"
+              />
+            </div>
+
+            <div className="w-full pt-4 mt-3 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-300">
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-4 h-4 text-[#C6A04A] shrink-0" />
+                <span>Verified Historical Primacy Record</span>
+              </div>
+              <a
+                href="https://www.malaysiarecords.com.my"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#D9B96E] hover:text-white font-semibold underline underline-offset-2 flex items-center space-x-1"
+              >
+                <span>Visit Official Registry</span>
+                <ArrowRight className="w-3 h-3 ml-0.5" />
+              </a>
             </div>
           </div>
         </div>

@@ -113,9 +113,18 @@ export const News: React.FC = () => {
                 >
                   <div className="relative h-48 bg-[#F8F5EE] overflow-hidden">
                     <img
-                      src={article.cover_image_url || '/api/public/media/stream/silambam/silambam-back.jpg'}
+                      src={article.cover_image_url || '/api/public/media/stream/silambam/b417be8b-6b26-4914-848f-fdc546a2abd2.jpg'}
                       alt={article.title}
+                      width={400}
+                      height={192}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        t.onerror = null;
+                        t.src = '/uploads/silambam-back.jpg';
+                      }}
                     />
                     <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#102137]/90 backdrop-blur-sm border border-[#183B5B] text-[#D9B96E] text-xs font-mono font-bold uppercase shadow-sm">
                       {article.category}

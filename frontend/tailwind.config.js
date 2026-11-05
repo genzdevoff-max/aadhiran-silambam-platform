@@ -73,7 +73,8 @@ export default {
       },
       fontFamily: {
         sans: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Outfit', 'Poppins', 'system-ui', '-apple-system', 'sans-serif'],
+        outfit: ['Outfit', 'Poppins', 'sans-serif'],
         poppins: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
       },
       boxShadow: {

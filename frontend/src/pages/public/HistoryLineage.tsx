@@ -153,7 +153,16 @@ export const HistoryLineage: React.FC = () => {
                   <img
                     src="/api/public/media/stream/silambam/mariapaqiam4.png"
                     alt="Grandmaster Mariapakkiam"
+                    width={350}
+                    height={288}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      t.onerror = null;
+                      t.src = '/uploads/mariapaqiam4.png';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/90 via-transparent to-transparent" />
                   <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#102137]/90 backdrop-blur-sm border border-[#C6A04A]/50 text-[10px] font-mono text-[#D9B96E] font-bold uppercase">
@@ -180,7 +189,16 @@ export const HistoryLineage: React.FC = () => {
                   <img
                     src="/api/public/media/stream/silambam/siva_orig.png"
                     alt="Chief Master Siva"
+                    width={350}
+                    height={288}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      t.onerror = null;
+                      t.src = '/uploads/siva_orig.png';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/90 via-transparent to-transparent" />
                   <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#102137]/90 backdrop-blur-sm border border-[#C6A04A]/50 text-[10px] font-mono text-[#D9B96E] font-bold uppercase">

@@ -165,7 +165,16 @@ export const Videos: React.FC = () => {
                     <img
                       src={video.poster}
                       alt={video.title}
+                      width={400}
+                      height={192}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-85"
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        t.onerror = null;
+                        t.src = '/uploads/silambam-back.jpg';
+                      }}
                     />
                     <div className="absolute inset-0 bg-[#102137]/40 flex items-center justify-center">
                       <div className="w-12 h-12 rounded-full bg-[#102137]/90 group-hover:bg-[#C6A04A] flex items-center justify-center text-[#D9B96E] group-hover:text-[#102137] transition-all transform group-hover:scale-110 shadow-lg border border-[#C6A04A]/50">

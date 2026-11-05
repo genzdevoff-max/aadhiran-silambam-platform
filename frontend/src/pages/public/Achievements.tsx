@@ -101,17 +101,30 @@ export const Achievements: React.FC = () => {
                 className="rounded-2xl bg-white border border-[#E8E3D9] overflow-hidden hover:border-[#C6A04A] transition-all duration-300 flex flex-col group shadow-sm hover:shadow-md"
               >
                 {item.cover_image_url && (
-                  <div className="relative h-56 overflow-hidden bg-[#F8F5EE]">
+                  <div className="relative h-56 overflow-hidden bg-[#F8F5EE] flex items-center justify-center">
                     <img
                       src={item.cover_image_url}
                       alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      width={400}
+                      height={224}
+                      loading="lazy"
+                      decoding="async"
+                      className={`w-full h-full group-hover:scale-105 transition-transform duration-500 ${
+                        item.cover_image_url.includes('298977c4') || item.cover_image_url.includes('cert')
+                          ? 'object-contain p-2 bg-white'
+                          : 'object-cover'
+                      }`}
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        t.onerror = null;
+                        t.src = '/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png';
+                      }}
                     />
-                    <div className="absolute top-3 right-3 px-3 py-1 rounded bg-[#102137]/90 backdrop-blur-sm border border-[#183B5B] text-[#D9B96E] text-xs font-mono font-bold">
+                    <div className="absolute top-3 right-3 px-3 py-1 rounded-lg bg-[#102137]/90 backdrop-blur-sm border border-[#183B5B] text-[#D9B96E] text-xs font-mono font-bold shadow-sm">
                       {item.year}
                     </div>
                     {item.is_featured && (
-                      <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded bg-[#C6A04A] text-[#102137] text-[10px] font-bold uppercase tracking-wider shadow">
+                      <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-[#C6A04A] text-[#102137] text-[10px] font-bold uppercase tracking-wider shadow-sm">
                         Featured Milestone
                       </div>
                     )}

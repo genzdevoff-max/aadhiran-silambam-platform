@@ -128,7 +128,16 @@ export const Gallery: React.FC = () => {
                     <img
                       src={album.cover_photo || '/api/public/media/stream/silambam/mariapaqiam4.png'}
                       alt={album.title}
+                      width={300}
+                      height={144}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        t.onerror = null;
+                        t.src = '/uploads/silambam-back.jpg';
+                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/80 via-transparent to-transparent" />
                     <span className="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-[#102137]/90 text-[10px] font-semibold text-[#D9B96E] border border-[#C6A04A]/40">
@@ -208,8 +217,16 @@ export const Gallery: React.FC = () => {
                   <img
                     src={photo.file_path}
                     alt={photo.alt_text || photo.original_name}
+                    width={400}
+                    height={300}
                     loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      t.onerror = null;
+                      t.src = '/uploads/silambam-back.jpg';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   

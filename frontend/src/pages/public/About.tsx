@@ -121,9 +121,18 @@ export const About: React.FC = () => {
                   <p className="text-xs text-[#D9B96E] font-mono">PPM-014-07-25021975 • Est. 1975</p>
                 </div>
                 <img
-                  src="/api/public/media/stream/silambam/screenshot-2019-06-09-at-5-17-22-am_orig.png"
-                  alt="Malaysia Book of Record Presentation"
-                  className="w-full h-64 object-cover"
+                  src="/api/public/media/stream/silambam/298977c4-5bd2-4bf7-b091-e5e0cfe77163.png"
+                  alt="The Malaysia Book of Records Official Certificate Presentation (2022) to Persatuan Aadhiran Silambam Pulau Pinang"
+                  className="w-full h-64 object-contain bg-white p-2"
+                  loading="lazy"
+                  decoding="async"
+                  width={500}
+                  height={256}
+                  onError={(e) => {
+                    const t = e.currentTarget;
+                    t.onerror = null;
+                    t.src = '/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png';
+                  }}
                 />
                 <div className="p-4 bg-white text-left">
                   <span className="text-[11px] font-bold text-[#C6A04A] uppercase tracking-wider block font-mono">National Heritage Milestone</span>

@@ -62,9 +62,18 @@ export const HeritageWorks: React.FC = () => {
             >
               <div className="lg:col-span-5 relative rounded-2xl overflow-hidden border border-[#E8E3D9] h-72 bg-slate-100">
                 <img
-                  src={project.cover_image_url || '/api/public/media/stream/silambam/screenshot-2019-06-09-at-5-17-22-am_orig.png'}
+                  src={project.cover_image_url || '/api/public/media/stream/silambam/298977c4-5bd2-4bf7-b091-e5e0cfe77163.png'}
                   alt={project.title}
+                  width={500}
+                  height={288}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const t = e.currentTarget;
+                    t.onerror = null;
+                    t.src = '/uploads/screenshot-2019-06-09-at-5-17-22-am_orig.png';
+                  }}
                 />
                 <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#102137]/90 backdrop-blur-sm border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-bold shadow-xs">
                   {project.year}

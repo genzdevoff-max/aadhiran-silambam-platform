@@ -82,7 +82,16 @@ export const Instructors: React.FC = () => {
                   <img
                     src={master.photo_url || '/api/public/media/stream/silambam/mariapaqiam4.png'}
                     alt={master.name}
+                    width={320}
+                    height={380}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      t.onerror = null;
+                      t.src = '/uploads/mariapaqiam4.png';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-[#102137]/80 via-transparent to-transparent" />
                   <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-[#102137]/90 backdrop-blur-sm border border-[#C6A04A]/50 text-[10px] font-mono text-[#D9B96E] font-bold uppercase">
@@ -151,7 +160,16 @@ export const Instructors: React.FC = () => {
                   <img
                     src={instructor.photo_url || '/api/public/media/stream/silambam/member1.png'}
                     alt={instructor.name}
+                    width={380}
+                    height={256}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      t.onerror = null;
+                      t.src = '/uploads/1129754474.jpg';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/90 via-transparent to-transparent" />
                   

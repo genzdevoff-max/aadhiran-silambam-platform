@@ -84,7 +84,17 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [loadedSlides, setLoadedSlides] = useState<number[]>([0]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Track loaded slides so only visible and next slide load
+  useEffect(() => {
+    const nextIdx = (currentIndex + 1) % activeSlides.length;
+    setLoadedSlides((prev) => {
+      const nextSet = new Set([...prev, currentIndex, nextIdx]);
+      return Array.from(nextSet);
+    });
+  }, [currentIndex, activeSlides.length]);
 
   // Touch gesture tracking for mobile swipe
   const touchStartX = useRef<number | null>(null);
@@ -106,15 +116,6 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [isPaused, nextSlide]);
-
-  // Preload next image for instant transitions
-  useEffect(() => {
-    const nextIdx = (currentIndex + 1) % activeSlides.length;
-    if (activeSlides[nextIdx]) {
-      const img = new Image();
-      img.src = activeSlides[nextIdx].image;
-    }
-  }, [currentIndex, activeSlides]);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsPaused(true);
@@ -156,7 +157,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
       role="region"
       aria-label="Silambam action photo showcase"
       onKeyDown={handleKeyDown}
-      className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-[#C6A04A]/30 bg-[#102137] shadow-2xl group select-none outline-none focus:ring-2 focus:ring-[#C6A04A]/50"
+      className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-[#C6A04A]/50 bg-[#102137] shadow-2xl group select-none outline-none focus:ring-2 focus:ring-[#C6A04A]/60 ring-offset-2 ring-offset-[#102137]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
@@ -167,6 +168,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
       <div className="relative aspect-[4/3] sm:aspect-[16/11] lg:aspect-[4/3] xl:aspect-[16/11] min-h-[320px] sm:min-h-[400px] lg:min-h-[460px] w-full overflow-hidden bg-[#102137]">
         {activeSlides.map((slide, idx) => {
           const isActive = idx === currentIndex;
+          const shouldLoad = loadedSlides.includes(idx);
           return (
             <div
               key={slide.id}
@@ -174,14 +176,27 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
                 isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
               }`}
             >
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className={`w-full h-full object-cover object-center filter brightness-[0.93] contrast-[1.05] transition-transform duration-[6000ms] ease-out ${
-                  isActive ? 'scale-105' : 'scale-100'
-                }`}
-                loading={idx === 0 ? 'eager' : 'lazy'}
-              />
+              {shouldLoad ? (
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  width={800}
+                  height={600}
+                  className={`w-full h-full object-cover object-center filter brightness-[0.93] contrast-[1.05] transition-transform duration-[6000ms] ease-out ${
+                    isActive ? 'scale-105' : 'scale-100'
+                  }`}
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  {...(idx === 0 ? { fetchPriority: 'high' } : {})}
+                  onError={(e) => {
+                    const t = e.currentTarget;
+                    t.onerror = null;
+                    t.src = '/uploads/silambam-back.jpg';
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full bg-[#102137]" />
+              )}
               {/* Refined Ambient Navy Gradients for readable overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#102137] via-[#102137]/35 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-r from-[#102137]/50 via-transparent to-[#102137]/30" />
