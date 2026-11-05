@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Award,
@@ -20,6 +20,53 @@ import { publicApi } from '../../services/api';
 export const Home: React.FC = () => {
   const [certModalOpen, setCertModalOpen] = useState<boolean>(false);
   const [enquiryBatchType, setEnquiryBatchType] = useState<'regular' | 'private'>('regular');
+
+  // Dynamic Hero & Settings State (Synced with Admin CMS & TiDB Cloud)
+  const [heroContent, setHeroContent] = useState<{
+    badge: string;
+    title: string;
+    subtitle: string;
+    bgImage: string;
+  }>({
+    badge: '⚡ 10-STAGE GURUKULAM SYLLABUS · EST. 1975',
+    title: 'TRAIN. MASTER. RISE.',
+    subtitle: 'Traditional Gurukulam syllabus, bamboo staff mastery, and battlefield combat sparring for champions of all ages.',
+    bgImage: '/api/public/media/stream/silambam/1.jpg',
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    publicApi.getSettings()
+      .then((data) => {
+        if (!isMounted || !data || !data.hero) return;
+        setHeroContent((prev) => ({
+          badge: data.hero.badge || prev.badge,
+          title: data.hero.title || prev.title,
+          subtitle: data.hero.subtitle || prev.subtitle,
+          bgImage: data.hero.bgImage || prev.bgImage,
+        }));
+      })
+      .catch((err) => {
+        console.warn('Fallback to default hero visual settings:', err.message);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const renderHeroHeadline = (titleStr: string) => {
+    const parts = titleStr.trim().split(' ');
+    if (parts.length > 1) {
+      const last = parts.pop();
+      return (
+        <>
+          <span className="text-white block">{parts.join(' ')}</span>
+          <span className="text-[#C6A04A] block mt-1">{last}</span>
+        </>
+      );
+    }
+    return <span className="text-white block">{titleStr}</span>;
+  };
 
   // Enquiry Form State (Matching Reference 6)
   const [enquiryForm, setEnquiryForm] = useState({
@@ -188,7 +235,7 @@ export const Home: React.FC = () => {
         {/* Full-Bleed Background Action Photography with Natural Contrast & High Visibility */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/api/public/media/stream/silambam/1.jpg"
+            src={heroContent.bgImage || '/api/public/media/stream/silambam/1.jpg'}
             alt="Silambam Master Action"
             className="w-full h-full object-cover object-center opacity-85"
           />
@@ -200,18 +247,17 @@ export const Home: React.FC = () => {
           
           {/* Top Pill Tag (Reference 1) */}
           <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-[#102137]/80 backdrop-blur-md border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-display font-semibold uppercase tracking-wider mb-6 shadow-lg">
-            <span>⚡ 10-STAGE GURUKULAM SYLLABUS · EST. 1975</span>
+            <span>{heroContent.badge || '⚡ 10-STAGE GURUKULAM SYLLABUS · EST. 1975'}</span>
           </div>
 
-          {/* Giant Centered Headline: TRAIN. MASTER. RISE. (Reference 1) */}
+          {/* Giant Centered Headline: Dynamic with Gold Accent (Reference 1) */}
           <h1 className="text-5xl sm:text-7xl lg:text-8xl font-display font-black tracking-tight uppercase leading-[0.88] mb-6">
-            <span className="text-white block">TRAIN. MASTER.</span>
-            <span className="text-[#C6A04A] block mt-1">RISE.</span>
+            {renderHeroHeadline(heroContent.title || 'TRAIN. MASTER. RISE.')}
           </h1>
 
           {/* Short, Impactful 1-Sentence Subtitle (Reference 1) */}
           <p className="text-sm sm:text-base text-slate-200 max-w-xl mx-auto mb-8 font-normal leading-relaxed drop-shadow-sm">
-            Traditional Gurukulam syllabus, bamboo staff mastery, and battlefield combat sparring for champions of all ages.
+            {heroContent.subtitle || 'Traditional Gurukulam syllabus, bamboo staff mastery, and battlefield combat sparring for champions of all ages.'}
           </p>
 
           {/* Rating, Credential & Hours Pill (Reference 1) */}
