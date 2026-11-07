@@ -1,0 +1,470 @@
+{
+  "timestamp": "2026-11-07T16:08:53.637Z",
+  "allPassed": true,
+  "results": [
+    {
+      "page": "Home",
+      "path": "/",
+      "viewports": {
+        "Desktop": {
+          "total": 63,
+          "initialRevealed": 5,
+          "finalRevealed": 63,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 63,
+          "initialRevealed": 5,
+          "finalRevealed": 63,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 63,
+          "initialRevealed": 5,
+          "finalRevealed": 63,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "About",
+      "path": "/about",
+      "viewports": {
+        "Desktop": {
+          "total": 28,
+          "initialRevealed": 6,
+          "finalRevealed": 28,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 28,
+          "initialRevealed": 5,
+          "finalRevealed": 28,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 28,
+          "initialRevealed": 5,
+          "finalRevealed": 28,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "History & Lineage",
+      "path": "/history-lineage",
+      "viewports": {
+        "Desktop": {
+          "total": 23,
+          "initialRevealed": 8,
+          "finalRevealed": 23,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 23,
+          "initialRevealed": 6,
+          "finalRevealed": 23,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 23,
+          "initialRevealed": 6,
+          "finalRevealed": 23,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Training Syllabus",
+      "path": "/training-syllabus",
+      "viewports": {
+        "Desktop": {
+          "total": 19,
+          "initialRevealed": 6,
+          "finalRevealed": 19,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 19,
+          "initialRevealed": 7,
+          "finalRevealed": 19,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 19,
+          "initialRevealed": 6,
+          "finalRevealed": 19,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Instructors",
+      "path": "/instructors",
+      "viewports": {
+        "Desktop": {
+          "total": 20,
+          "initialRevealed": 6,
+          "finalRevealed": 20,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 20,
+          "initialRevealed": 7,
+          "finalRevealed": 20,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 20,
+          "initialRevealed": 7,
+          "finalRevealed": 20,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Achievements",
+      "path": "/achievements",
+      "viewports": {
+        "Desktop": {
+          "total": 14,
+          "initialRevealed": 7,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 14,
+          "initialRevealed": 6,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 14,
+          "initialRevealed": 5,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Events",
+      "path": "/events",
+      "viewports": {
+        "Desktop": {
+          "total": 12,
+          "initialRevealed": 7,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 12,
+          "initialRevealed": 6,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 12,
+          "initialRevealed": 5,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "News",
+      "path": "/news",
+      "viewports": {
+        "Desktop": {
+          "total": 12,
+          "initialRevealed": 7,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 12,
+          "initialRevealed": 6,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 12,
+          "initialRevealed": 5,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "News Detail",
+      "path": "/news/living-legacy-5000-years-kurunji-to-penang",
+      "viewports": {
+        "Desktop": {
+          "total": 12,
+          "initialRevealed": 5,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 12,
+          "initialRevealed": 5,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 12,
+          "initialRevealed": 5,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Partners & Press",
+      "path": "/partners-press",
+      "viewports": {
+        "Desktop": {
+          "total": 14,
+          "initialRevealed": 5,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 14,
+          "initialRevealed": 5,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 14,
+          "initialRevealed": 5,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Gallery",
+      "path": "/gallery",
+      "viewports": {
+        "Desktop": {
+          "total": 34,
+          "initialRevealed": 9,
+          "finalRevealed": 34,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 34,
+          "initialRevealed": 10,
+          "finalRevealed": 34,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 34,
+          "initialRevealed": 7,
+          "finalRevealed": 34,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Videos",
+      "path": "/videos",
+      "viewports": {
+        "Desktop": {
+          "total": 15,
+          "initialRevealed": 5,
+          "finalRevealed": 15,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 15,
+          "initialRevealed": 5,
+          "finalRevealed": 15,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 15,
+          "initialRevealed": 5,
+          "finalRevealed": 15,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Contact",
+      "path": "/contact",
+      "viewports": {
+        "Desktop": {
+          "total": 12,
+          "initialRevealed": 6,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 12,
+          "initialRevealed": 5,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 12,
+          "initialRevealed": 5,
+          "finalRevealed": 12,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Join Training",
+      "path": "/join-training",
+      "viewports": {
+        "Desktop": {
+          "total": 10,
+          "initialRevealed": 5,
+          "finalRevealed": 10,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 10,
+          "initialRevealed": 5,
+          "finalRevealed": 10,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 10,
+          "initialRevealed": 5,
+          "finalRevealed": 10,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Heritage Works",
+      "path": "/heritage-works",
+      "viewports": {
+        "Desktop": {
+          "total": 13,
+          "initialRevealed": 5,
+          "finalRevealed": 13,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 13,
+          "initialRevealed": 5,
+          "finalRevealed": 13,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 13,
+          "initialRevealed": 5,
+          "finalRevealed": 13,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    },
+    {
+      "page": "Privacy Policy",
+      "path": "/privacy-policy",
+      "viewports": {
+        "Desktop": {
+          "total": 14,
+          "initialRevealed": 6,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Tablet": {
+          "total": 14,
+          "initialRevealed": 7,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        },
+        "Mobile": {
+          "total": 14,
+          "initialRevealed": 6,
+          "finalRevealed": 14,
+          "unrevealed": 0,
+          "passed": true
+        }
+      },
+      "reducedMotionPassed": true,
+      "consoleErrors": []
+    }
+  ]
+}

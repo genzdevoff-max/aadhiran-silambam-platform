@@ -1,0 +1,31 @@
+{
+  "visibleControlsRemoved": true,
+  "transitionsObserved": [
+    {
+      "step": 0,
+      "image": "http://localhost:5173/api/public/media/stream/silambam/b417be8b-6b26-4914-848f-fdc546a2abd2.jpg",
+      "h1": "AADHIRAN\nSILAMBAM"
+    },
+    {
+      "step": 1,
+      "image": "http://localhost:5173/api/public/media/stream/silambam/cde7d1f2-37ec-4367-9130-16a957c6bb2e.jpg",
+      "h1": "AADHIRAN\nSILAMBAM",
+      "imageChanged": true
+    },
+    {
+      "step": 2,
+      "image": "http://localhost:5173/api/public/media/stream/silambam/30f575ff-d7dd-45ca-b024-2d3ec970d369.jpg",
+      "h1": "AADHIRAN\nSILAMBAM",
+      "imageChanged": true
+    },
+    {
+      "step": 3,
+      "image": "http://localhost:5173/api/public/media/stream/silambam/1.jpg",
+      "h1": "AADHIRAN\nSILAMBAM",
+      "imageChanged": true
+    }
+  ],
+  "textRemainedStationary": true,
+  "consoleErrors": [],
+  "failedRequests": []
+}

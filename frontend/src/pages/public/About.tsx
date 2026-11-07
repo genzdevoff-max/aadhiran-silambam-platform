@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { generalInfo } from '../../data';
 import { publicApi } from '../../services/api';
+import { ScrollReveal } from '../../components/common/ScrollReveal';
 
 export const About: React.FC = () => {
   const [info, setInfo] = useState(generalInfo);
@@ -44,21 +45,29 @@ export const About: React.FC = () => {
       {/* Header Banner - Deep Heritage Navy & Gold Accent */}
       <section className="relative py-20 sm:py-24 bg-[#102137] border-b border-[#183B5B] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-4 shadow-sm">
-            <Shield className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
-            <span>{info.siteName}</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-white tracking-tight uppercase">
-            About Aadhiran Silambam
-          </h1>
-          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
-            {info.tamilName} • Preserving Ancient Tamil Martial Wisdom
-          </p>
-          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-4 font-medium">
-            <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-[#D9B96E]">About Academy</span>
-          </div>
+          <ScrollReveal animation="fade-down" delay={0} duration={600}>
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/50 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-4 shadow-sm">
+              <Shield className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
+              <span>{info.siteName}</span>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal animation="fade-up" delay={80} duration={650}>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-white tracking-tight uppercase">
+              About Aadhiran Silambam
+            </h1>
+          </ScrollReveal>
+          <ScrollReveal animation="fade-up" delay={160} duration={650}>
+            <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
+              {info.tamilName} • Preserving Ancient Tamil Martial Wisdom
+            </p>
+          </ScrollReveal>
+          <ScrollReveal animation="fade-up" delay={240} duration={650}>
+            <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-4 font-medium">
+              <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
+              <span>/</span>
+              <span className="text-[#D9B96E]">About Academy</span>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -66,7 +75,7 @@ export const About: React.FC = () => {
       <section className="py-20 border-b border-slate-200 bg-[#F8FAFC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-7 space-y-6">
+            <ScrollReveal animation="fade-up" duration={650} className="lg:col-span-7 space-y-6">
               <span className="text-xs uppercase font-bold text-[#C6A04A] tracking-widest block">
                 Official Association Identity
               </span>
@@ -103,9 +112,9 @@ export const About: React.FC = () => {
                   <p className="text-xs text-[#64748B] mt-1">UNESCO World Heritage Site, {info.state}</p>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
 
-            <div className="lg:col-span-5 space-y-6">
+            <ScrollReveal animation="fade-up" delay={150} duration={650} className="lg:col-span-5 space-y-6">
               <div className="relative rounded-2xl overflow-hidden border border-[#E8E3D9] shadow-md bg-white">
                 <div className="p-6 text-center border-b border-[#183B5B] bg-[#102137] text-white">
                   <div className="w-24 h-24 mx-auto mb-3 rounded-full p-1 bg-gradient-to-br from-[#C6A04A] via-[#D9B96E] to-[#183B5B] shadow-xl">
@@ -163,7 +172,7 @@ export const About: React.FC = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -171,7 +180,7 @@ export const About: React.FC = () => {
       {/* ASA Emblem Symbolism Section */}
       <section className="py-20 border-b border-[#E8E3D9] bg-[#F8F5EE]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <ScrollReveal animation="fade-up" duration={600} className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#102137]/5 border border-[#C6A04A]/40 text-[#102137] text-xs font-semibold uppercase tracking-wider mb-3">
               <Sparkles className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
               <span>Official ASA Crest Anatomy</span>
@@ -182,11 +191,11 @@ export const About: React.FC = () => {
             <p className="text-[#64748B] text-sm mt-3">
               Every detail in the Aadhiran Silambam Association seal encapsulates our ancient Tamil origin, martial philosophy, and global custodianship.
             </p>
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Visual Centerpiece */}
-            <div className="lg:col-span-5 flex flex-col items-center justify-center">
+            <ScrollReveal animation="scale-up" delay={100} duration={700} className="lg:col-span-5 flex flex-col items-center justify-center">
               <div className="relative group">
                 <div className="relative w-64 h-64 sm:w-72 sm:h-72 rounded-full p-2 bg-gradient-to-br from-[#C6A04A] via-[#D9B96E] to-[#183B5B] shadow-xl flex items-center justify-center">
                   <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden p-2">
@@ -206,104 +215,114 @@ export const About: React.FC = () => {
                   ASA • Aadhiran Silambam Association
                 </span>
               </div>
-            </div>
+            </ScrollReveal>
 
             {/* Emblem Breakdown Elements */}
             <div className="lg:col-span-7 space-y-4">
-              <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-                <div className="flex items-start space-x-3.5">
-                  <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
-                    <Swords className="w-5 h-5 text-[#C6A04A] shrink-0" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#102137] flex items-center">
-                      <span>Twin Combatants in Red & Blue</span>
-                      <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
-                        Por & Sport Silambam
-                      </span>
-                    </h4>
-                    <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
-                      Representing the clashing staves of martial confrontation and the complete integration of traditional <strong>Por Silambam</strong> (battlefield warfare) and <strong>Sport Silambam</strong> (regulated competitive championship combat).
-                    </p>
+              <ScrollReveal animation="fade-up" delay={80} duration={600}>
+                <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
+                  <div className="flex items-start space-x-3.5">
+                    <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
+                      <Swords className="w-5 h-5 text-[#C6A04A] shrink-0" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#102137] flex items-center">
+                        <span>Twin Combatants in Red & Blue</span>
+                        <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
+                          Por & Sport Silambam
+                        </span>
+                      </h4>
+                      <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
+                        Representing the clashing staves of martial confrontation and the complete integration of traditional <strong>Por Silambam</strong> (battlefield warfare) and <strong>Sport Silambam</strong> (regulated competitive championship combat).
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-                <div className="flex items-start space-x-3.5">
-                  <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
-                    <Sparkles className="w-5 h-5 text-[#C6A04A] shrink-0" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#102137] flex items-center">
-                      <span>The Bengal White Tiger (புலி)</span>
-                      <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
-                        Pulipaaivu Kinematics
-                      </span>
-                    </h4>
-                    <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
-                      Depicted behind the combatants within the shield. It embodies primal courage and dynamic animal combat maneuvers (Pulipaaivu) developed in the stone age by ancient ancestors observing wild beasts.
-                    </p>
+              <ScrollReveal animation="fade-up" delay={160} duration={600}>
+                <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
+                  <div className="flex items-start space-x-3.5">
+                    <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
+                      <Sparkles className="w-5 h-5 text-[#C6A04A] shrink-0" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#102137] flex items-center">
+                        <span>The Bengal White Tiger (புலி)</span>
+                        <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
+                          Pulipaaivu Kinematics
+                        </span>
+                      </h4>
+                      <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
+                        Depicted behind the combatants within the shield. It embodies primal courage and dynamic animal combat maneuvers (Pulipaaivu) developed in the stone age by ancient ancestors observing wild beasts.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-                <div className="flex items-start space-x-3.5">
-                  <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
-                    <Shield className="w-5 h-5 text-[#C6A04A] shrink-0" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#102137] flex items-center">
-                      <span>Crossed Swords & Bamboo Staves</span>
-                      <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
-                        Weapons Evolution
-                      </span>
-                    </h4>
-                    <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
-                      Flanking the shield are crossed swords and bamboo staves—tracing the continuous historical progression from stone-age tree branches to metal spears, swords, and deer horn blades (Maduvu / Maan Kombu).
-                    </p>
+              <ScrollReveal animation="fade-up" delay={240} duration={600}>
+                <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
+                  <div className="flex items-start space-x-3.5">
+                    <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
+                      <Shield className="w-5 h-5 text-[#C6A04A] shrink-0" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#102137] flex items-center">
+                        <span>Crossed Swords & Bamboo Staves</span>
+                        <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
+                          Weapons Evolution
+                        </span>
+                      </h4>
+                      <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
+                        Flanking the shield are crossed swords and bamboo staves—tracing the continuous historical progression from stone-age tree branches to metal spears, swords, and deer horn blades (Maduvu / Maan Kombu).
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-                <div className="flex items-start space-x-3.5">
-                  <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
-                    <Award className="w-5 h-5 text-[#C6A04A] shrink-0" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#102137] flex items-center">
-                      <span>Royal Crown & Five-Point Star</span>
-                      <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
-                        Sovereign Gurukulam
-                      </span>
-                    </h4>
-                    <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
-                      Symbolizing unyielding masterhood, sovereign lineage authority, and the highest standards of competitive and spiritual excellence upheld by Grandmasters for generations.
-                    </p>
+              <ScrollReveal animation="fade-up" delay={320} duration={600}>
+                <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
+                  <div className="flex items-start space-x-3.5">
+                    <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
+                      <Award className="w-5 h-5 text-[#C6A04A] shrink-0" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#102137] flex items-center">
+                        <span>Royal Crown & Five-Point Star</span>
+                        <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
+                          Sovereign Gurukulam
+                        </span>
+                      </h4>
+                      <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
+                        Symbolizing unyielding masterhood, sovereign lineage authority, and the highest standards of competitive and spiritual excellence upheld by Grandmasters for generations.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-                <div className="flex items-start space-x-3.5">
-                  <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
-                    <Globe className="w-5 h-5 text-[#C6A04A] shrink-0" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-[#102137] flex items-center">
-                      <span>Royal Blue Encirclement & Golden Arcs</span>
-                      <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
-                        Global Reach
-                      </span>
-                    </h4>
-                    <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
-                      The outer ring and solar gold arcs represent the global expansion of Aadhiran Silambam—connecting our origins in Tamil Nadu, our living sanctuary in Penang, and our MENA hub in Qatar.
-                    </p>
+              <ScrollReveal animation="fade-up" delay={400} duration={600}>
+                <div className="p-4 rounded-xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
+                  <div className="flex items-start space-x-3.5">
+                    <div className="w-10 h-10 rounded-lg bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] shrink-0 mt-0.5">
+                      <Globe className="w-5 h-5 text-[#C6A04A] shrink-0" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#102137] flex items-center">
+                        <span>Royal Blue Encirclement & Golden Arcs</span>
+                        <span className="ml-2 text-[10px] font-mono px-2 py-0.5 rounded bg-[#F8F5EE] text-[#C6A04A]">
+                          Global Reach
+                        </span>
+                      </h4>
+                      <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
+                        The outer ring and solar gold arcs represent the global expansion of Aadhiran Silambam—connecting our origins in Tamil Nadu, our living sanctuary in Penang, and our MENA hub in Qatar.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
@@ -312,7 +331,7 @@ export const About: React.FC = () => {
       {/* Vision & Mission Section */}
       <section className="py-20 border-b border-[#E8E3D9] bg-[#FDFBF7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <ScrollReveal animation="fade-up" duration={600} className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs uppercase font-bold text-[#C6A04A] tracking-widest">
               Institutional Charter
             </span>
@@ -322,77 +341,83 @@ export const About: React.FC = () => {
             <p className="text-[#64748B] text-sm mt-3">
               The tripartite commitment driving our association across Tamil Nadu, Malaysia, Qatar, and the world.
             </p>
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Tenet 1 */}
-            <div className="p-8 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all duration-300 relative group shadow-sm hover:shadow-md">
-              <div className="w-14 h-14 rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-6 group-hover:scale-105 transition-transform">
-                <Target className="w-7 h-7 text-[#C6A04A] shrink-0" />
+            <ScrollReveal animation="fade-up" delay={80} duration={650}>
+              <div className="p-8 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all duration-300 relative group shadow-sm hover:shadow-md h-full">
+                <div className="w-14 h-14 rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-6 group-hover:scale-105 transition-transform">
+                  <Target className="w-7 h-7 text-[#C6A04A] shrink-0" />
+                </div>
+                <span className="text-xs font-mono font-bold text-[#C6A04A] uppercase tracking-widest block mb-2">
+                  Mission Objective 1
+                </span>
+                <h3 className="text-lg font-display font-bold text-[#102137] mb-3">
+                  MENA Region Central Hub
+                </h3>
+                <p className="text-sm text-[#102137] font-semibold mb-3">
+                  "Make Aadhiran Qatar branch the central hub of Silambam for the MENA region."
+                </p>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Establishing the State of Qatar as our Middle East nerve center, delivering structured traditional training and sport tournament development to quench the martial arts thirst of youth across the MENA region.
+                </p>
+                <div className="mt-6 pt-4 border-t border-[#E8E3D9] flex items-center text-xs text-[#64748B]">
+                  <CheckCircle2 className="w-4 h-4 mr-1.5 text-[#C6A04A] shrink-0" />
+                  <span>Qatar & Middle East Expansion</span>
+                </div>
               </div>
-              <span className="text-xs font-mono font-bold text-[#C6A04A] uppercase tracking-widest block mb-2">
-                Mission Objective 1
-              </span>
-              <h3 className="text-lg font-display font-bold text-[#102137] mb-3">
-                MENA Region Central Hub
-              </h3>
-              <p className="text-sm text-[#102137] font-semibold mb-3">
-                "Make Aadhiran Qatar branch the central hub of Silambam for the MENA region."
-              </p>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Establishing the State of Qatar as our Middle East nerve center, delivering structured traditional training and sport tournament development to quench the martial arts thirst of youth across the MENA region.
-              </p>
-              <div className="mt-6 pt-4 border-t border-[#E8E3D9] flex items-center text-xs text-[#64748B]">
-                <CheckCircle2 className="w-4 h-4 mr-1.5 text-[#C6A04A] shrink-0" />
-                <span>Qatar & Middle East Expansion</span>
-              </div>
-            </div>
+            </ScrollReveal>
 
             {/* Tenet 2 */}
-            <div className="p-8 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all duration-300 relative group shadow-sm hover:shadow-md">
-              <div className="w-14 h-14 rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-6 group-hover:scale-105 transition-transform">
-                <HeartPulse className="w-7 h-7 text-[#C6A04A] shrink-0" />
+            <ScrollReveal animation="fade-up" delay={160} duration={650}>
+              <div className="p-8 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all duration-300 relative group shadow-sm hover:shadow-md h-full">
+                <div className="w-14 h-14 rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-6 group-hover:scale-105 transition-transform">
+                  <HeartPulse className="w-7 h-7 text-[#C6A04A] shrink-0" />
+                </div>
+                <span className="text-xs font-mono font-bold text-[#C6A04A] uppercase tracking-widest block mb-2">
+                  Mission Objective 2
+                </span>
+                <h3 className="text-lg font-display font-bold text-[#102137] mb-3">
+                  Worldwide Health & Agility
+                </h3>
+                <p className="text-sm text-[#102137] font-semibold mb-3">
+                  "Spread the art worldwide by establishing health benefits required for sedentary lifestyles."
+                </p>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Demonstrating how the rapid stick rotations, triangular footwork, breathing harmony, and vital point (Varma) stimulation in Silambam counteract the modern physical deterioration caused by inactive desk and screen habits.
+                </p>
+                <div className="mt-6 pt-4 border-t border-[#E8E3D9] flex items-center text-xs text-[#64748B]">
+                  <CheckCircle2 className="w-4 h-4 mr-1.5 text-[#C6A04A] shrink-0" />
+                  <span>Holistic Physical Conditioning</span>
+                </div>
               </div>
-              <span className="text-xs font-mono font-bold text-[#C6A04A] uppercase tracking-widest block mb-2">
-                Mission Objective 2
-              </span>
-              <h3 className="text-lg font-display font-bold text-[#102137] mb-3">
-                Worldwide Health & Agility
-              </h3>
-              <p className="text-sm text-[#102137] font-semibold mb-3">
-                "Spread the art worldwide by establishing health benefits required for sedentary lifestyles."
-              </p>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Demonstrating how the rapid stick rotations, triangular footwork, breathing harmony, and vital point (Varma) stimulation in Silambam counteract the modern physical deterioration caused by inactive desk and screen habits.
-              </p>
-              <div className="mt-6 pt-4 border-t border-[#E8E3D9] flex items-center text-xs text-[#64748B]">
-                <CheckCircle2 className="w-4 h-4 mr-1.5 text-[#C6A04A] shrink-0" />
-                <span>Holistic Physical Conditioning</span>
-              </div>
-            </div>
+            </ScrollReveal>
 
             {/* Tenet 3 */}
-            <div className="p-8 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all duration-300 relative group shadow-sm hover:shadow-md">
-              <div className="w-14 h-14 rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-6 group-hover:scale-105 transition-transform">
-                <Globe className="w-7 h-7 text-[#C6A04A] shrink-0" />
+            <ScrollReveal animation="fade-up" delay={240} duration={650}>
+              <div className="p-8 rounded-2xl bg-white border border-[#E8E3D9] hover:border-[#C6A04A] transition-all duration-300 relative group shadow-sm hover:shadow-md h-full">
+                <div className="w-14 h-14 rounded-2xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-6 group-hover:scale-105 transition-transform">
+                  <Globe className="w-7 h-7 text-[#C6A04A] shrink-0" />
+                </div>
+                <span className="text-xs font-mono font-bold text-[#C6A04A] uppercase tracking-widest block mb-2">
+                  Mission Objective 3
+                </span>
+                <h3 className="text-lg font-display font-bold text-[#102137] mb-3">
+                  Global Rules Standardization
+                </h3>
+                <p className="text-sm text-[#102137] font-semibold mb-3">
+                  "Work with peoples having similar thoughts to derive standardized rules for worldwide practice."
+                </p>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Uniting traditional masters, sport commissions, and heritage organizations globally to formulate unified tournament guidelines, fair judging systems, and safety protocols while strictly preserving original martial authenticity.
+                </p>
+                <div className="mt-6 pt-4 border-t border-[#E8E3D9] flex items-center text-xs text-[#64748B]">
+                  <CheckCircle2 className="w-4 h-4 mr-1.5 text-[#C6A04A] shrink-0" />
+                  <span>International Sports Federation Accord</span>
+                </div>
               </div>
-              <span className="text-xs font-mono font-bold text-[#C6A04A] uppercase tracking-widest block mb-2">
-                Mission Objective 3
-              </span>
-              <h3 className="text-lg font-display font-bold text-[#102137] mb-3">
-                Global Rules Standardization
-              </h3>
-              <p className="text-sm text-[#102137] font-semibold mb-3">
-                "Work with peoples having similar thoughts to derive standardized rules for worldwide practice."
-              </p>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Uniting traditional masters, sport commissions, and heritage organizations globally to formulate unified tournament guidelines, fair judging systems, and safety protocols while strictly preserving original martial authenticity.
-              </p>
-              <div className="mt-6 pt-4 border-t border-[#E8E3D9] flex items-center text-xs text-[#64748B]">
-                <CheckCircle2 className="w-4 h-4 mr-1.5 text-[#C6A04A] shrink-0" />
-                <span>International Sports Federation Accord</span>
-              </div>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -400,7 +425,7 @@ export const About: React.FC = () => {
       {/* Core Martial Pillars */}
       <section className="py-20 border-b border-[#E8E3D9] bg-[#F8F5EE]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <ScrollReveal animation="fade-up" duration={600} className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs uppercase font-bold text-[#C6A04A] tracking-widest">
               Guiding Philosophy
             </span>
@@ -410,59 +435,67 @@ export const About: React.FC = () => {
             <p className="text-[#64748B] text-sm mt-3">
               Upholding the timeless Tamil code of warrior conduct, ethical restraint, and physical mastery.
             </p>
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-5">
-                <Sparkles className="w-6 h-6 text-[#C6A04A] shrink-0" />
+            <ScrollReveal animation="fade-up" delay={60} duration={600}>
+              <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors h-full">
+                <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-5">
+                  <Sparkles className="w-6 h-6 text-[#C6A04A] shrink-0" />
+                </div>
+                <h3 className="text-lg font-display font-bold text-[#102137] mb-2">1. குருகுலம் (Gurukulam)</h3>
+                <p className="text-xs font-semibold text-[#C6A04A] uppercase tracking-wider mb-3">Unbroken Transmission</p>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Knowledge passed directly from Master to Disciple in accordance with 5,000 years of traditional Guru-Student etiquette, honoring the lineage founders.
+                </p>
               </div>
-              <h3 className="text-lg font-display font-bold text-[#102137] mb-2">1. குருகுலம் (Gurukulam)</h3>
-              <p className="text-xs font-semibold text-[#C6A04A] uppercase tracking-wider mb-3">Unbroken Transmission</p>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Knowledge passed directly from Master to Disciple in accordance with 5,000 years of traditional Guru-Student etiquette, honoring the lineage founders.
-              </p>
-            </div>
+            </ScrollReveal>
 
-            <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-5">
-                <Shield className="w-6 h-6 text-[#C6A04A] shrink-0" />
+            <ScrollReveal animation="fade-up" delay={120} duration={600}>
+              <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors h-full">
+                <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-5">
+                  <Shield className="w-6 h-6 text-[#C6A04A] shrink-0" />
+                </div>
+                <h3 className="text-lg font-display font-bold text-[#102137] mb-2">2. ஒழுக்கம் (Ozhukkam)</h3>
+                <p className="text-xs font-semibold text-[#C6A04A] uppercase tracking-wider mb-3">Ethical Restraint</p>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Martial skill is exclusively for self-defense, character preservation, and cultural protection. Aggression and ostentatious bravado are strictly forbidden.
+                </p>
               </div>
-              <h3 className="text-lg font-display font-bold text-[#102137] mb-2">2. ஒழுக்கம் (Ozhukkam)</h3>
-              <p className="text-xs font-semibold text-[#C6A04A] uppercase tracking-wider mb-3">Ethical Restraint</p>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Martial skill is exclusively for self-defense, character preservation, and cultural protection. Aggression and ostentatious bravado are strictly forbidden.
-              </p>
-            </div>
+            </ScrollReveal>
 
-            <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-5">
-                <BookOpen className="w-6 h-6 text-[#C6A04A] shrink-0" />
+            <ScrollReveal animation="fade-up" delay={180} duration={600}>
+              <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors h-full">
+                <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-5">
+                  <BookOpen className="w-6 h-6 text-[#C6A04A] shrink-0" />
+                </div>
+                <h3 className="text-lg font-display font-bold text-[#102137] mb-2">3. பாரம்பரியம் (Parambariyam)</h3>
+                <p className="text-xs font-semibold text-[#C6A04A] uppercase tracking-wider mb-3">Living Heritage</p>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Refusal to modify authentic techniques for commercial sporting belt businesses or Western entertainment, preserving the sacred 10-stage syllabus intact.
+                </p>
               </div>
-              <h3 className="text-lg font-display font-bold text-[#102137] mb-2">3. பாரம்பரியம் (Parambariyam)</h3>
-              <p className="text-xs font-semibold text-[#C6A04A] uppercase tracking-wider mb-3">Living Heritage</p>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Refusal to modify authentic techniques for commercial sporting belt businesses or Western entertainment, preserving the sacred 10-stage syllabus intact.
-              </p>
-            </div>
+            </ScrollReveal>
 
-            <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors">
-              <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-5">
-                <Compass className="w-6 h-6 text-[#C6A04A] shrink-0" />
+            <ScrollReveal animation="fade-up" delay={240} duration={600}>
+              <div className="p-6 rounded-2xl bg-white border border-[#E8E3D9] shadow-sm hover:border-[#C6A04A] transition-colors h-full">
+                <div className="w-12 h-12 rounded-xl bg-[#F8F5EE] border border-[#E8E3D9] flex items-center justify-center text-[#102137] mb-5">
+                  <Compass className="w-6 h-6 text-[#C6A04A] shrink-0" />
+                </div>
+                <h3 className="text-lg font-display font-bold text-[#102137] mb-2">4. மெய்க்காப்பு (Meikappu)</h3>
+                <p className="text-xs font-semibold text-[#C6A04A] uppercase tracking-wider mb-3">Total Body Mastery</p>
+                <p className="text-xs text-[#64748B] leading-relaxed">
+                  Harmony of breathing, mental agility, pressure-point awareness (Varma), and lightning-quick staff rotation building lifelong physical resilience.
+                </p>
               </div>
-              <h3 className="text-lg font-display font-bold text-[#102137] mb-2">4. மெய்க்காப்பு (Meikappu)</h3>
-              <p className="text-xs font-semibold text-[#C6A04A] uppercase tracking-wider mb-3">Total Body Mastery</p>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Harmony of breathing, mental agility, pressure-point awareness (Varma), and lightning-quick staff rotation building lifelong physical resilience.
-              </p>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="py-16 bg-[#102137] border-t border-[#183B5B] text-center text-white">
-        <div className="max-w-4xl mx-auto px-4">
+        <ScrollReveal animation="fade-up" duration={650} className="max-w-4xl mx-auto px-4">
           <h3 className="text-2xl sm:text-3xl font-display font-bold text-white mb-4">
             Learn More About Our Living Lineage
           </h3>
@@ -483,7 +516,7 @@ export const About: React.FC = () => {
               Meet the Masters
             </Link>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </div>
   );

@@ -89,8 +89,8 @@ export const Navbar: React.FC = () => {
               <Award className="w-3.5 h-3.5 mr-1.5 text-[#C6A04A] shrink-0" />
               Malaysia Book of Records (2022) — Certified Oldest Silambam Association
             </span>
-            <span className="hidden xl:inline text-[#183B5B]">|</span>
-            <span className="hidden xl:inline-flex items-center text-slate-300 whitespace-nowrap truncate">
+            <span className="hidden xl:inline text-slate-500">|</span>
+            <span className="hidden xl:inline-flex items-center text-slate-200 whitespace-nowrap truncate">
               <MapPin className="w-3.5 h-3.5 mr-1 text-[#C6A04A] shrink-0" />
               George Town UNESCO Heritage Zone, Penang
             </span>
@@ -104,7 +104,7 @@ export const Navbar: React.FC = () => {
               <Phone className="w-3.5 h-3.5 mr-1.5 text-[#C6A04A] shrink-0" />
               <span className="font-medium">+60 16-414 7856</span>
             </a>
-            <span className="text-[#183B5B]">|</span>
+            <span className="text-slate-500">|</span>
             <Link
               to="/admin/login"
               className="text-slate-300 hover:text-[#D9B96E] font-medium transition-colors"
@@ -151,8 +151,8 @@ export const Navbar: React.FC = () => {
                 </span>
               </div>
               
-              <span className="text-[10px] sm:text-xs text-[#64748B] font-medium tracking-wide truncate max-w-[140px] sm:max-w-xs">
-                <span className="text-[#C6A04A] font-semibold">George Town, Penang</span>
+              <span className="text-[10px] sm:text-xs text-[#475569] font-medium tracking-wide truncate max-w-[140px] sm:max-w-xs">
+                <span className="text-[#8B6508] font-semibold">George Town, Penang</span>
               </span>
             </div>
           </Link>
@@ -461,7 +461,7 @@ export const Navbar: React.FC = () => {
                   Home
                 </Link>
 
-                <div className="pt-2 pb-1 px-4 text-[10px] font-bold uppercase tracking-wider text-[#C6A04A]">
+                <div className="pt-2 pb-1 px-4 text-[10px] font-bold uppercase tracking-wider text-[#8B6508]">
                   Heritage & Lineage
                 </div>
                 <Link
@@ -501,7 +501,7 @@ export const Navbar: React.FC = () => {
                   UNESCO & Living Safeguarding
                 </Link>
 
-                <div className="pt-2 pb-1 px-4 text-[10px] font-bold uppercase tracking-wider text-[#C6A04A]">
+                <div className="pt-2 pb-1 px-4 text-[10px] font-bold uppercase tracking-wider text-[#8B6508]">
                   Programmes & Media
                 </div>
                 <Link

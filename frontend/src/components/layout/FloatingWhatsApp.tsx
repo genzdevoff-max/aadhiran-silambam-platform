@@ -26,7 +26,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
         rel="noopener noreferrer"
         aria-label="Contact Aadhiran Silambam on WhatsApp"
         title="Contact Aadhiran Silambam on WhatsApp"
-        className="group relative flex items-center justify-center w-14 h-14 sm:w-[60px] sm:h-[60px] rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white border-2 border-white shadow-[0_4px_16px_rgba(37,211,102,0.45)] hover:shadow-[0_6px_24px_rgba(37,211,102,0.65)] ring-1 ring-[#25D366]/40 transition-all duration-300 ease-out hover:scale-110 hover:-translate-y-1 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/50"
+        className="group relative flex items-center justify-center w-14 h-14 sm:w-[60px] sm:h-[60px] rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-[#060B26] border-2 border-white shadow-[0_4px_16px_rgba(37,211,102,0.45)] hover:shadow-[0_6px_24px_rgba(37,211,102,0.65)] ring-1 ring-[#25D366]/40 transition-all duration-300 ease-out hover:scale-110 hover:-translate-y-1 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#25D366]/50"
       >
         {/* White WhatsApp Symbol inside */}
         <FaWhatsapp

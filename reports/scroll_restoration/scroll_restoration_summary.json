@@ -1,0 +1,126 @@
+{
+  "totalLinksTested": 15,
+  "allPassed": true,
+  "mobilePassed": true,
+  "tabletPassed": true,
+  "consoleErrors": [],
+  "failedRequests": [
+    {
+      "url": "http://localhost:5173/uploads/VID-20231026-WA0019.mp4",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "linkResults": [
+    {
+      "link": "Training Syllabus",
+      "path": "/training-syllabus",
+      "scrollYBefore": 0,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "About Academy",
+      "path": "/about",
+      "scrollYBefore": 0,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "History Lineage",
+      "path": "/history-lineage",
+      "scrollYBefore": 0,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Instructors",
+      "path": "/instructors",
+      "scrollYBefore": 7405,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Achievements",
+      "path": "/achievements",
+      "scrollYBefore": 0,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Heritage Works",
+      "path": "/heritage-works",
+      "scrollYBefore": 7427,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Gallery",
+      "path": "/gallery",
+      "scrollYBefore": 7453,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Videos",
+      "path": "/videos",
+      "scrollYBefore": 0,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Events",
+      "path": "/events",
+      "scrollYBefore": 7453,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "News",
+      "path": "/news",
+      "scrollYBefore": 7453,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Partners Press",
+      "path": "/partners-press",
+      "scrollYBefore": 7453,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Privacy Policy",
+      "path": "/privacy-policy",
+      "scrollYBefore": 7453,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Contact",
+      "path": "/contact",
+      "scrollYBefore": 0,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Join Training (CTA)",
+      "path": "/join-training",
+      "scrollYBefore": 7453,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Admin Portal",
+      "path": "/admin/login",
+      "scrollYBefore": 7453,
+      "scrollYAfter": 0,
+      "passed": true
+    },
+    {
+      "link": "Anchor #disciplines",
+      "path": "/#disciplines",
+      "scrollYAfter": 731,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "heroSlider": {
+    "initialSlide": {
+      "textCounter": "01 / 05",
+      "heroH1": "AADHIRAN\nSILAMBAM"
+    },
+    "autoAdvancedSlide": {
+      "textCounter": "03 / 05",
+      "heroH1": "SPEED. PRECISION.\nFOCUS."
+    },
+    "manualNextSlide": {
+      "textCounter": "04 / 05"
+    },
+    "preSwipe": "01 / 05",
+    "postSwipe": "02 / 05",
+    "success": true
+  },
+  "counters": [
+    "3,000+ yrs Sangam lineage Ancient battlefield warrior roots.",
+    "50+ yrs Academy pedagogy Established on 25 February 1975.",
+    "10 stages Gurukulam syllabus From Kaaladi to Varma mastery.",
+    "40+ titles Championship records National Sukma and state golds."
+  ],
+  "contrast": {
+    "passingCount": 100,
+    "failingCount": 0,
+    "issues": []
+  },
+  "viewports": [
+    {
+      "viewport": "320x600",
+      "name": "320_mobile_small",
+      "scrollW": 320,
+      "clientW": 320,
+      "overflow": 0,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "375x667",
+      "name": "375_iphone_se",
+      "scrollW": 375,
+      "clientW": 375,
+      "overflow": 0,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "430x932",
+      "name": "430_iphone_pro_max",
+      "scrollW": 430,
+      "clientW": 430,
+      "overflow": 0,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "768x1024",
+      "name": "768_tablet_portrait",
+      "scrollW": 768,
+      "clientW": 768,
+      "overflow": 0,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "1024x768",
+      "name": "1024_tablet_landscape",
+      "scrollW": 1024,
+      "clientW": 1024,
+      "overflow": 0,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "1280x800",
+      "name": "1280_laptop",
+      "scrollW": 1280,
+      "clientW": 1280,
+      "overflow": 0,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "1440x900",
+      "name": "1440_desktop",
+      "scrollW": 1440,
+      "clientW": 1440,
+      "overflow": 0,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "1920x1080",
+      "name": "1920_ultrawide",
+      "scrollW": 1920,
+      "clientW": 1920,
+      "overflow": 0,
+      "hasOverflow": false
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": []
+}

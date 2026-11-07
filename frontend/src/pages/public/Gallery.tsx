@@ -12,6 +12,7 @@ import {
 import { mediaAssetsList, galleryAlbums } from '../../data';
 import { publicApi } from '../../services/api';
 import type { MediaAsset } from '../../types';
+import { ScrollReveal } from '../../components/common/ScrollReveal';
 
 export const Gallery: React.FC = () => {
   const [albums, setAlbums] = useState<any[]>(galleryAlbums);
@@ -69,92 +70,105 @@ export const Gallery: React.FC = () => {
       <section className="relative py-20 sm:py-24 bg-[#102137] text-white overflow-hidden border-b border-[#183B5B]">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#C6A04A_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-5 shadow-xs">
-            <Camera className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
-            <span>Living Photographic Archives</span>
-          </div>
+          <ScrollReveal animation="fade-down" delay={0} duration={600}>
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#183B5B] border border-[#C6A04A]/40 text-[#D9B96E] text-xs font-display font-bold uppercase tracking-wider mb-5 shadow-xs">
+              <Camera className="w-3.5 h-3.5 text-[#C6A04A] shrink-0" />
+              <span>Living Photographic Archives</span>
+            </div>
+          </ScrollReveal>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tight uppercase">
-            Photo Gallery
-          </h1>
-          <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
-            புகைப்பட தொகுப்பு <span className="text-slate-400 mx-2">•</span> Rare Archival Records from 1936 to Present Day
-          </p>
+          <ScrollReveal animation="fade-up" delay={80} duration={650}>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black text-white tracking-tight uppercase">
+              Photo Gallery
+            </h1>
+          </ScrollReveal>
+          <ScrollReveal animation="fade-up" delay={160} duration={650}>
+            <p className="mt-3 text-lg sm:text-xl font-display text-[#D9B96E] font-semibold tracking-wide">
+              புகைப்பட தொகுப்பு <span className="text-slate-400 mx-2">•</span> Rare Archival Records from 1936 to Present Day
+            </p>
+          </ScrollReveal>
 
-          <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
-            Visual chronicle of ancient Tamil martial arts preservation in George Town, Penang — featuring historical grandmasters, weapon demonstrations, and UNESCO cultural showcases.
-          </p>
+          <ScrollReveal animation="fade-up" delay={240} duration={650}>
+            <p className="mt-4 max-w-2xl mx-auto text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+              Visual chronicle of ancient Tamil martial arts preservation in George Town, Penang — featuring historical grandmasters, weapon demonstrations, and UNESCO cultural showcases.
+            </p>
+          </ScrollReveal>
 
-          <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-6 font-medium">
-            <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
-            <span>/</span>
-            <span className="text-[#D9B96E]">Photo Gallery</span>
-          </div>
+          <ScrollReveal animation="fade-up" delay={300} duration={650}>
+            <div className="flex items-center justify-center space-x-2 text-xs text-slate-300 mt-6 font-medium">
+              <Link to="/" className="hover:text-[#D9B96E] transition-colors">Home</Link>
+              <span>/</span>
+              <span className="text-[#D9B96E]">Photo Gallery</span>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* 2. Visual Album Overview Cards */}
       <section className="py-12 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-[#C6A04A]" />
-              <h3 className="text-xs uppercase font-bold text-[#102137] tracking-wider">
-                Featured Archival Collections
-              </h3>
+          <ScrollReveal animation="fade-up" delay={0} duration={650}>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-[#C6A04A]" />
+                <h3 className="text-xs uppercase font-bold text-[#102137] tracking-wider">
+                  Featured Archival Collections
+                </h3>
+              </div>
+              <span className="text-xs text-[#64748B] font-medium">
+                {albums.length} Curated Albums
+              </span>
             </div>
-            <span className="text-xs text-[#64748B] font-medium">
-              {albums.length} Curated Albums
-            </span>
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {albums.map((album) => {
+            {albums.map((album, idx) => {
               const isSelected = selectedAlbum === album.id;
               return (
-                <button
-                  key={album.id}
-                  onClick={() => {
-                    setSelectedAlbum(album.id);
-                    setActivePhotoIndex(null);
-                  }}
-                  className={`text-left p-4 rounded-xl border transition-all duration-300 group flex flex-col justify-between ${
-                    isSelected
-                      ? 'bg-[#F8F5EE] border-[#C6A04A] ring-2 ring-[#C6A04A]/30 shadow-md'
-                      : 'bg-[#FDFBF7] border-[#E8E3D9] hover:border-[#C6A04A] hover:bg-white hover:shadow-sm'
-                  }`}
-                >
-                  <div className="relative h-36 w-full rounded-lg overflow-hidden mb-3 bg-slate-100 border border-[#E8E3D9]">
-                    <img
-                      src={album.cover_photo || '/api/public/media/stream/silambam/mariapaqiam4.png'}
-                      alt={album.title}
-                      width={300}
-                      height={144}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => {
-                        const t = e.currentTarget;
-                        t.onerror = null;
-                        t.src = '/uploads/silambam-back.jpg';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/80 via-transparent to-transparent" />
-                    <span className="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-[#102137]/90 text-[10px] font-semibold text-[#D9B96E] border border-[#C6A04A]/40">
-                      {album.photo_count || 0} Photos
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className={`text-sm font-bold mb-1 transition-colors ${
-                      isSelected ? 'text-[#102137]' : 'text-[#182332] group-hover:text-[#183B5B]'
-                    }`}>
-                      {album.title}
-                    </h4>
-                    <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
-                      {album.description}
-                    </p>
-                  </div>
-                </button>
+                <ScrollReveal key={album.id} animation="fade-up" delay={(idx % 4) * 80} duration={650}>
+                  <button
+                    onClick={() => {
+                      setSelectedAlbum(album.id);
+                      setActivePhotoIndex(null);
+                    }}
+                    className={`text-left p-4 rounded-xl border transition-all duration-300 group flex flex-col justify-between w-full h-full ${
+                      isSelected
+                        ? 'bg-[#F8F5EE] border-[#C6A04A] ring-2 ring-[#C6A04A]/30 shadow-md'
+                        : 'bg-[#FDFBF7] border-[#E8E3D9] hover:border-[#C6A04A] hover:bg-white hover:shadow-sm'
+                    }`}
+                  >
+                    <div className="relative h-36 w-full rounded-lg overflow-hidden mb-3 bg-slate-100 border border-[#E8E3D9]">
+                      <img
+                        src={album.cover_photo || '/api/public/media/stream/silambam/mariapaqiam4.png'}
+                        alt={album.title}
+                        width={300}
+                        height={144}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          const t = e.currentTarget;
+                          t.onerror = null;
+                          t.src = '/uploads/silambam-back.jpg';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/80 via-transparent to-transparent" />
+                      <span className="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-[#102137]/90 text-[10px] font-semibold text-[#D9B96E] border border-[#C6A04A]/40">
+                        {album.photo_count || 0} Photos
+                      </span>
+                    </div>
+                    <div>
+                      <h4 className={`text-sm font-bold mb-1 transition-colors ${
+                        isSelected ? 'text-[#102137]' : 'text-[#182332] group-hover:text-[#183B5B]'
+                      }`}>
+                        {album.title}
+                      </h4>
+                      <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">
+                        {album.description}
+                      </p>
+                    </div>
+                  </button>
+                </ScrollReveal>
               );
             })}
           </div>
@@ -208,42 +222,43 @@ export const Gallery: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {displayPhotos.map((photo, index) => (
-              <div
-                key={photo.id || index}
-                onClick={() => setActivePhotoIndex(index)}
-                className="group relative rounded-xl overflow-hidden bg-white border border-[#E8E3D9] hover:border-[#C6A04A] cursor-pointer transition-all duration-300 shadow-xs hover:shadow-md flex flex-col"
-              >
-                <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-100">
-                  <img
-                    src={photo.file_path}
-                    alt={photo.alt_text || photo.original_name}
-                    width={400}
-                    height={300}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      const t = e.currentTarget;
-                      t.onerror = null;
-                      t.src = '/uploads/silambam-back.jpg';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
-                  <div className="absolute top-2.5 right-2.5 w-8 h-8 rounded-lg bg-[#102137]/80 backdrop-blur-sm border border-[#C6A04A]/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[#D9B96E]">
-                    <Maximize2 className="w-4 h-4" />
+              <ScrollReveal key={photo.id || index} animation="fade-up" delay={(index % 4) * 80} duration={650}>
+                <div
+                  onClick={() => setActivePhotoIndex(index)}
+                  className="group relative rounded-xl overflow-hidden bg-white border border-[#E8E3D9] hover:border-[#C6A04A] cursor-pointer transition-all duration-300 shadow-xs hover:shadow-md flex flex-col h-full"
+                >
+                  <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-100">
+                    <img
+                      src={photo.file_path}
+                      alt={photo.alt_text || photo.original_name}
+                      width={400}
+                      height={300}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => {
+                        const t = e.currentTarget;
+                        t.onerror = null;
+                        t.src = '/uploads/silambam-back.jpg';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#102137]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    
+                    <div className="absolute top-2.5 right-2.5 w-8 h-8 rounded-lg bg-[#102137]/80 backdrop-blur-sm border border-[#C6A04A]/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-[#D9B96E]">
+                      <Maximize2 className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-white flex-grow flex flex-col justify-between">
+                    <p className="text-xs font-semibold text-[#182332] group-hover:text-[#183B5B] transition-colors line-clamp-1">
+                      {photo.caption || photo.original_name}
+                    </p>
+                    <p className="text-[11px] text-[#64748B] mt-1 font-medium">
+                      {photo.album_title || 'Aadhiran Archives'}
+                    </p>
                   </div>
                 </div>
-
-                <div className="p-4 bg-white flex-grow flex flex-col justify-between">
-                  <p className="text-xs font-semibold text-[#182332] group-hover:text-[#183B5B] transition-colors line-clamp-1">
-                    {photo.caption || photo.original_name}
-                  </p>
-                  <p className="text-[11px] text-[#64748B] mt-1 font-medium">
-                    {photo.album_title || 'Aadhiran Archives'}
-                  </p>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { PublicLayout } from './components/layout/PublicLayout';
 import { AdminLayout } from './components/layout/AdminLayout';
+import { ScrollToTop } from './components/common/ScrollToTop';
 
 const Home = lazy(() => import('./pages/public/Home').then(({ Home }) => ({ default: Home })));
 const About = lazy(() => import('./pages/public/About').then(({ About }) => ({ default: About })));
@@ -124,6 +125,7 @@ const AdminNotFound: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <AppErrorBoundary>
           <Suspense fallback={
